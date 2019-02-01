@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>promise</title>
+</head>
+<body>
+  <script>
+    const person = [
+      {id: 1, name: 'junhong'},
+      {id: 2, name: 'jay'}
+    ]
+
+    const ability = [
+      {name: 'junhong', skill: '唱歌、跳舞、吃饭、睡觉'},
+      {name: 'jay', skill: 'C|python|javascript|Angular|Vue'},
+    ]
+
+    function findId(id) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          let temp = person.find(obj => obj.id === id);
+          if (temp) {
+            resolve(temp);
+          } else {
+            reject(Error('not found id!'));
+          }
+        }, 500)
+      })
+    }
+
+    function findAbility(name) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          let temp = ability.find(obj => obj.name === name)
+          if (temp) {
+            resolve(temp);
+          } else {
+            reject(Error('not found name!'));
+          }
+        }, 300)
+      })
+    }
+
+    // 链式调用：先通过id获取到姓名，再通过姓名获取到能力。
+    findId(2)
+    .then(result => findAbility(result.name))
+    .then(result => console.log(result))
+    .catch(error => {
+      console.log(error);
+    })
+
+    
+
+    // all：当传入的所有promise都返回resolve，才执行.then，否则就执行.catch或者报错。
+    // race：当第一个promise返回resolve，才执行.then，否则就执行.catch或者报错。注意，race只看最先返回的promise对象。
+    // race的翻译就是赛跑、比速度。
+    Promise
+    .all([findId(1), findAbility('jay')])
+    // .race([findId(3), findAbility('jay')])
+    .then(result => {
+      let [id, name] = result;
+      console.log(id, name);
+    })
+    .catch(error => console.log(error))
+  </script>
+</body>
+</html>
