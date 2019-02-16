@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Tagged Template Strings</title>
+  <style>
+    .highlight {
+      color: white;
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+	<script>
+    // strings 以数组的形式保存被变量分隔的字符串，如果字符串模板的开头或结尾是变量，那么strings的第一个或最后一个值就是空字符串。
+    // ...value 表示所有的变量
+    function highlight(strings, ...values) {
+      // 获取一个含有高亮样式的标签的数组
+      const highlighted = values.map(value => `
+        <span class="highlight">${value}</span>
+      `)
+
+      // 把strings和有高亮样式的标签组合在一起
+      return strings.reduce((prev, curr, i) => `
+        ${prev}${curr}${highlighted[i] || ''}
+      `, '')
+    }
+
+    let user = 'Jay'
+    let topic = 'Learn to use markdown.'
+    // sentence 返回highlight标签(函数)的值
+    let sentence = highlight`${user} has commented on your topic ${topic}`
+
+    document.body.innerHTML = sentence
+	</script>
+
+</body>
+</html>

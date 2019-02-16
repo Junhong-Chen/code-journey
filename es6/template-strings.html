@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Template Strings</title>
+  <style>
+    article {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid cadetblue;
+      border-radius: 5px;
+    }
+    .panel-header,
+    .panel-footer {
+      background-color: cadetblue;
+      color: white;
+      font-size: 18px;
+      height: 30px;
+      line-height: 30px;
+      text-indent: 15px;
+    }
+    .panel-body {
+      background-color: mintcream;
+    }
+    .panel-footer {
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    let name = 'Jay'
+    let age = 20
+    // 模板字符串可以轻松的组合字符串，用 ${} 插入变量
+    let sentence = `I'm is ${name}, ${age + 4} years old.`
+    console.log(sentence)
+
+    // 还可以很清晰的写出html结构
+    const HTMLtemplate = `
+		  <article>
+        <p>hello ${name}<p>
+      <article>
+    `
+    console.log(HTMLtemplate.trim()) // trim(): 删除字符串两边的空白
+
+
+    // Examples
+    const Jay = {
+      name: 'Jay',
+      date: '2019-2-16',
+      todos: [
+        {
+          name: 'Go to Store',
+          completed: false
+        },
+        {
+          name: 'Watch Moive',
+          completed: true
+        },
+        {
+          name: 'Runing',
+          completed: true
+        },
+      ]
+    }
+
+    function renderTodos(todos) {
+      return (`
+        <ul>
+          ${todos.map(todo => `
+            <li>
+              ${todo.name} ${todo.completed ? '✅': '❌'}
+            </li>
+            `).join('')}
+        </ul>
+      `)
+    }
+
+    // map返回的是一个数组，以逗号分隔，所以用join('')删除逗号
+    const template = `
+    <article>
+      <div class="panel-header">${Jay.name}</div>
+      <div class="panel-body">
+        ${renderTodos(Jay.todos)}
+      </div>
+      <div class="panel-footer">${Jay.date}</div>
+    </article>
+      
+    `
+
+    document.body.innerHTML = template
+  </script>
+</body>
+</html>
