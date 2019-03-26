@@ -1,0 +1,104 @@
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  background: #ddd;
+}
+
+h2 {
+  color: #333;
+}
+
+li {
+  list-style: none;
+}
+
+header {
+  height: 50px;
+  background: rgba(47,47,47,0.98);
+}
+
+label {
+  color: #DDD;
+  font-size: 24px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  line-height: 50px;
+}
+
+article,
+footer {
+  width: 600px;
+  margin: 0 auto;
+}
+
+footer {
+  text-align: center;
+}
+
+.input {
+  height: 24px;
+  border-radius: 5px;
+  text-indent: 10px;
+  width: 95%;
+  margin-top: 12px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.24), 0 1px 6px rgba(0,0,0,0.45) inset;
+  border: none;
+  padding: 1px 0px;
+}
+
+.inputArea {
+  width: 600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 110px auto 80px;
+}
+
+.Btn {
+  cursor: pointer;
+  border-radius: 5px;
+  border: 0;
+  background: #333;
+  color: white;
+  box-shadow: 1px 1px 3px #333;
+}
+
+.addBtn {
+  height: 26px;
+  margin-top: 12px;
+  border: none;
+  padding: 1px 0;
+  border: 1px solid white;
+}
+
+.showItem {
+  border: 0;
+}
+
+.item {
+  width:fit-content;
+  text-indent: 5px;
+}
+
+.displayItem {
+  margin: 8px 0;
+  height: 26px;
+  text-indent: 5px;
+  line-height: 26px;
+  display: grid;
+  grid-template-columns: auto 40px 40px;
+  background: white;
+  border-radius: 5px;
+}
+
+.clear {
+  margin: 20px auto 0 auto;
+  padding: 5px 10px;
+  background: #ddd;
+  color: black;
+  border: 0;
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>猜数字</title>
+</head>
+<body>
+  <script>
+    // 初始值
+    var number = 100
+    // 猜数次数
+    var time = 0
+    // 每次猜的数字
+    var temp = null
+    // 标记
+    var stamp = null
+    // 存放猜过的数字
+    var array = []
+    function guess (target, min = 1, max = 100) {
+      // 判断给的数字是否在范围内
+      if (target > 100 || target < 1) {
+        console.log('要1到100的数字哦！')
+        return
+      }
+      temp = Math.floor((max + min) / 2)
+      temp = tempChange(temp)
+      // 将猜过的数字放进一个数组里
+      array.push(temp)
+      number = Math.floor(number / 2)
+      if (number === 0) number = 1
+      if (target === temp) {
+        console.log('第' + ++time + '次，我猜是' + temp + '%c bingo！', 'color: green')
+        return
+      } else if (target >= min + number) {
+        console.log('第' + ++time + '次，我猜是' + temp + '%c 小了！', 'color: red')
+        stamp = true
+        guess(target, min + number, max)
+      } else if (target <= max - number) {
+        console.log('第' + ++time + '次，我猜是' + temp + '%c 大了！', 'color: red')
+        stamp = false
+        guess(target, min, max - number)
+      }
+    }
+
+    // 判断这个数字是否已经猜过
+    function tempChange (temp) {
+      if (array.indexOf(temp) !== -1) {
+        if (stamp) {
+          temp++
+        } else {
+          temp--
+        }
+      }
+      return temp
+    }
+
+    guess(76)
+  </script>
+</body>
+</html>

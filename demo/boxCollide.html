@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>boxCollide</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    body {
+      overflow-x: hidden;
+    }
+    .collideBox {
+      position: absolute;
+      height: 50px;
+      width: 50px;
+      background: black;
+    }
+    button {
+      height: 40px;
+      width: 100px;
+      border-radius: 3px;
+      border: 1px solid black;
+    }
+    button:hover {
+      color: white;
+      background: black;
+    }
+    ul {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+  <ul>
+    <button id="button">more box</button>
+  </ul>
+
+  <script>
+    let clientWidth = document.body.clientWidth
+
+    // 实例化move box
+    let collideBox = new moveCollideBox()
+
+    // 实例集合
+    var blockList = []
+    blockList.push(collideBox)
+
+    // 按钮控制
+    let button = document.getElementById('button')
+
+    button.addEventListener('click', () => {
+      blockList.push(new moveCollideBox(randemNum(), 0, randomColor()))
+    })
+
+    // box对象
+    function moveCollideBox (speed = 5, place = 0, background = 'black') {
+      let _this = this
+      let box = document.createElement('div')
+      box.className = 'collideBox'
+      box.style.background = background
+      document.body.appendChild(box)
+      this.box = box
+      this.speed = speed
+
+      // 改变速度
+      this.changeSpeed = function (newSpeed = 5) {
+        speed = newSpeed
+      }
+
+      // 循环
+      this.move = () => {
+        this.speed = speed
+        this.box = box
+        // 移动
+        if (place > clientWidth) {
+        place = -50
+        } else {
+          place += this.speed
+        }
+        this.box.style.left = place + 'px'
+      }
+    }
+
+    // 随机一个的数字
+    function randemNum () {
+      return Math.floor(Math.random() * 10 + 1)
+    }
+
+    // 随机一个颜色
+    function randomColor () {
+      return '#' + Math.floor(Math.random() * 0xffffff).toString(16)
+    }
+
+    // 碰撞检测
+    function collideCheck (box1, box2) {
+      // 获取box坐标
+      let box1_left = box1.box.getBoundingClientRect().left
+      let box1_right = box1.box.getBoundingClientRect().right
+      let box2_left = box2.box.getBoundingClientRect().left
+      let box2_right = box2.box.getBoundingClientRect().right
+      let temp = null
+
+      // 判断是否碰撞
+      if (box1_right > box2_left && 0 < (box2_left - box1_left) < 50 && box1_left < box2_left && box1.speed > box2.speed) {
+        temp = box2.speed
+        box2.speed = box1.speed
+        box1.speed = temp
+        box1.changeSpeed(box1.speed)
+        box2.changeSpeed(box2.speed)
+      }
+    }
+
+    // 主逻辑
+    function loop () {
+      setTimeout(() => {
+        // box移动
+        let length = blockList.length
+        for (let i = 0; i < length; i++) {
+          blockList[i].move()
+
+          // box碰撞检测
+          for (let j = 0; j < length; j++) {
+            if (blockList[i] !== blockList[j]) {
+              collideCheck(blockList[i], blockList[j])
+            }
+          }
+        }
+        clearTimeout()
+        loop() // 递归
+      }, 1)
+    }
+    loop()  
+  </script>
+</body>
+</html>

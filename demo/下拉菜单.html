@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>下拉菜单</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    #nav {
+      background-color: #222;
+      height: 41px;
+      margin: 0 auto;
+    }
+    #nav ul {
+      list-style: none;
+    }
+    #nav > ul > li {
+      float: left;
+      text-align: center;
+      position: relative;
+    }
+    ul li a:hover {
+      background: rgba(0, 0, 0, .5);
+      color: white;
+    }
+    li a {
+      text-decoration: none;
+      padding: 10px;
+      display: block;
+    }
+    ul li ul {
+      position: absolute;
+      display: none;  /*隐藏二级菜单*/
+    }
+    ul li:hover ul{ /*鼠标悬浮在li上时，改变li下ul的状态*/
+      display: block;
+    }
+
+    ul li ul li {
+      background-color: #222;
+      margin-top: 2px;
+    }
+    .second:hover {
+      background-color: red;
+    }
+    a {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div id="nav">
+    <ul>
+      <li><a href="#">首页</a></li>
+      <li><a href="#">语言</a>
+        <ul>
+          <li><a href="#" class="second">javascript</a></li>
+          <li><a href="#" class="second">python</a></li>
+          <li><a href="#" class="second">c</a></li>
+          <li><a href="#" class="second">java</a></li>
+          <li><a href="#" class="second">rust</a></li>
+        </ul>
+      </li>
+      <li><a href="#">关于我</a>
+        <ul>
+          <li><a href="#" class="second">没错</a></li>
+          <li><a href="#" class="second">我很</a></li>
+          <li><a href="#" class="second">嚣张</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <script></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>希尔排序</title>
+</head>
+<body>
+  <script>
+    const shellSort = (array) => {
+      let length = array.length
+      let gap = 1
+      while (gap < length / 3) {
+        gap = gap * 3 + 1
+      }
+      for (gap; gap > 0; gap = Math.floor(gap / 3)) {
+        for (let i = gap; i < length; i++) {
+          let temp = array[i]
+          for (var j = i - gap; j >= 0 && array[j] > temp; j -= gap) {
+            array[j + gap] = array [j]
+          }
+          array[j + gap] = temp
+        }
+      }
+      return array
+    }
+    const array = [2, 7, 22, 21, 9, 0, -21, 32, 12, 3, 1, 2]
+    console.log(shellSort(array))
+  </script>
+</body>
+</html>

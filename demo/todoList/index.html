@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>todolist</title>
+  <link rel="stylesheet" href="todolist.css" type="text/css">
+  <script src="vue.js"></script>
+</head>
+<body>
+  <div id="todolist">
+    <header>
+      <section class="inputArea">
+        <label for="title">ToDoList</label>
+        <input class="input" type="text" placeholder="添加事件" v-model='inputValue' @keyup.enter="handleInput" autofocus>
+        <button class="addBtn Btn" @click="handleInput">添加</button>
+      </section>
+    </header>
+    <article>
+      <h2>待完成：<span>{{list.length}}</span></h2>
+      <ul>
+        <li class="displayItem" v-for="(item, index) of list" :key="index">
+          <div class="item" @click="handleShowItem(index)" v-show="i !== index">
+            {{item}}
+          </div>
+          <!-- v-focus决定input是否聚焦 -->
+          <input type="text" @blur.prevent="handlePrevent(index)" v-show="show && i === index" v-focus="focusState" v-model="tempValue">
+          <button class="Btn" @click="handleDone(index)">完成</button>
+          <button class="Btn" @click="handleRemove(list, index)">移除</button> <!-- 移除当前项 -->
+        </li>
+      </ul>
+      <h2>已完成：<span>{{doneList.length}}</span></h2>
+      <ul>
+        <li class="displayItem" v-for="(item, index) of doneList" :key="index">
+          {{item}} 
+          <button class="Btn" @click="handleRevocation(index)">撤销</button>
+          <button class="Btn" @click="handleRemove(doneList, index)">移除</button> <!-- 移除当前项 -->
+        </li>
+      </ul>
+    </article>
+    <footer>
+      <button class="Btn clear" @click="handleClearList">清空</button>
+    </footer>
+  </div>
+  <script>
+    const todolist = new Vue ({
+      el: '#todolist',
+      data () {
+        return {
+          list: [],
+          doneList: [],
+          inputValue: '',
+          show: false,
+          focusState: false,
+          tempValue: '',
+          i: null
+        }
+      },
+      methods: {
+        // 输入事件
+        handleInput () {
+          if (!this.inputValue) {
+            return
+          }
+          this.list.push(this.inputValue)
+          this.inputValue = ''
+          this.handleUpdataLocalStorage()
+        },
+        // 移除事件
+        handleRemove (list, index) {
+          list.splice(index, 1)
+          this.handleUpdataLocalStorage()
+        },
+        // 完成事件
+        handleDone (index) {
+          this.doneList.push(this.list.splice(index, 1)[0])
+          this.handleUpdataLocalStorage()
+        },
+        // 清除列表
+        handleClearList () {
+          this.list = []
+          this.doneList = []
+          this.handleUpdataLocalStorage()
+        },
+        // 撤销已完成事件
+        handleRevocation (index) {
+          this.list.push(this.doneList.splice(index, 1)[0])
+          this.handleUpdataLocalStorage()
+        },
+        // input失去焦点时（视为用户已更改信息），更新list内容
+        handlePrevent (index) {
+          this.show = !this.show
+          // input失去焦点时，更改list的内容
+          this.list.splice(index, 1, this.tempValue)
+          this.i = null
+          this.handleUpdataLocalStorage()
+        },
+        // 隐藏或显示item与修改框
+        handleShowItem (index) {
+          this.i = index
+          this.show = true
+          this.focusState = true
+          this.tempValue = this.list[index]
+        },
+        // 把当前的list存入localStorage里
+        handleUpdataLocalStorage () {
+          //stringify()把JavaScript值转换为JSON字符串，因为localStorage里只能存储字符串
+          localStorage.list = JSON.stringify(this.list) 
+          localStorage.doneList = JSON.stringify(this.doneList)
+        }
+      },
+      mounted () {
+        // 初始化list，从localStorage里获取值，用JSON.parse将JSON字符串转换为对象
+        this.list = JSON.parse(localStorage.list)
+        this.doneList = JSON.parse(localStorage.doneList)
+      },
+      directives: {
+        focus: {
+          // 根据focusState的状态改变是否聚焦focus
+          // 第二个参数传进来的是个json
+          update: function (el, value) {
+            if (value) {
+              el.focus()
+            }
+          }
+        }
+      }
+    })
+  </script>
+</body>
+</html>

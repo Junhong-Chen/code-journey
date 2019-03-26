@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>快速排序</title>
+</head>
+<body>
+  <script>
+    const quickSort = (array) => {
+      let length = array.length
+      if (length <= 1) {
+        return array
+      }
+      let pivotIndex = Math.floor(length / 2) // 基准位置
+      let pivot = array.splice(pivotIndex, 1)
+      let left = []
+      let right = []
+      for (let i = 0; i < length - 1; i++) {
+        if (array[i] < pivot) {
+          left.push(array[i])
+        } else {
+          right.push(array[i])
+        }
+      }
+      return quickSort(left).concat(pivot, quickSort(right))
+    }
+    const array = [2, 7, 22, 21, 9, 0, -21, 32, 12, 3, 1, 2]
+    console.log(quickSort(array))
+  </script>
+</body>
+</html>
