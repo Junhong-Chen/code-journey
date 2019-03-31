@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arrow Function</title>
+  <style>
+    .zoom {
+      display: block;
+      transition: all 1s;
+      margin: auto;
+      padding: 10px 20px;
+      border: 0;
+      border-radius: 5px;
+      box-shadow: 2px 2px 5px dimgrey;
+      background-color: dimgrey;
+      color: white;
+    }
+    .up {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body>
+  <button class="zoom">click me</button>
+  <script>
+    /*
+    如果只有一条语句的时候，箭头函数可以隐式返回（不用写return和大括号{}），
+    只有一个参数时可以省略括号()，但一般不建议这么做，
+    this永远指向一个不是箭头函数的父级。
+    */
+    const Jay = {
+      name: 'Jay',
+      age: 24,
+      skills: ['javascript', 'html', 'css'],
+      printSkill: function () {
+        this.skills.map(skill => {
+          console.log(`${this.name} hava ${skill}`)
+        })
+      }
+    }
+    Jay.printSkill()
+
+
+    /*
+    箭头函数不适用的场景
+    */
+
+    // 1.作为构造函数时
+    function Person(name = 'Junhong', age = 24) {
+      this.name = name
+      this.age = age
+    }
+
+    const Junhong = new Person(undefined, 23) // 有多个参数时，最后一个参数不是默认值，而之前的参数需要使用默认参数，就需要传入undefined来使用默认参数
+
+    Person.prototype.updateAge = function (value) {
+      this.age = value
+    }
+    Junhong.updateAge(25)
+    console.log(Junhong)
+
+    // 2.当真正需要用到this时
+    const button = document.querySelector('.zoom')
+    button.addEventListener('click', function() {
+      this.classList.add('up')
+      setTimeout(() => {
+        this.classList.remove('up')
+      }, 1000)
+    })
+
+    // 3.需要用到arguments对象时
+    const sum = function(...value) {
+      console.log(value)
+      return Array.from(arguments).reduce((prev, current) => prev + current, 0) // arguments对象包含传递给函数的每个参数
+    }
+    console.log(sum(1, 2, 3))
+
+  </script>
+</body>
+</html>
