@@ -71,7 +71,7 @@
     // 3.需要用到arguments对象时
     const sum = function(...value) {
       console.log(value)
-      return Array.from(arguments).reduce((prev, current) => prev + current, 0) // arguments对象包含传递给函数的每个参数
+      return Array.from(arguments).reduce((previous, current) => previous + current, 0) // arguments对象包含传递给函数的每个参数
     }
     console.log(sum(1, 2, 3))
 

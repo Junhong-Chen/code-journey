@@ -18,13 +18,13 @@
     // 立即函数有独立的作用域，可以让变量私有化，但操作比较繁琐
     (function () {
       var name = 'Jay'
-      console.log('this is my name:' + name, ', this is window.name:' +  window.name)
+      console.log(`this is my name: ${name}, this is window.name: ${window.name}`)
     })()
 
     // 使用let 或 const 实现变量私有化更简便
     {
       let name = 'Jay'
-      console.log('this is my name:' + name, ', this is window.name:' +  window.name)
+      console.log(`this is my name: ${name}, this is window.name:  ${window.name}`)
     }
 
     // 声明常量(block scope)
