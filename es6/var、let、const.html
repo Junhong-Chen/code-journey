@@ -33,7 +33,7 @@
       sex: 'male'
     }
 
-    const Jay = Object.freeze(person) // 通过Object.freeze()可以冻结对象的属性值（无法修改）
+    const Jay = Object.freeze(person) // 通过Object.freeze()可以冻结对象的属性值（但如果这个对象的属性值，指向另一个对象时，这个被指向的对象的值是可以改变的）
     Jay.name = 'Junhong'
 
     console.log(id, age, person, Jay)
