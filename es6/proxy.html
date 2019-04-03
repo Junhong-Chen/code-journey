@@ -7,9 +7,11 @@
 <body>
   <script>
 
-    /*Proxy 可以改写对象的一些默认的方法，定义自己的逻辑。
+    /*
+    Proxy 可以改写对象的一些默认的方法，定义自己的逻辑。
     Proxy 接受两个参数，第一个参数是用Proxy包装的目标对象，第二个参数是一个对象，它包含了一些我们希望重写的操作。
-    更多介绍可参阅MDN：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy*/
+    更多介绍可参阅MDN：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+    */
     const person = {
       name: 'Junhong',
       age: 24,
@@ -29,7 +31,9 @@
 
 
 
-    /*Examples-1：统一手机格式*/
+    /*
+    Examples-1：统一手机格式
+    */
     const phoneHandler = {
       get(target, key) {
         return target[key].replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
@@ -44,7 +48,9 @@
 
 
 
-    /*Examples-2：类似属性进行检查，并提示用户。*/
+    /*
+    Examples-2：类似属性进行检查，并提示用户
+    */
     const safeHandler = {
       set(target, key, value) {
         const likeKey = Object.keys(target).find(k => k.toLowerCase() === key.toLowerCase())

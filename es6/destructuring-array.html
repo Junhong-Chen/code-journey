@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Destructuring Array</title>
+</head>
+<body>
+  <script>
+    /*
+    数组解构会按照数组的顺序，分别赋值给新定义的参数
+    */
+    const numbers = [1, 2, 3, 4, 5, 6, 7]
+
+    const [one, two, , four] = numbers  // 如果要跳过某个元素，可以使用逗号分隔。
+    console.log(one, two, four)
+
+    const [first, ...ohter] = numbers // 可以使用拓展运算符包含所有剩下的元素，拓展运算符必须是最后一个参数，否则会报错
+    console.log(first, ohter)
+
+
+    const person = ['Jay', 24]
+
+    const [name, age, sex = 'male'] = person // 当某个元素不存在（值必须为undefined，null/false/0 均不会使用默认值）时，可以使用默认参数输出
+    console.log(name, age, sex)
+
+    /*
+    Examples：交换两个变量的值
+    */
+    let x = 3
+    let y = 7;
+    [x, y] = [y, x]
+    console.log(`x = ${x}, y = ${y}`)
+  </script>
+</body>
+</html>

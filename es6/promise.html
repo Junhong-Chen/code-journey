@@ -42,7 +42,9 @@
       })
     }
 
-    // 链式调用：先通过id获取到姓名，再通过姓名获取到能力。
+    /*
+    Examples：链式调用，先通过id获取到姓名，再通过姓名获取到能力。
+    */
     findId(2)
     .then(result => findAbility(result.name))
     .then(result => console.log(result))
