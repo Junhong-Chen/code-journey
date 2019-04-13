@@ -6,16 +6,18 @@
 </head>
 <body>
   <script>
-    /*默认使用const
+    /*
+    默认使用const
     当变量需要更新时使用let
-    尽量不使用var*/
+    尽量不使用var
+    */
 
     // 声明变量
-    var id = 1  // 作用域是 function scope（函数作用域）
+    var id = 1  // 作用域是 function scope（函数作用域）。
     var id = 2 // var声明一个名字相同变量，编译器不会报错。
-    let age = '24';  // 作用域是 block scope（块级作用域），let创建会被提升，但不会初始化（暂时性死区）
+    let age = '24';  // 作用域是 block scope（块级作用域），let创建会被提升，但不会初始化（暂时性死区）。
 
-    // 立即函数有独立的作用域，可以让变量私有化，但操作比较繁琐
+    // 立即函数有独立的作用域，可以让变量私有化，但操作比较繁琐。
     (function () {
       var name = 'Jay'
       console.log(`this is my name: ${name}, this is window.name: ${window.name}`)
@@ -33,7 +35,7 @@
       sex: 'male'
     }
 
-    const Jay = Object.freeze(person) // 通过Object.freeze()可以冻结对象的属性值（但如果这个对象的属性值，指向另一个对象时，这个被指向的对象的值是可以改变的）
+    const Jay = Object.freeze(person) // 通过Object.freeze()可以冻结对象的属性值（但如果这个对象的属性值，指向另一个对象时，这个被指向的对象的值是可以改变的）。
     Jay.name = 'Junhong'
 
     console.log(id, age, person, Jay)

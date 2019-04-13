@@ -14,7 +14,7 @@
 </head>
 <body>
   <ul>
-    <li>Go to Stroe</li>
+    <li>Go to Shopping</li>
     <li>Watch Moive</li>
     <li>Learn English</li>
   </ul>
@@ -24,8 +24,8 @@
     fruits.description = 'My favorite fruits'
     /*
     for()
-    优点：性能最好
-    缺点：较为繁琐
+    优点：性能最好。
+    缺点：较为繁琐。
     */
     const length = fruits.length
     for (let i = 0; i < length; i++) {
@@ -34,8 +34,8 @@
 
     /*
     forEach()
-    优点：简洁
-    缺点：不能跳过(continue)或跳出(break)循环，使用return只会跳过当前循环，不会结束函数
+    优点：简洁。
+    缺点：不能跳过(continue)或跳出(break)循环，使用return只会跳过当前循环，不会结束函数。
     */
     fruits.forEach(fruit => {
       console.log(`forEach: ${fruit}`)
@@ -43,8 +43,8 @@
 
     /*
     for in
-    优点：简洁、遍历属性名(键)
-    缺点：遍历当前对象以及原型对象上所有的可枚举属性(有时候我们并不希望得到这些属性)，不能使用return
+    优点：简洁、遍历属性名(键)。
+    缺点：遍历当前对象以及原型对象上所有的可枚举属性(有时候我们并不希望得到这些属性)，不能使用return。
     */
     for (let index in fruits) {
       console.log(`for in: ${fruits[index]}`)
@@ -52,8 +52,8 @@
 
     /*
     for of
-    优点：简洁、可以使用break、continue、return、可遍历Array，Map，Set，String，TypedArray，arguments
-    缺点：不支持遍历对象
+    优点：简洁、可以使用break、continue、return、可遍历Array、Map、Set、String、TypedArray、arguments。
+    缺点：不支持遍历对象。
     */
     for (let fruit of fruits) {
       console.log(`for of: ${fruit}`)
@@ -63,13 +63,13 @@
 
     /*
     for of原理
-    es6中定义了iterator接口或者定义了symbol.iterator方法的数据结构，可以调用entries()获得接口，它有一个next()方法，调用next()方法可以手动地遍历这个对象
-    for of其实就是帮助我们调用了这些接口的next()方法
+    es6中定义了iterator接口或者定义了symbol.iterator方法的数据结构，可以调用entries()获得接口，它有一个next()方法，调用next()方法可以手动地遍历这个对象。
+    for of其实就是帮助我们调用了这些接口的next()方法。
     */
-    const iterator = fruits.entries() // 这是es6给数组提供的iterator接口
+    const iterator = fruits.entries() // 这是es6给数组提供的iterator接口。
     console.log(iterator.next())
 
-    // 使用解构的方式去遍历一个数组的iterator接口，这样就可以同时获得索引和值
+    // 使用解构的方式去遍历一个数组的iterator接口，这样就可以同时获得索引和值。
     for (let [index, fruit] of fruits.entries()) {
       console.log(`index: ${index}, value: ${fruit}`)
     }

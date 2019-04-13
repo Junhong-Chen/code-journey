@@ -31,17 +31,17 @@
   <script>
     let name = 'Jay'
     let age = 20
-    // 模板字符串可以轻松的组合字符串，用 ${} 插入变量
+    // 模板字符串可以轻松的组合字符串，用 ${} 插入变量。
     let sentence = `I'm is ${name}, ${age + 4} years old.`
     console.log(sentence)
 
-    // 还可以很清晰的写出html结构
+    // 还可以很清晰的写出html结构。
     const HTMLtemplate = `
 		  <article>
         <p>hello ${name}<p>
       <article>
     `
-    console.log(HTMLtemplate.trim()) // trim(): 删除字符串两边的空白
+    console.log(HTMLtemplate.trim()) // trim(): 删除字符串两边的空白。
 
 
     /*
@@ -78,7 +78,7 @@
       `)
     }
 
-    // map返回的是一个数组，以逗号分隔，所以用join('')删除逗号
+    // map返回的是一个数组，以逗号分隔，所以用join('')删除逗号。
     const template = `
     <article>
       <div class="panel-header">${Jay.name}</div>

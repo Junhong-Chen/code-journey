@@ -68,7 +68,7 @@
         <span class="highlight">${value}</span>
       `)
 
-      // 把strings和有高亮样式的标签组合在一起
+      // 把strings和有高亮样式的标签组合在一起。
       return strings.reduce((prev, curr, i) => `
         ${prev}${curr}${highlighted[i] || ''}
       `, '')
@@ -76,7 +76,7 @@
 
     const user = 'Jay'
     let topic = 'Learn to use markdown.'
-    // sentence 返回highlight标签(函数)的值
+    // sentence 返回highlight标签(函数)的值。
     let sentence = highlight`${user} has commented on your topic ${topic}`
 
     document.body.insertAdjacentHTML('afterbegin', sentence)  // 插入到第一个子节点之前
@@ -84,7 +84,7 @@
 
 
     /*
-    Example：使用转义标签和DOMPurify过滤用户输入的信息，避免被黑客攻击
+    Example：使用转义标签和DOMPurify过滤用户输入的信息，避免被黑客攻击。
     带有攻击的输入信息: <img src="https://s9.51cto.com/wyfs01/M00/15/7B/wKioJlIK5QzTEZzvAABqXKplFxs442.jpg-wh_651x-s_1711129743.jpg" onload="alert('Hah!You got hacked!😈')"/>
     */
     const addCommentFrom = document.querySelector('.add-comment')
@@ -105,7 +105,7 @@
       event.preventDefault()
       const newComment = textarea.value.trim()
       if(newComment) {
-      // 可以删除sanitize函数查看被攻击时的场景
+      // 可以删除sanitize函数查看被攻击时的场景。
         comment.insertAdjacentHTML('beforeend', sanitize`
           <div class="comment-header">${user}</div>
           <div class="comment-body">${textarea.value}</div>
