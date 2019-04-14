@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spread Operator Intro</title>
+  <style>
+    html, body {
+      padding: 0;
+      border: 0;
+      margin: 0;
+      height: 100%;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: darkcyan;
+    }
+    .heading {
+      color: white;
+      font-size: 50px;
+      text-shadow: 3px 3px 0 hsla(0, 0%, 0%, 0.2)
+    }
+    .heading span{
+      display: inline-block; /*h2是inline元素，不会触发动画效果*/
+      cursor: pointer;
+      transition: transform .25s;
+    }
+    .heading span:hover {
+      transform: translateY(-10px) rotate(10deg) scale(1.5);
+    }
+  </style>
+</head>
+<body>
+  <h2 class="heading">JUNHONG</h2>
+  <script>
+    /*
+    Example-0: 获取页面中的字符串，给字符串中每一个字符添加动画效果。
+    */
+    const heading = document.querySelector('.heading')
+    // 将heading中的元素替换为wrapWithSpan返回的字符串。
+    heading.innerHTML = wrapWithSpan(heading.textContent)
+
+    // 解构字符串，用span包裹每一个字符。
+    function wrapWithSpan(word) {
+      return [...word].map(letter => `<span>${letter}</span>`).join('')
+    }
+
+    
+    /*
+    Example-1: 将一个可遍历对象（包括数组）拓展到一个新的数组中。
+    */
+    // 将nodeList转换为一个数组
+    const letters = [...document.querySelectorAll('span')]
+    console.log('letters从nodeList转换成了数组：', letters)
+
+    
+    /*
+    Example-2: 拓展对象的属性。
+    */
+    const favorites = {
+      fruit: ['watermelon', 'strawberry'],
+      sport: ['cycling', 'run'],
+      color: ['black', 'white']
+    }
+
+    const shoppingList = ['milk', ...favorites.fruit]
+    console.log('我要购买的物品：', shoppingList)
+
+
+    /*
+    Example-3: 拼接两个数组。
+    */
+    const todos = [
+      {id: 1, name: 'Go Shopping', completed: false},
+      {id: 2, name: 'Watch Moive', completed: false},
+      {id: 3, name: 'Learn English', completed: false}
+    ]
+    const id = 2
+    const todoIndex = todos.findIndex(todo => todo.id === id)
+    const newTodos = [...todos.slice(0, todoIndex), ...todos.slice(todoIndex + 1)]
+    console.log(newTodos)
+
+
+    /*
+    Example-4: 在函数中使用拓展运算符。
+    */
+    const fruit = ['watermelon', 'strawberry', 'mongo']
+    const newFruit = ['apple', 'orange', 'pear', 'bananas']
+    // es5：fruit.push.apply(fruit, newFruit)
+    fruit.push(...newFruit)
+    console.log(fruit)
+
+    const dateFields = [2019, 3, 14]
+    console.log('2019-4-14：', new Date(...dateFields))
+  </script>
+</body>
+</html>

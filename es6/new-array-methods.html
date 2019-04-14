@@ -6,7 +6,7 @@
 </head>
 <body>
   <ul>
-    <li>Go to Shopping</li>
+    <li>Go Shopping</li>
     <li>Watch Moive</li>
     <li>Learn English</li>
   </ul>
@@ -22,6 +22,7 @@
 
     // 转换arguments为数组后使用reduce计算参数之和。
     function sum(...numbers) {
+      // 这里可以用剩余参数numbers来计算，但因为numbers本身是一个数组，而这里需要演示如何使用Array.from()，故使用arguments。
       return Array.from(arguments).reduce((previous, current) => previous + current, 0)
     }
     console.log(sum(1, 2, 3, 4))
