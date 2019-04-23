@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Symbol</title>
+</head>
+<body>
+  <script>
+    const Jay = Symbol('this is a name.') // Symbol里可以添加对当前Symbol的描述。
+    console.log(Jay)
+
+
+    /*
+    Example-0：在对象中使用Symbol。
+    在对象中使用Symbol需要使用动态计算属性名 -> [key]: value
+    */
+    const people = {
+      [Symbol('Jay')]: { age: 24, sex: 'male'},
+      [Symbol('Junhong')]: { age: 25, sex: 'male'},
+      [Symbol('Junhong')]: { age: 18, sex: 'male'}
+    }
+    console.log(people)
+
+
+    /*
+    Example-1：获取对象中的Symbol属性。
+    Symbol不是可遍历的，故可以使用Symbol来作为对象的私有属性
+    */
+    for (let key in people) {
+      console.log(key) // 这里不会有任何输出，因为Symbol不是可遍历的
+    }
+
+    // es6提供了一个方法来获取对象里Symbol
+    const symbols = Object.getOwnPropertySymbols(people).map(symbol => people[symbol]) // 这里使用动态计算属性名，因为返回的symbol是字符串
+    console.log(symbols)
+  </script>
+</body>
+</html>
