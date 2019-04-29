@@ -47,7 +47,7 @@
     /*
     Example: ToDoList
     */
-    const Jay = {
+    const jay = {
       name: 'Jay',
       date: '2019-2-16',
       todos: [
@@ -81,11 +81,11 @@
     // map返回的是一个数组，以逗号分隔，所以用join('')删除逗号。
     const template = `
     <article>
-      <div class="panel-header">${Jay.name}</div>
+      <div class="panel-header">${jay.name}</div>
       <div class="panel-body">
-        ${renderTodos(Jay.todos)}
+        ${renderTodos(jay.todos)}
       </div>
-      <div class="panel-footer">${Jay.date}</div>
+      <div class="panel-footer">${jay.date}</div>
     </article>
     `
     document.body.innerHTML = template

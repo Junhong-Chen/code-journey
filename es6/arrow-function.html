@@ -28,7 +28,7 @@
     只有一个参数时可以省略括号()，但一般不建议这么做，
     this永远指向一个不是箭头函数的父级。
     */
-    const Jay = {
+    const jay = {
       name: 'Jay',
       age: 24,
       skills: ['javascript', 'html', 'css'],
@@ -38,7 +38,7 @@
         })
       }
     }
-    Jay.printSkill()
+    jay.printSkill()
 
 
     /*
@@ -51,13 +51,13 @@
       this.age = age
     }
 
-    const Junhong = new Person(undefined, 23) // 有多个参数时，最后一个参数不是默认值，而之前的参数需要使用默认参数，就需要传入undefined来使用默认参数
+    const junhong = new Person(undefined, 23) // 有多个参数时，最后一个参数不是默认值，而之前的参数需要使用默认参数，就需要传入undefined来使用默认参数
 
     Person.prototype.updateAge = function (value) {
       this.age = value
     }
-    Junhong.updateAge(25)
-    console.log(Junhong)
+    junhong.updateAge(25)
+    console.log(junhong)
 
     // 2.当真正需要用到this时
     const button = document.querySelector('.zoom')

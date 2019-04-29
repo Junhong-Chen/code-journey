@@ -8,12 +8,12 @@
   <!-- export -->
   <script>
     // 默认导出（只能有一个）
-    const Jay = {
+    const jay = {
       name: 'Junhong',
       age: 25,
       sex: 'male'
     }
-    export default Jay
+    export default jay
 
     // 命名导出
     export const height = '176'
@@ -26,8 +26,8 @@
   <!-- import -->
   <script>
     // 默认导出可以用任意名字进行导入，上面导出是Jay，下面导入用的是Junhong
-    import Junhong from './config'
-    console.log(Junhong)
+    import junhong from './config'
+    console.log(junhong)
 
     // 命名导出只能用对应的名字进行导入
     import { height } from './config'
