@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Classes Extends Array</title>
+</head>
+<body>
+  <script>
+    class movieCollection extends Array {
+      constructor(name, ...items) {
+        super(...items)
+        this.name = name
+      }
+
+      // 继承了Array后，可以使用Array所有的方法(包括原型上的方法和Array对象上的方法)
+      add(movie) {
+        this.push(movie)
+      }
+
+      topRated(limit = 10) {
+        return this.sort((x, y) => (x.scores > y.scores) ? -1 : 1).slice(0, limit)
+      }
+    }
+
+    const movies = new movieCollection('favorite movies',
+      { name: 'The Shawshank Redemption', scores: 9.6 },
+      { name: 'Léon', scores: 9.4 },
+      { name: 'Inception', scores: 9.3 },
+      { name: 'Forrest Gump', scores: 9.4 },
+      { name: 'The Great Gatsby', scores: 7.8 },
+      { name: '鬼子来了', scores: 9.2 },
+      { name: '大话西游', scores: 9.2 },
+      { name: 'The Lord of the Rings', scores: 9.0 },
+      { name: '千と千尋の神隠し', scores: 9.3 }
+    )
+    movies.add({ name: 'La leggenda del pianista sull\'oceano', scores: 9.2 })
+    console.table(movies.topRated())
+  </script>
+</body>
+</html>
