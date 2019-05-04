@@ -12,13 +12,13 @@
         this.name = name
       }
 
-      // 继承了Array后，可以使用Array所有的方法(包括原型上的方法和Array对象上的方法)
+      // 继承了Array后，可以使用Array所有的方法(包括原型上的方法和Array对象上的方法)。
       add(movie) {
         this.push(movie)
       }
 
       topRated(limit = 10) {
-        return this.sort((x, y) => (x.scores > y.scores) ? -1 : 1).slice(0, limit)
+        return this.sort((x, y) =>  y.scores - x.scores).slice(0, limit)
       }
     }
 
