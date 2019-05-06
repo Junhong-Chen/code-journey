@@ -6,9 +6,8 @@
 </head>
 <body>
   <script>
-
     /*
-    Proxy 可以改写对象的一些默认的方法，定义自己的逻辑。
+    Proxy 可以重写对象的一些默认的方法，定义自己的逻辑。
     Proxy 接受两个参数，第一个参数是用Proxy包装的目标对象，第二个参数是一个对象，它包含了一些我们希望重写的操作。
     更多介绍可参阅MDN：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy
     */
@@ -24,10 +23,12 @@
         return target[key].toUpperCase()
       },
       set(target, key, value) {
-        return target[key] = value.trim()
+        if (typeof value === 'string') {
+          target[key] = value.trim()
+        }
       }
     })
-    personProxy.name = 'Jay'
+    personProxy.name = '   Jay   '
 
 
 
@@ -49,12 +50,12 @@
 
 
     /*
-    Example-1：类似属性进行检查，并提示用户。
+    Example-1：设置属性时进行检查，如果有类似属性抛出错误并提示用户。
     */
     const safeHandler = {
       set(target, key, value) {
         const likeKey = Object.keys(target).find(k => k.toLowerCase() === key.toLowerCase())
-        console.log(likeKey)
+        console.log(`存在一个类似的key："${likeKey}"`)
         if (!(key in target) && likeKey) {
           throw new Error(`Oops! Looks like we already hava a property ${key} but with the case of ${likeKey}.`)
         }
@@ -62,7 +63,7 @@
       }
     }
     const safetyProxy = new Proxy({ name: 'Jay' }, safeHandler)
-    console.log(safetyProxy.Name = 'Junhong')
+    safetyProxy.Name = 'Junhong'
 
   </script>
 </body>

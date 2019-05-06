@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Set</title>
+</head>
+<body>
+  <script>
+    /*
+    Set 对象允许存储任何类型的唯一值，无论是原始值或者是对象引用。
+    Set 无法像Array一样通过索引获取元素。
+    */
+    const fruits = new Set(['apple', 'banana', 'cherry'])
+    console.log('Set.prototype.size方法查看元素个数:', fruits.size)
+    console.log('Set.prototype.add()方法添加元素:', fruits.add('durian'))
+    console.log('Set.prototype.delete()方法删除元素:', fruits.delete('durian'), fruits)
+    console.log('Set.prototype.has()方法查看元素是否存在:', fruits.has('durian'))
+    // console.log('Set.prototype.clear()方法清空set:', fruits.clear())
+    // 更多方法参考：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set
+
+    // es6 为Set 提供了内建的迭代器，所以可以使用for of(for of 本质上就是调用了迭代器进行遍历)进行遍历。
+    for (let fruit of fruits) {
+      console.log(fruit)
+    }
+
+    // 也可以使用forEach进行遍历。
+    fruits.forEach((item, key, ownSet) => {
+      // 这里的item和key一样，之所以会有两个相同的参数，是为了和array、map的forEach参数保持一致。
+      console.log(item, key, ownSet)
+    })
+
+
+    /*
+    Example：数组去重。
+    */
+    const numbers = [1, 2, 3, 4, 1, 2, 5]
+    const numbersSet = new Set(numbers)
+    // set转为数组。
+    const uniqueNumbers = [...numbersSet]
+    console.log(uniqueNumbers)
+  </script>
+</body>
+</html>
