@@ -16,10 +16,12 @@
 
     // es6并没有为 WeakSet 配置内建的迭代器，所以不能使用 for of 和 forEach进行遍历。
     let steam = {name: 'steam', representative: 'G胖'}
-    let origin = {name: 'origin', representative: 'EA'}
+    let uplay = {name: 'uplay', representative: 'ubisoft'}
 
-    let gamePlatforms = new WeakSet([steam, origin])
+    let gamePlatforms = new WeakSet([steam, uplay])
     console.log(gamePlatforms)
+    console.log(`WeakSet没有size：${gamePlatforms.size}`)
+    // console.log(`给WeakSet添加的元素能为值，否在报错：${gamePlatforms.add('origin')}`)
     // for (let game of gamePlatforms) {
     //   console.log(game) // 报错，因为WeakSet不能用 for of 遍历
     // }
@@ -28,10 +30,10 @@
     /*
     WeakSet 的垃圾回收机制
     */
-    origin = null
-    console.log(`在gamePlatforms中, 是否还存在steam：${gamePlatforms.has(steam)}, 是否还存在origin： ${gamePlatforms.has(origin)}`)
-    // 疑问：在控制台中查看 gamePlatforms 时，多次刷新会看到不同的结果，有时还能看到 origin 存在。
-    // 可能性：垃圾回收机制何时运行是不可预测的。
+    uplay = null
+    console.log(`在gamePlatforms中, 是否还存在steam：${gamePlatforms.has(steam)}, 是否还存在uplay： ${gamePlatforms.has(uplay)}`)
+    // 疑问：在控制台中查看 gamePlatforms 时，多次刷新会看到不同的结果，有时还能看到 uplay 存在。
+    // 原因(*暂未确定)：垃圾回收机制何时运行是不可预测的。
   </script>
 </body>
 </html>
