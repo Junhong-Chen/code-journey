@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>边框内圆角</title>
+</head>
+<body>
+  <!--
+  优点：只需用到一个元素。
+  缺点：如果我们希望这一圈“边框”不只是纯色的，而是要加一层淡淡的纹理，这个方案则无法做到，但可以使用两个元素来实现。
+
+  .34em 由来：如果希望box-shadow填充空余的部分，我们只需要计算出空余部分的对角到圆角的最小直线距离即可知道最小扩张值(p)。
+  border-radius 为 .8em(r) ，由勾股定理得知：最小扩张值(p)加上圆的半径(r) = r√2。
+  p = r√2 - r，简化：p = (√2 - 1)r，将 .8 带入 r 计算，可得 p 为 .34。
+  该计算过程揭示了这个方法的另一个限制：为了让这个效果得以达成，扩张半径需要比描边的宽度值小，但它同时又要比 (√2 - 1)r 大
+  （这里的 r 表示 border-radius）。这意味着，如果描边的宽度比 (√2 - 1)r 小，那我们是不可能用这个方法达成该效果的。
+  -->
+  <div class="filleted-corner">
+    <style>
+      .filleted-corner {
+        width: 100px;
+        height: 100px;
+        background: tan;
+        border-radius: .8em;
+        padding: 1em;
+        box-shadow: 0 0 0 .34em grey;
+        outline: .6em solid grey;
+      }
+    </style>
+  </div>
+</body>
+</html>
