@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>灵活的背景定位</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  background-position方案：
+  它允许我们指定背景图片距离任意角的偏移量，只要我们在偏移量前面指定关键字。
+  -->
+  <div class="background-position-plan">
+    <style>
+      .background-position-plan {
+        width: 400px;
+        height: 400px;
+        /*一个回退方案，把老套的 bottom right 定位值写进 background 的简写属性中：*/
+        background: url('../assets/images/AlbertEinstein.jpg') no-repeat bottom right yellowgreen;
+        background-position: right 10px bottom 10px;
+      }
+    </style>
+  </div>
+
+  <!--
+  background-origin方案：
+  给背景图片设置距离某个角的偏移量与容器的内边距一致。如果采用上面提到的 background-position 的扩展语法方案不够 DRY。
+  background-position 默认是以 padding box 为准的来设置top right bottom left，这样边框才不会遮住背景图片，
+  属性 background-origin可以改变这种行为，如果把它的值改成 content-box 就会以内容区的边缘作为基准。
+  -->
+  <div class="background-origin-plan">
+    <style>
+      .background-origin-plan {
+        width: 380px;
+        height: 380px;
+        padding: 10px;
+        background: url('../assets/images/AlbertEinstein.jpg') no-repeat bottom right pink;
+        background-origin: content-box;
+      }
+    </style>
+  </div>
+
+  <!--
+  calc()方案：
+  calc() 函数允许我们执行此类运算，它可以完美地在 background-position 属性中使用。
+  -->
+  <div class="calc-plan">
+    <style>
+      .calc-plan {
+        width: 400px;
+        height: 400px;
+        background: url('../assets/images/AlbertEinstein.jpg') no-repeat bottom right aqua;
+        background-position: calc(100% - 10px) calc(100% - 10px);
+      }
+    </style>
+  </div>
+</body>
+</html>

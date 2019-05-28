@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>条纹背景</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  横向条纹：
+  主要是通过 background: linear-gradient 和 background-size 的配合使用来生成条纹形状，
+  因为渐变是一种由代码生成的图像，我们能像对待其他任何背景图像那样对待它，而且还可以通过 background-size 来调整其尺寸。
+  -->
+  <div class="horizontal-stripes">
+    <style>
+      .horizontal-stripes {
+        width: 200px;
+        height: 200px;
+        /*如果某个色标的位置值比整个列表中在它之前的色标的位置值都要小，则该色标的位置值会被设置为它前面所有色标位置值的最大值。*/
+        background: linear-gradient(#fb3 33.3%, #58a 0, #58a 66.6%, yellowgreen 0);
+        /*通过 background-size 来调整其尺寸。*/
+        background-size: 100% 60px;
+      }
+    </style>
+  </div>
+
+  <!-- 
+  垂直条纹：
+  代码跟水平条纹几乎是一样的，差别主要在于：
+  1、我们需要在开头加上一个额外的参数来指定渐变的方向（在水平条纹的代码中，我们其实也可以加上这个参数，只不过它的默认值 to bottom 本来就跟我们的意图一致，于是就省略了。）。
+  2、把 background-size 的值颠倒一下。
+  -->
+  <div class="vertical-stripes">
+    <style>
+      .vertical-stripes {
+        width: 200px;
+        height: 200px;
+        background: linear-gradient(to right, #fb3 33.3%, #58a 0, #58a 66.6%, yellowgreen 0);
+        background-size: 60px 100%;
+      }
+    </style>
+  </div>
+
+  <!--
+  斜向条纹：
+  并不能直接把 linear-gradient 里的方向设置为 45deg，因为这样只是把每个“贴片”内部的渐变旋转了 45°，而不是把整个背景都旋转了。
+  所以我们需要更多的条纹(quantity * 2)，只有这样才有可能做到无缝拼接。
+  -->
+</body>
+</html>
