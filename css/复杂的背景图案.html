@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>复杂的背景图案</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    div {
+      width: 200px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  方格纹: 
+  把水平和垂直的条纹叠加起来，从而得到各种样式的网格。
+  -->
+  <div class="trellis">
+    <style>
+      .trellis {
+        background: white;
+        background-image: linear-gradient(rgba(200, 0, 0, .5), 50%, transparent 0),
+                          linear-gradient(90deg, rgba(200, 0, 0, .5), 50%, transparent 0);
+        background-size: 60px 60px;
+      }
+    </style>
+  </div>
+
+  
+  <!--
+  蓝图网格：
+  网格中每个格子的大小可以调整，而网格线条的粗细同时保持固定，
+  并且把两幅不同线宽、不同颜色的网格图案叠加起来，得到一个更炫酷的网格。
+  -->
+  <div class="blueprint">
+    <style>
+      .blueprint {
+        background: #58a;
+        background-image: linear-gradient(white, 1px, transparent 0),
+                          linear-gradient(90deg, white, 1px, transparent 0),
+                          linear-gradient(hsla(0,0%,100%,.3), 1px, transparent 0),
+                          linear-gradient(90deg, hsla(0,0%,100%,.3), 1px, transparent 0);
+        background-size: 90px 90px, 90px 90px,
+                         30px 30px, 30px 30px;
+      }
+    </style>
+  </div>
+
+  <!--
+  波点：
+  径向渐变能够创建的最简单的图案是圆点的阵列，我们可以生成两层圆点阵列图案，并把它们的背景定位错开，这样就可以得到真正的波点图案了。
+  -->
+  <div class="polka">
+    <style>
+      .polka {
+        background: #655;
+        background-image: radial-gradient(tan 30%, transparent 0),
+                          radial-gradient(tan 30%, transparent 0);
+        background-size: 60px 60px;
+        background-position: 0 0, 30px 30px;
+      }
+    </style>
+  </div>
+
+  <!--
+  棋盘：
+  使用角向渐变生成两个错位的正方形。
+  提示：兼容性较差，建议使用SVG图代替。
+  -->
+  <div class="checkerboard">
+    <style>
+      .checkerboard {
+        background: repeating-conic-gradient(#bbb 0, #bbb 25%, #eee 0, #eee 50%);
+        background-size: 60px 60px;
+      }
+
+      /*
+      另一种方案，代码过于冗余，不宜维护。
+      .checkerboard {
+        background: #eee;
+        background-image: linear-gradient(45deg, rgba(0,0,0,.25) 25%, transparent 0, transparent 75%, rgba(0,0,0,.25) 0),
+                          linear-gradient(45deg, rgba(0,0,0,.25) 25%, transparent 0, transparent 75%, rgba(0,0,0,.25) 0);
+        background-position: 0 0, 30px 30px;
+        background-size: 59px 59px;
+      }
+      */
+    </style>
+  </div>
+</body>
+</html>
