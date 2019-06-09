@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>连续的图像边框</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    div {
+      width: 300px;
+      height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  自定义图像边框：
+  主要的思路就是在背景图片之上，再叠加一层纯白的实色背景。为了让下层的图片背景透过边框区域显示出来，
+  我们需要给两层背景指定不同的 background-clip 值。最后一个要点在于，我们只能在多重背景的最底层设置背景色，
+  因此需要用一道从白色过渡到白色的 CSS 渐变来模拟出纯白实色背景的效果。
+  -->
+  <div class="continuous-image-borders">
+    <style>
+      .continuous-image-borders {
+        padding: 1em;
+        border: 1em solid transparent;
+        /*
+        background: linear-gradient(white, white), url('../assets/images/background.jpg');
+        background-size: cover;
+        background-clip: padding-box, border-box;
+        background-origin: border-box;
+        */
+
+        /*
+        简写:
+        background: [background-color] [background-image] [background-repeat] [background-attachment] [background-position] / [ background-size] [background-origin] [background-clip];
+        */
+        background: linear-gradient(white, white) padding-box, url('../assets/images/background.jpg') border-box 0 / cover;
+      }
+    </style>
+  </div>
+
+  <!--
+  老式信封：
+  -->
+  <div class="vintage-envelope">
+    <style>
+      .vintage-envelope {
+        padding: 1em;
+        border: 1em solid transparent;
+        background: linear-gradient(white, white) padding-box,
+                    repeating-linear-gradient(-45deg, red 0, red 12.5%, transparent 0, transparent 25%, #58a 0, #58a 37.5%, transparent 0, transparent 50%) 0 / 5em 5em;
+      }
+    </style>
+  </div>
+
+  <!--
+  蚂蚁行军：
+  基于老式信封的变种。
+  1、把条纹转变为黑白两色，并把边框的宽度减少至 1px（斜向条纹是怎么转变成虚线边框），
+  2、把 background-size 改为某个合适的值。
+  3、把 background-position 以动画的方式改变为 100%，就可以让它滚动起来了。
+  -->
+  <div class="marching-ants">
+    <style>
+      @keyframes ants { to { background-position: 100% 100% } }
+      .marching-ants {
+        padding: 1em;
+        border: 1px solid transparent;
+        background: linear-gradient(white, white) padding-box,
+                    repeating-linear-gradient(-45deg, black 0, black 25%, white 0, white 50%) 0 / .6em .6em;
+        animation: ants 24s linear infinite; 
+      }
+    </style>
+  </div>
+</body>
+</html>
