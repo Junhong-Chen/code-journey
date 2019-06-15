@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>菱形图片</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      margin: 0;
+      height: 100vh;
+    }
+
+    div {
+      width: 200px;
+      height: 200px;
+    }
+
+    div > img {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  基于变形的方案：
+  主要思路与“平行四边形”中的第一个解决方案类似。
+
+  这里着重讨论下为什么给 img 元素设置 scale(1.42)。
+  如果删掉 scale(1.42)，会发现 img 被裁剪成一个八角形。主要问题在于 max-width: 100% 这条声明。100% 会被解析为容器（.picture）的边长。
+  而我们希望图片的宽度与容器的对角线相等，而不是与边长相等。
+  由勾股定理可知正方形的对角线长度等于它的边长乘以 √2。
+  因此，把 max-width 的值设置为 √2 * 100% 才能得到期望的结果。
+
+  但是，通过 width 属性来放大图片时，只会以它的左上角为原点进行缩放，从而迫使我们用额外的负外边距来把图片的位置调整回来。
+  所以使用 scale() 变形样式来放大更合理：
+  1.图片的尺寸属性保留 100% 这个值，这样当浏览器不支持变形样式时仍然可以得到一个合理的布局。
+  2.通过 scale() 变形样式来缩放图片时，是以它的中心点进行缩放的（除非我们额外指定了 transform-origin 样式）。
+
+  缺点：
+  1.额外的 html 元素。
+  2.无法处理非正方形的图片。
+  -->
+  <div class="diamond-images">
+    <img src="../assets/images/eagle.jpg" alt="eagle">
+    <style>
+      .diamond-images {
+        transform: rotate(45deg);
+        overflow: hidden;
+      }
+
+      .diamond-images > img {
+        transform: rotate(-45deg) scale(1.42);
+      }
+    </style>
+  </div>
+
+  <!--
+  裁剪路径方案：
+  主要思路是使用 clip-path 属性。
+  使用 polygon()（多边形）函数来指定一个菱形。
+  它允许我们用一系列（以逗号分隔的）坐标点来指定任意的多边形（可以使用百分比值，它会解析为元素自身的尺寸）。
+  clip-path 所创造的奇迹还不止于此，它甚至可以参与动画（只能在 相同属性 且 相同参数 间进行）。
+  -->
+  <img class="diamond-clip" src="../assets/images/panda.jpg" alt="panda">
+  <style>
+    .diamond-clip {
+      height: 200px;
+      clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+      transition: 1s clip-path;
+    }
+
+    .diamond-clip:hover {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+  </style>
+</body>
+</html>
