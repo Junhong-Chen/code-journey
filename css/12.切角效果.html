@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>切角效果</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    div {
+      width: 200px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  渐变方案：
+  渐变可以接受一个角度（比如 45deg）作为方向，而且色标的位置信息也可以是绝对的长度值，这一点丝毫不受容器尺寸的影响。
+  写四个渐变分别对应四个角，使用 background-size 属性使每层渐变占据整个元素面积的四分之一。
+  使用 background-repeat 使得每层渐变只平铺一次，不设置则每个渐变都会重复平铺四次。
+
+  缺点：
+  1.可维护性差，改变背景色时需要修改五处，改变切角尺寸时需要修改四处（可以使用css预处理的mixin减少重复代码）。
+  2.无法完美支持动画(某些浏览器)。
+  -->
+  <div class="bevel-corners-gradients">
+    <style>
+      .bevel-corners-gradients {
+        background: #58a; /*回退机制*/
+        background: linear-gradient(135deg, transparent 15px, #58a 0) top left,
+                    linear-gradient(-135deg, transparent 15px, #f60 0) top right,
+                    linear-gradient(-45deg, transparent 15px, #1c0 0) bottom right,
+                    linear-gradient(45deg, transparent 15px, #996 0) bottom left;
+        background-size: 50% 50%;
+        background-repeat: no-repeat;
+      }
+    </style>
+  </div>
+
+  <!--
+  弧形切角：
+  也是使用渐变方案，只是将 线性渐变(linear-gradient) 换成 径向渐变(radial-gradient)。
+  -->
+  <div class="scoop-corners">
+    <style>
+      .scoop-corners {
+        background: #58a; /*回退机制*/
+        background: radial-gradient(circle at top left, transparent 15px, #58a 0) top left,
+                    radial-gradient(circle at top right, transparent 15px, #f60 0) top right,
+                    radial-gradient(circle at bottom right, transparent 15px, #1c0 0) bottom right,
+                    radial-gradient(circle at bottom left, transparent 15px, #996 0) bottom left;
+        background-size: 50% 50%;
+        background-repeat: no-repeat;
+      }
+    </style>
+  </div>
+
+  <!--
+  内联 SVG 与 border-image 方案：
+  border-image 会解决缩放问题，而 SVG 可以实现与尺寸完全无关的完美缩放——这就是矢量图的好处。
+  切角的尺寸是1，直线边缘也都是 1，为了以便理解和书写，每个切片的尺寸都设置为 1。
+  border-image 属性值加上 fill 关键字，它就不会丢掉 SVG 中央的那个切片了。
+
+  缺点：只能指定某实色的背景或一个边缘接近某个实色的背景图案。
+  -->
+  <div class="bevel-corners">
+    <style>
+      .bevel-corners {
+        width: 160px;
+        height: 160px;
+        border: 20px solid #58a; /*回退机制。若想要得到和渐变方案中的一样的尺寸，需要把值乘以 √2 */
+        border-image: 1 fill url('data:image/svg+xml,\
+          <svg xmlns="http://www.w3.org/2000/svg" width="3" height="3" fill="%2358a">\
+          <polygon points="0,1 1,0 2,0 3,1 3,2 2,3 1,3 0,2"/>\
+          </svg>');
+        background: #58a; /*回退机制*/
+        background-clip: padding-box; /*避免背景色蔓延到边框区域*/
+      }
+    </style>
+  </div>
+
+  <!--
+  裁切路径方案：
+  clip-path。
+
+  优点：可以使用任意类型的背景，甚至可以对替换元素（比如图片）进行裁切。 
+  缺点：不够DRY，而且当内边距不够宽时，会裁切掉文本。
+  -->
+  <div class="bevel-corners-clipped">
+    <style>
+      .bevel-corners-clipped {
+        background: #58a;
+        clip-path: polygon(
+          20px 0, calc(100% - 20px) 0,
+          100% 20px, 100% calc(100% - 20px),
+          calc(100% - 20px) 100%, 20px 100%,
+          0 calc(100% - 20px), 0 20px );
+      }
+    </style>
+  </div>
+
+  <!--
+  corner-shape 方案：
+  CSS 背景与边框（第四版）引入的新属性。
+
+  缺点：暂未支持。
+  -->
+  <!-- <div class="bevel-corner-shape">
+    <style>
+      .bevel-corner-shape {
+        border-radius: 15px;
+        corner-shape: bevel;
+      }
+    </style>
+  </div> -->
+</body>
+</html>
