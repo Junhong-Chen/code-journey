@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>边框内圆角</title>
+  <style>
+    div {
+      width: 100px;
+      height: 100px;
+    }
+  </style>
 </head>
 <body>
   <!--
@@ -14,12 +20,12 @@
 
   优点：只需用到一个元素。
   缺点：如果我们希望这一圈“边框”不只是纯色的，而是要加一层淡淡的纹理，这个方案则无法做到，但可以使用两个元素来实现。
+
+  reference-link: play.csssecrets.io/inner-rounding
   -->
-  <div class="filleted-corner">
+  <div class="inner-rounding">
     <style>
-      .filleted-corner {
-        width: 100px;
-        height: 100px;
+      .inner-rounding {
         background: tan;
         border-radius: .8em;
         padding: 1em;

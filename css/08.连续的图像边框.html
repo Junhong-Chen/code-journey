@@ -22,6 +22,8 @@
   主要的思路就是在背景图片之上，再叠加一层纯白的实色背景。为了让下层的图片背景透过边框区域显示出来，
   我们需要给两层背景指定不同的 background-clip 值。最后一个要点在于，我们只能在多重背景的最底层设置背景色，
   因此需要用一道从白色过渡到白色的 CSS 渐变来模拟出纯白实色背景的效果。
+
+  reference-link: play.csssecrets.io/continuous-image-borders
   -->
   <div class="continuous-image-borders">
     <style>
@@ -46,6 +48,7 @@
 
   <!--
   老式信封：
+  reference-link: play.csssecrets.io/vintage-envelope
   -->
   <div class="vintage-envelope">
     <style>
@@ -64,6 +67,8 @@
   1.把条纹转变为黑白两色，并把边框的宽度减少至 1px（斜向条纹是怎么转变成虚线边框），
   2.把 background-size 改为某个合适的值。
   3.把 background-position 以动画的方式改变为 100%，就可以让它滚动起来了。
+
+  reference-link: play.csssecrets.io/marching-ants
   -->
   <div class="marching-ants">
     <style>
@@ -77,5 +82,27 @@
       }
     </style>
   </div>
+
+  <!--
+  边框裁切：
+  border-image 属性加上一条由渐变生成的垂直条纹，并把要裁切的长度在渐变中写好。
+  边框线的粗细交给 border-width 来控制。
+  所有属性都指定为 em 单位，效果会根据 font-size 的变化而自动调整。
+  另外，由于使用了 currentColor，它也会根据 color 属性的变化而自动适应（假设我希望这条边框跟文字保持相同的颜色）。
+
+  reference-link: play.csssecrets.io/footnote
+  -->
+  <div class="footnote">
+    <sup>1</sup> This is a footnote.
+  </div>
+  <style>
+    .footnote {
+      width: 400px;
+      border-top: .15em solid transparent;
+      border-image: 100% 0 0 linear-gradient(90deg, currentColor 4em, transparent 0);
+      padding-top: .5em;
+      font: 220%/1.4 Baskerville, Palatino, serif;
+    }
+  </style>
 </body>
 </html>

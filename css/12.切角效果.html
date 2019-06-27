@@ -25,6 +25,8 @@
   缺点：
   1.可维护性差，改变背景色时需要修改五处，改变切角尺寸时需要修改四处（可以使用css预处理的mixin减少重复代码）。
   2.无法完美支持动画(某些浏览器)。
+
+  reference-link: play.csssecrets.io/bevel-corners-gradients
   -->
   <div class="bevel-corners-gradients">
     <style>
@@ -43,6 +45,8 @@
   <!--
   弧形切角：
   也是使用渐变方案，只是将 线性渐变(linear-gradient) 换成 径向渐变(radial-gradient)。
+
+  reference-link: play.csssecrets.io/scoop-corners
   -->
   <div class="scoop-corners">
     <style>
@@ -65,6 +69,8 @@
   border-image 属性值加上 fill 关键字，它就不会丢掉 SVG 中央的那个切片了。
 
   缺点：只能指定某实色的背景或一个边缘接近某个实色的背景图案。
+
+  reference-link: play.csssecrets.io/bevel-corners
   -->
   <div class="bevel-corners">
     <style>
@@ -88,6 +94,8 @@
 
   优点：可以使用任意类型的背景，甚至可以对替换元素（比如图片）进行裁切。 
   缺点：不够DRY，而且当内边距不够宽时，会裁切掉文本。
+
+  reference-link: play.csssecrets.io/bevel-corners-clipped
   -->
   <div class="bevel-corners-clipped">
     <style>

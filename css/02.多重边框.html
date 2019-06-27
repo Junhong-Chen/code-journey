@@ -11,6 +11,11 @@
       height: 100vh;
       margin: 0;
     }
+
+    div {
+      width: 100px;
+      height: 100px;
+    }
   </style>
 </head>
 <body>
@@ -18,13 +23,13 @@
   box-shadow方案：
   1.投影的行为跟边框不完全一致，因为它不会影响布局，而且也不会受到 box-sizing 属性的影响。不过，还是可以通过内边距或外边距（这取决于投影是内嵌和还是外扩的）来额外模拟出边框所需要占据的空间。
   2.这个方法所创建出的假“边框”出现在元素的外圈。它们并不会响应鼠标事件，比如悬停或点击。如果这一点非常重要，可以给 box-shadow 属性加上 inset 关键字，来使投影绘制在元素的内圈。 请注意，此时需要增加额外的内边距来腾出足够的空隙。
+
+  reference-link: play.csssecrets.io/multiple-borders
   -->
-  <div class="box-shadow-plan">
+  <div class="multiple-borders">
     box-shadow
     <style>
-      .box-shadow-plan {
-        width: 100px;
-        height: 100px;
+      .multiple-borders {
         background: yellowgreen;
         box-shadow: 0 0 0 5px grey,
                     0 0 0 10px deeppink,
@@ -45,8 +50,6 @@
     outline
     <style>
       .outline-plan {
-        width: 100px;
-        height: 100px;
         background: yellowgreen;
         border: 5px solid grey;
         border-radius: 10px;
@@ -66,7 +69,6 @@
     <style>
       .outline-seam {
         width: 200px;
-        height: 100px;
         background: yellowgreen;
         border-radius: 10px;
         outline: 1px dashed white;
