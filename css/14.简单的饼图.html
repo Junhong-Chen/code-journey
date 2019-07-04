@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>简单的饼图</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    div {
+      width: 100px;
+      height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  基于 transform 方案的动态饼图：
+  把圆形的左右两部分指定为两种颜色，然后用伪元素覆盖上去，通过旋转来决定露出多大的扇区。
+  我希望伪元素能遮盖圆形中的棕色部分，因此应该给它指定绿色背景。使用 background-color: inherit 声明可以避免代码的重复。
+  伪元素是绕着圆形的圆心来旋转的，对它自己来说，这个点就是它左边缘的中心点。因此，应该把它的 transform-origin 设置为 0 50%，或者写成left。
+  给父元素设置 overflow: hidden 来隐藏伪元素多出的部分（伪元素为矩形），或者把伪元素设置成一个半圆（border-radius）。
+
+  缺点：
+  1.无法增加第三种颜色。
+  2.依赖背景来实现，因此往往无法打印出来。
+  3.颜色依赖伪元素，无法对它使用内联样式（意味着无法轻易地通过脚本来控制颜色）；即使通过继承来实现，也很不方便。
+
+  reference-link: play.csssecrets.io/pie-animated
+  -->
+  <div class="pie-animated">
+    <style>
+      .pie-animated {
+        border-radius: 50%;
+        background: yellowgreen;
+        background-image: linear-gradient(to right, transparent 50%, indianred 0);
+        color: indianred;
+      }
+
+      .pie-animated::before {
+        content: '';
+        display: block;
+        height: 100%;
+        margin-left: 50%;
+        border-radius: 0 100% 100% 0 / 50%;
+        background-color: inherit;
+        transform-origin: left;
+        animation: spin 3s linear infinite, bg 6s step-end infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(.5turn); }
+      }
+      @keyframes bg {
+        50% { background: currentColor; }
+      }
+    </style>
+  </div>
+
+  <!--
+  基于 transform 方案的静态饼图：
+  通过元素内的数值来设定饼图的比率。
+  解决方案恰恰来源于一个看似最不沾边的地方。我们将使用上面刚刚用到的那个动画，但动画必须处于暂停状态。
+  跟常规情形下我们让动画动起来的做法不一样，这里我们要用负的动画延时来直接跳至动画中的任意时间点，并且定格在那里。
+
+  animation-delay 在规范中的解释：
+    一个负的延时值是合法的。与0s的延时类似，它意味着动画会立即开始播放，但会自动前进到延时值的绝对值处，就好像动画在过去已经播放了指定的时间一样。
+    因此实际效果就是动画跳过指定时间而从中间开始播放了。
+
+  因为我们的动画是暂停的，所以动画的第一帧（由负的 animationdelay 值定义）将是唯一显示出的那一帧。
+  在饼图上显出的比率就是我们的 animation-delay 值在总的动画持续时间中所占的比率。
+  举例来说，如果动画持续时间定为6s，只需要把 animation-delay 设置为-1.2s，就能显示出 20% 的比率。
+  为了简化这个计算过程，可以设置一个长达100s的持续时间。
+  因为动画是永远处在暂停状态的，因此指定的持续时间并不会产生其他副作用。
+  动画是作用在伪元素上的，但我希望最终内联样式可以设置在 .pie 元素上。
+  由于 <div> 上并没有任何动画效果，可以给其设置 animation-delay 属性，然后再在伪元素上应用 animation-delay: inherit; 属性。
+
+  reference-link: play.csssecrets.io/pie-static
+  -->
+  <div class="pie-static">70</div>
+  <style>
+    .pie-static {
+      position: relative;
+      border-radius: 50%;
+      background: yellowgreen;
+      background-image: linear-gradient(to right, transparent 50%, indianred 0);
+      color: transparent;
+      line-height: 100px;
+      text-align: center;
+    }
+
+    .pie-static::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      display: block;
+      width: 50%;
+      height: 100%;
+      border-radius: 0 100% 100% 0 / 50%;
+      background-color: inherit;
+      transform-origin: left;
+      animation: spin 50s linear infinite, bg 100s step-end infinite;
+      animation-play-state: paused;
+      animation-delay: inherit;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(.5turn); }
+    }
+    @keyframes bg {
+      50% { background: indianred; }
+    }
+  </style>
+
+  <script>
+    const pieStatic = document.getElementsByClassName('pie-static')[0]
+    const pieStaticProportion = pieStatic.textContent
+    pieStatic.style.animationDelay = `-${pieStaticProportion}s`
+  </script>
+
+  <!--
+  基于 SVG 方案的动态饼图：
+  SVG 的描边效果并不仅仅由 stroke 和 stroke-width 组成。还有很多不那么为人所知的属性可以微调描边的效果，其中之一就是 stroke-dasharray。
+  它可以指定虚线线段的长度和间隙长度。
+  把这个虚线描边的线段长度指定为0，并且把虚线间隙的长度设置为等于或大于整个圆周的长度时（圆形的周长C = 2πr，因此在这里 C = 2π × 25 ≈ 158。），就会得到一个完全去除了描边效果的圆形。
+  增加虚线描边的线段长度时，神奇的事情就发生了：因为虚线的间隙太大，所以根本就看不到连续的虚线效果，只能得到虚线的第一段线段，而它在整个圆周上覆盖的长度正是它的长度值。
+  接下来把圆形的半径设置成描边宽度的一半，它就会被描边完全覆盖，最终会得到一个非常接近饼图的图形。
+  现在只需要在描边的下层再绘制一个稍大些的圆形，然后把描边以逆时针方向旋转90°，就可以得到一个饼图。
+
+  优点：
+  1.增加第三种颜色非常容易，只要增加另一个圆形，并设置虚线描边，再用 stroke-dashoffset 来推后描边线段的起始位置即可。把它的描边长度添加到它下面那层描边的长度，也可以做到。
+  2.不需要特别担心打印，因为 SVG 元素本身被视为页面内容，是会被打印出来的，在这方面它跟 <img> 元素类似。
+  3.可以用内联样式来指定颜色，这意味着可以很容易地通过脚本来控制颜色（比如，我们想让用户输入来决定颜色）。
+
+  reference-link: play.csssecrets.io/pie-svg
+  -->
+  <svg class="svg-animated" width="100" height="100">
+    <circle r="25" cx="50" cy="50" />
+  </svg>
+  <style>
+    .svg-animated {
+      transform: rotate(-90deg);
+      background: yellowgreen;
+      border-radius: 50%;
+    }
+
+    .svg-animated circle {
+      fill: yellowgreen;
+      stroke: indianred;
+      stroke-width: 50;
+      stroke-dasharray: 0 158;
+      animation: fillup 5s linear infinite;
+    }
+
+    @keyframes fillup {
+      to { stroke-dasharray: 158 158; }
+    }
+  </style>
+
+  <!--
+  基于 SVG 方案的静态饼图：
+  给圆形指定一个特定的半径，从而让它的周长无限接近100，这样就可以直接把比率的百分比值指定为 strokedasharray 的长度，不需要做其他计算了。
+  周长是2πr，半径就是100 / 2π ≈ 15.915 494 309，把这个值取整为16。
+  在 SVG 的 viewBox 属性中指定其尺寸，而不再使用 width 和 height 属性，这样就可以让它自动适应容器的大小。
+
+  reference-link: play.csssecrets.io/pie-svg
+  -->
+  <svg class="svg-static" viewBox="0 0 32 32">23
+    <!-- <circle r="16" cx="16" cy="16" /> -->
+  </svg>
+  <style>
+    .svg-static {
+      width: 100px;
+      height: 100px;
+      transform: rotate(-90deg);
+      background: yellowgreen;
+      border-radius: 50%;
+    }
+
+    .svg-static circle {
+      fill: yellowgreen;
+      stroke: indianred;
+      stroke-width: 32;
+    }
+  </style>
+
+  <script>
+    const svgStatic = document.getElementsByClassName('svg-static')[0]
+    const svgStaticProportion = svgStatic.textContent
+    const NS = 'http://www.w3.org/2000/svg'
+    const svg = document.createElementNS(NS, 'svg')
+    const circle = document.createElementNS(NS, 'circle')
+    const title = document.createElementNS(NS, 'title')
+    circle.setAttribute('r', 16)
+    circle.setAttribute('cx', 16)
+    circle.setAttribute('cy', 16)
+    circle.setAttribute('stroke-dasharray', `${svgStaticProportion} 100`)
+    svg.setAttribute('viewBox', '0 0 32 32')
+    title.textContent = svgStatic.textContent
+    svgStatic.textContent = ''
+    svg.appendChild(title)
+    svg.appendChild(circle)
+    svgStatic.appendChild(svg)
+  </script>
+
+  <!--
+  角向渐变方案：
+  展望未来……
+
+  缺点：兼容性较差。
+  -->
+  <div class="pie-conic-gradient">
+    <style>
+      .pie-conic-gradient {
+        width: 100px; height: 100px;
+        border-radius: 50%;
+        background: conic-gradient(orange 25%, indianred 0, indianred 50%, yellowgreen 0);
+      }
+    </style>
+  </div>
+</body>
+</html>
