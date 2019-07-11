@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>单侧投影</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    div {
+      width: 100px;
+      height: 100px;
+      background: gold;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  box-shadow 原理，以 box-shadow: 2px 3px 4px rgba(0, 0, 0, .5); 为例：
+  (1) 以该元素相同的尺寸和位置，画一个 rgba(0, 0, 0, .5) 的矩形。
+
+  (2) 把它向右移2px，向下移3px。
+
+  (3) 使用高斯模糊算法（或类似算法）将它进行 4px 的模糊处理。
+  这在本质上表示在阴影边缘发生阴影色和纯透明色之间的颜色过渡长度近似于模糊半径的两倍（比如在这里是8px）。
+
+  (4) 模糊后的矩形与原始元素的交集部分会被切除掉，因此它看起来像是在该元素的“后面”。
+  这跟大多数开发者所理解的情况（元素叠在模糊后矩形的上层）可能稍有不同。
+  不过，在某些场景下，意识到没有任何投影绘制在元素的下层十分重要。
+  举例来说，如果给元素设置一层半透明的背景，就看不到它下层有任何投影。这一点跟text-shadow 不同，因为文字下层的投影不会被裁切。
+  -->
+ 
+  <!--
+  单侧投影:
+  解决方案来自 box-shadow 鲜为人知的第四个长度参数。它排在模糊半径参数之后，称作扩张半径。
+  这个参数会根据你指定的值去扩大或（当指定负值时）缩小投影的尺寸。
+  举例来说，一个 -5px 的扩张半径会把投影的宽度和高度各减少10px（即每边各5px）。
+  从逻辑上来说，如果应用一个负的扩张半径，而它的值刚好等于模糊半径，那么投影的尺寸就会与投影所属元素的尺寸完全一致。
+  除非用偏移量（前两个长度参数）来移动它，否则将完全看不见任何投影。
+
+  reference-link: play.csssecrets.io/shadow-one-side
+  -->
+  <div class="shadow-one-side">
+    <style>
+      .shadow-one-side {
+        box-shadow: 0 5px 5px -5px dimgray;
+      }
+    </style>
+  </div>
+
+
+  <!--
+  邻边投影:
+  与单侧投影思路类似，并做出一些调整：
+  (1) 不需要把投影缩得太小，只需把阴影藏进一侧，另一侧自然露出就好。因此，扩张半径不应设为模糊半径的相反值，而应该是这个相反值的一半。
+  (2) 需要指定两个偏移量，因为投影在水平和垂直方向上同时移动。它们的值需要大于或等于模糊半径的一半，因为我希望把投影藏进另外两条边之内。
+
+  reference-link: play.csssecrets.io/shadow-2-sides
+  -->
+  <div class="shadow-2-sides">
+    <style>
+      .shadow-2-sides {
+        box-shadow: 3px 3px 6px -3px dimgray;
+      }
+    </style>
+  </div>
+
+  <!--
+  双侧投影:
+  因为扩张半径在四个方向上的作用是均等的（也就是说，无法指定投影在水平方向上放大，而在垂直方向上缩小）。
+  唯一的办法是用两块投影（每边各一块）来达到目的。也就是把“单侧投影”中的技巧运用两次。
+
+  reference-link: play.csssecrets.io/shadow-opposite-sides
+  -->
+  <div class="shadow-opposite-sides">
+    <style>
+      .shadow-opposite-sides {
+        box-shadow: 0 5px 5px -5px dimgray,
+                    0 -5px 5px -5px dimgray;
+      }
+    </style>
+  </div>
+</body>
+</html>
