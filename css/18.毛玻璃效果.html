@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>毛玻璃效果</title>
+  <style>
+    body {
+      box-sizing: border-box;
+      min-height: 100vh;
+      margin: 0;
+      padding-top: calc(50vh - 7em);
+      font: 150% / 1.6 Baskerville, Palatino, serif;
+    }
+
+    body, main::before {
+      background: url('../assets/images/lady.jpg') 0 / cover fixed;
+    }
+
+    main {
+      position: relative;
+      margin: 0 auto;
+      padding: 1em;
+      max-width: 28em;
+      background: hsla(0,0%,100%,.25) border-box;
+      overflow: hidden;
+      border-radius: .3em;
+      box-shadow: 0 0 0 1px hsla(0,0%,100%,.3) inset,
+                  0 .5em 1em rgba(0, 0, 0, 0.6);
+      text-shadow: 0 1px 1px hsla(0,0%,100%,.3);
+    }
+
+    main::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0;
+      margin: -30px;
+      z-index: -1;
+      filter: blur(20px);
+    }
+
+    blockquote {
+      font-style: italic
+    }
+
+    blockquote footer {
+      text-align: right;
+    }
+
+    blockquote footer cite {
+      font-style: normal;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  由于不能直接对元素本身进行模糊处理，那就对一个伪元素进行处理，然后将其定位到元素的下层，它的背景将会无缝匹配 <body> 的背景(前提是两者的 background-attachment 设置为 fixed 且 background-position 和 background-size 的值一致)。
+  添加一个伪元素，将其绝对定位，并把所有偏移量置为0，这样就可以将它完整地覆盖到 <main> 元素之上。
+  伪元素会覆盖在内容元素之上。可以用 z-index: -1; 来修正这个问题。
+  使用滤镜 filter: blur(20px); 对伪元素进行模糊处理。
+  模糊效果在中心区域看起来非常完美，但在接近边缘处会逐渐消退。这是因为模糊效果会削减实色像素所能覆盖的范围，削减的幅度正是模糊半径的长度。
+  为了补偿这种情况，需要让伪元素相对其宿主元素的尺寸再向外扩大至少 20px（即它的模糊半径）。
+  可以通过 -20px 的外边距来实现，由于不同浏览器的模糊算法可能存在差异，用一个更大的绝对值（比如-30px）会更保险一些。
+  这个方法修复了边缘模糊消退的问题，但也导致了模糊效果超出了容器(-30px的锅)。对 main 元素应用 overflow: hidden; 解决。
+
+  缺点：如果浏览器不支持滤镜，只能适当增加背景色的不透明度，以便让回退样式下的可读性得到少许提升。
+
+  reference-link: play.csssecrets.io/frosted-glass
+  -->
+
+  <main>
+    <blockquote>“The only way to get rid of a temptation is to yield to it. Resist it, 
+      and your soul grows sick with longing for the things it has forbidden to itself, 
+      with desire for what its monstrous laws have made monstrous and unlawful.”
+    <footer>— <cite>Oscar Wilde</cite></footer>
+    </blockquote>
+  </main>
+</body>
+</html>
