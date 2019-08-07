@@ -37,7 +37,7 @@
 
   <!--
   其他角度方案：
-  现实生活中的折角往往不是精确的45°。如果希望它看起来更真实一些，可以稍稍改变一下角度，比如 -150deg 可以产生 30° 的切角。
+  现实生活中的折角往往不是精确的 45°。如果希望它看起来更真实一些，可以稍稍改变一下角度，比如 -150deg 可以产生 30° 的切角。
   只是改变斜面切角的角度很简单，但是想改变翻折部分的三角形的尺寸并不容易。它的尺寸并不是由角度来定义的，而是由宽度和高度来定义的。
   这里需要用到一些三角函数的知识（正弦函数、余弦函数以及勾股定理）。已知 sin30° = 1 / 2，cos30° = √3 / 2。
   根据计算可知三角形的宽高分别为 3 1.732 才能和斜面切角保持一致（计算过程略）。
@@ -48,10 +48,10 @@
   逆时针 30° 来旋转这个折页三角形，这样可以让它的斜边与折线平行。
   为了让这两个三角形（深色的三角形折页和折角的三角形缺口）的斜边重合，它在水平和垂直方向上都需进行移动，要算出这两个偏移量似乎很难。
   可以让事情变得更简单一些，把 transform-origin 设置为 bottom right，让三角形的右下角成为旋转的中心，这样就可以让它的右下角保持固定。
-  现在只需在垂直方向上向上移动这个折页三角形就可以了。
+  现在只需在垂直方向上，向上移动这个折页三角形就可以了。
   为了算出实际要移动的距离，又要用到几何学了。
-  把旋转给去掉，可以看出所需的垂直偏移量是三角形的两条边相减：x − y = 3 − √3 = 1.268
-  最后，为了让它更加真实一些，可以增加圆角、（真正的）渐变以及投影等。
+  把旋转暂时去掉，可以轻易的看出所需的垂直偏移量是三角形的两条边相减：x − y = 3 − √3 = 1.268
+  最后，为了让它更加真实一些，可以增加圆角、渐变以及投影等。
 
   缺点：不够DRY。
 
@@ -65,7 +65,7 @@
     <style>
       .folded-corner-realistic {
         position: relative;
-        background: linear-gradient(-150deg, transparent 1.414em, lightblue 0);
+        background: linear-gradient(-150deg, transparent 1.5em, lightblue 0); /*1.414em 取整后更贴合，具体原因不知，可能与浏览器计算 em 方式有关*/
         border-radius: .5em;
       }
       .folded-corner-realistic::before {
@@ -76,7 +76,7 @@
         background: linear-gradient(to left bottom, transparent 50%, hsla(0, 0%, 0%, .2) 0, hsla(0, 0%, 0%, .4)) 100% 0 no-repeat;
         width: 1.732em;
         height: 3em;
-        transform: translateY(-1.3em) rotate(-30deg);
+        transform: translateY(-1.268em) rotate(-30deg);
         transform-origin: bottom right;
         border-bottom-left-radius: inherit;
         box-shadow: -.2em .2em .3em -.1em hsla(0, 0%, 0%, .15);

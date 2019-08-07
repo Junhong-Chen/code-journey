@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>连字符断行</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  设计师迷恋文本的两端对齐效果。看一眼杂志和书籍中的精美排版，就会发现这种效果无处不在。不过在网页中，两端对齐却极少使用，而且越是有经验的设计师就越少使用。
+  从CSS 1 开始就已经有 text-align:justify; 了，为什么还会形成这个局面呢？
+  在对文本进行两端对齐处理时，需要调整单词的间距，此时会出现“单词孤岛”现象。这个结果不仅看起来很糟糕，而且可读性也变差了。
+  在打印媒介中，两端对齐总是与连字符断行相辅相成的。因为连字符允许单词在音节分界处断开并折行，所以在处理对齐时所需要调整的间距就少得多了，文本看起来也自然很多。
+  以前，有一些在网页上实现连字符断行的方法，但这类方法完全是“伤敌八百，自损一千”。
+  常见的方法包括服务器端预处理、JavaScript 后期处理、用在线生成器单独处理，甚至还有开发者耐着性子在单词中纯手工插入软连字符（&shy;），以便浏览器可以在正确的地方断开单词。
+  一般来说，这种额外成本很不划算，因此设计师往往会改用其他的文本对齐方式。
+
+  CSS 文本（第三版）引入了一个新的属性 hyphens。它接受三个值：none、 manual 和 auto。
+  manual 是缺省值，其行为正好对应了现有的工作方式，可以在任何时候手工插入软连字符，来实现断词折行的效果；
+  none 会禁用这种行为；
+  auto 则实现了断行效果。
+  为了确保它生效，需要在HTML 标签的 lang 属性中指定合适的语言。
+  如果需要更细粒度地控制连字符的行为（比如在简短的引文中），仍可以通过一些软连字符（&shy;）来辅助浏览器进行断词。
+  这个hyphens属性会优先处理它们，然后再去计算其他可以断词的地方。
+
+  优点：平稳退化。
+  缺点：不支持 chrome。
+
+  reference-link: play.csssecrets.io/hyphenation
+  -->
+
+  <div class="hyphenation">“The only way to get rid of a temptation is to yield to it.”
+    <style>
+      .hyphenation {
+        width: 10em;
+        padding: .5em;
+        border-radius: 1em;
+        font: 180%/1.4 Baskerville, serif;
+        text-align: justify;
+        hyphens: auto;
+        background: aliceblue;
+      }
+    </style>
+  </div>
+</body>
+</html>
