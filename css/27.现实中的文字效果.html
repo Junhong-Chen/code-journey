@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>现实中的文字效果</title>
+  <style>
+    body {
+      font-size: 1.5em;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  凸版印刷效果：
+  出现在底部的浅色投影（或者出现在顶部的暗色投影）会让人产生物体是凹进平面内的错觉。
+  同理，出现在底部的暗色投影（或者出现在顶部的浅色投影）会让人产生物体从平面上凸起的错觉。
+  这种方法之所以奏效，是因为在现实世界中光源总是悬在头顶。
+  在浅色背景上使用深色文字时，在底部加上浅色投影通常效果最佳。
+  在深色背景上使用深色文字时，在底部加上深色投影通常效果最佳。
+
+  reference-link: play.csssecrets.io/letterpress
+  -->
+  <div class="letterpress">
+    <p>“The only way to get rid of a temp­ta­tion is to yield to it.”</p>
+    <p>“The only way to get rid of a temp­ta­tion is to yield to it.”</p>
+  </div>
+  <style>
+    .letterpress p {
+      padding: .8em 1em;
+      background: hsl(210, 13%, 60%);
+      color: hsl(210, 13%, 30%);
+      text-shadow: 0 1px 1px hsla(0,0%,100%,.8);
+    }
+
+    .letterpress p + p {
+      background: hsl(210, 13%, 30%); 
+      color: hsl(210, 13%, 60%);
+      text-shadow: 0 -1px 1px black;
+    }
+  </style>
+
+  <!--
+  空心字效果：
+  流传最广的方法就是使用多个 text-shadow，分别为这些投影加上不同方向的少量偏移。
+  也可以重叠多层轻微模糊的投影来模拟描边，不过，这种方法性能消耗较高，因为用了模糊算法。
+  如果需要的描边越粗，上面提到的两种方案效果越差，这时候就需要第三种方案：SVG。
+  在未来，实现文字描边或空心字的效果会非常容易，因为只需要使用 text-shadows 属性的扩张参数就可让投影变大。
+
+  reference-link: play.csssecrets.io/stroked-text
+  -->
+  <div class="stroked-text">
+    <h1>CSS</h1>
+    <h1>
+      <svg overflow="visible" width="2em" height="1.2em">
+        <use xlink:href="#css" />
+        <text id="css" y="1em">CSS</text>
+      </svg>
+    </h1>
+  </div>
+  <style>
+    .stroked-text {
+      background: deeppink;
+    }
+
+    .stroked-text h1 {
+      margin: 0;
+      color: white;
+    }
+
+    .stroked-text h1:first-child { 
+      text-shadow: 1px 1px black,
+                   -1px -1px black,
+                   1px -1px black,
+                   -1px 1px black;
+    }
+
+    .stroked-text h1 text {
+      fill: currentColor 
+    }
+
+    .stroked-text h1 use {
+      stroke: black; 
+      stroke-width: 6;
+      stroke-linejoin: round;
+    }
+  </style>
+
+  <!--
+  文字外发光效果：
+  只需要准备几层重叠的 text-shadow 即可，不需要考虑偏移量，颜色也只需跟文字保持一致。
+  这个效果还可以做得更炫。比如在 :hover 状态下把文字本身隐藏掉，那它看起来就像在慢慢变模糊。
+  不过依赖 text-shadow 来实现文字显示的做法无法实现平稳退化，如果浏览器不支持 text-shadow，那就什么字也看不见了。
+  换种思路，使用 CSS 滤镜也能实现文字的模糊效果，虽然支持这种方法的浏览器可能要少一些，但在不支持的情况下至少不会有任何功能损失。
+
+  reference-link: play.csssecrets.io/glow
+  -->
+  <div class="glow">
+    <a href="http://play.csssecrets.io/glow">Glow</a>
+    <a>Dizzy</a>
+  </div>
+  <style>
+    .glow {
+      margin-top: 24px;
+      background: #203;
+      font-size: 2em;
+    }
+
+    .glow a {
+      color: #ffc;
+      text-decoration: none;
+      transition: 1s;
+      cursor: pointer;
+    }
+
+    .glow a:first-child:hover  {
+      color: transparent;
+      text-shadow: 0 0 .1em white, 0 0 .3em white;
+    }
+
+    .glow a:last-child:hover  {
+      filter: blur(.1em);
+    }
+  </style>
+
+  <!--
+  文字凸起效果：
+  思路就是使用一长串累加的投影，不设模糊并以 1px 的跨度逐渐错开，使颜色逐渐变暗，然后在底部加一层强烈模糊的暗投影，从而模拟完整的立体效果。
+  这种繁琐冗长的代码可以使用 CSS 预处理器的 mixin 功能解决。
+  这种效果还有很多变种。比如把所有的投影都设成黑色，并且去掉最底层的投影，就可以模拟出一种在复古标志牌中常见的文字效果。
+  下面这个例子中用函数来组织代码可能比 mixin 更合适。
+
+  reference-link: play.csssecrets.io/extruded
+  -->
+  <div class="extruded">
+    <p>CSS3d</p>
+    <p>CSS3d</p>
+  </div>
+  <style>
+    .extruded {
+      background: #58a;
+      color: white;
+      font-size: 2em;
+    }
+
+    .extruded p:first-child {
+      text-shadow: 0 1px hsl(0,0%,85%),
+                   0 2px hsl(0,0%,80%),
+                   0 3px hsl(0,0%,75%),
+                   0 4px hsl(0,0%,70%),
+                   0 5px hsl(0,0%,65%),
+                   0 5px 10px black;
+    }
+
+    .extruded p:last-child {
+      text-shadow: 1px 1px black, 2px 2px black,
+                   3px 3px black, 4px 4px black,
+                   5px 5px black, 6px 6px black,
+                   7px 7px black, 8px 8px black;
+    }
+  </style>
+</body>
+</html>
