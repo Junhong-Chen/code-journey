@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>选用适合的鼠标光标</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    :disabled, [disabled], [aria-disabled="true"] {
+      cursor: not-allowed;
+    }
+
+    .cursor-hidden {
+      cursor: none;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  鼠标指针的用途不仅在于显示鼠标在屏幕上的位置，还可以告诉用户当前可以执行什么动作。
+  这在桌面应用程序中是十分普遍的用户体验实践，但在网页应用中却往往被忽视。
+  在 CSS 基本 UI 特性（第三版）（http://w3.org/TR/css3-ui/#cursor）中，新增了一大批新的内建光标。
+  对网页应用来说，也并不是每个新光标都十分常用。比如 cell 光标，它用于提示当前位置有一个或一组单元格可以被选中，除了编辑表格或网格，我们很少会遇到这种需求。
+  这里并不会把所有的光标逐一列举出，只列举两个常用的光标做参考，其余光标可自行上官网了解。
+  1. 提示禁用状态
+    如果要提示某个控件因为某些原因而变得无法交互（即控件已被禁用），用这个光标就再合适不过了。
+  2. 隐藏鼠标光标
+    把鼠标光标隐藏起来听起来简直就是一场噩梦，但是有它的用武之地，比如当你观看视频的时候，往往会不自觉地把鼠标移到屏幕的最右侧，这是因为光标碍事。
+
+  reference-link: play.csssecrets.io/disabled
+  -->
+
+  <button disabled>Disabled Button</button>
+  <button class="cursor-hidden">Hidden Cursor</button>
+</body>
+</html>
