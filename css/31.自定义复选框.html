@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>自定义复选框</title>
+  <style>
+    body {
+      font: 120%/1.6 sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  在选择符（第三版）（http://w3.org/TR/css3-selectors）中，新增了一个新的伪类:checked。
+  这个伪类只在复选框被勾选时才会匹配，不论这个勾选状态是由用户交互触发，还是由脚本触发。
+  如果直接对复选框设置样式，那么这个伪类并不实用，因为没有多少样式能够对复选框起作用。不过，可以基于复选框的勾选状态借助组合选择符来给其他元素设置样式。
+  有一个元素总是跟复选框形影不离、息息相关，它就是<label>（标签元素）。当<label> 元素与复选框关联之后，也可以起到触发开关的作用。
+  由于 label 不是复选框那样的替换元素，但可以为它添加生成性内容（伪元素），并基于复选框的状态来为其设置样式。
+  然后，就可以把真正的复选框隐藏起来（但不能把它从tab 键切换焦点的队列中完全删除），再把生成性内容美化一番，用来顶替原来的复选框。
+  因为不能把复选框完全隐藏，就意味着不能使用 display: none，改用另一种方法来达到目的：clip: rect(0,0,0,0);
+
+  reference-link: play.csssecrets.io/checkboxes
+  -->
+
+  <input type="checkbox" id="awesome"  class="checkboxes" autofocus />
+  <label for="awesome">Awesome!</label>
+
+  <input type="checkbox" id="awesome2" class="checkboxes"  checked />
+  <label for="awesome2">Awesome!</label>
+
+  <input type="checkbox" id="awesome3" class="checkboxes"  disabled />
+  <label for="awesome3">Awesome!</label>
+
+  <input type="checkbox" id="awesome4" class="checkboxes"  checked disabled />
+  <label for="awesome4">Awesome!</label>
+  <style>
+    .checkboxes[type="checkbox"] {
+      position: absolute;
+      clip: rect(0,0,0,0);
+    }
+
+    .checkboxes[type="checkbox"] + label::before {
+      content: '\a0';
+      display: inline-block;
+      vertical-align: .2em;
+      width: .8em;
+      height: .8em;
+      margin-right: .2em;
+      border-radius: .2em;
+      background: silver;
+      text-indent: .15em;
+      line-height: .65;
+    }
+
+    .checkboxes[type="checkbox"]:checked + label::before {
+      content: '\2713';
+      background: yellowgreen;
+    }
+
+    .checkboxes[type="checkbox"]:focus + label::before {
+      box-shadow: 0 0 .1em .1em #58a;
+    }
+
+    .checkboxes[type="checkbox"]:disabled + label::before {
+      background: gray;
+      box-shadow: none;
+      color: #555;
+      cursor: not-allowed;
+    }
+  </style>
+  <br />
+
+  <!--
+  说到开关式按钮，HTML 并没有提供一种原生的方式来生成它，但可以利用“复选框hack”的思路来模拟它。
+  开关式按钮与复选框的行为十分相似，可以用来切换某个选项的开关状态：启用时，它是被按下的状态；停用时，它就是浮起的状态。
+  在语义上，开关式按钮和复选框并没有本质上的差别，因此可以放心地使用这个技巧，不用担心语义上有问题。
+  如果想用这个技巧来生成开关式按钮，其实只需要把 label 设置为按钮的样式即可，并不需要用到伪元素。
+  不过，在使用开关式按钮时仍需慎重。在绝大多数场景下，开关式按钮对可用性有负面作用，因为它们很容易与普通按钮混淆，让人误以为按下它会触发某个动作。
+
+  reference-link: play.csssecrets.io/toggle-buttons
+  -->
+
+  <input type="checkbox" id="wow" class="toggle-buttons" autofocus />
+  <label for="wow">Wow!</label>
+
+  <input type="checkbox" id="wow2" class="toggle-buttons" checked />
+  <label for="wow2">Wow!</label>
+  <style>
+    .toggle-buttons[type="checkbox"] {
+      position: absolute;
+      clip: rect(0,0,0,0);
+    }
+
+    .toggle-buttons[type="checkbox"] + label {
+      display: inline-block;
+      padding: .35em .5em .2em;
+      background: #ccc;
+      background-image: linear-gradient(#ddd, #bbb);
+      border: 1px solid rgba(0,0,0,.2);
+      border-radius: .3em;
+      box-shadow: 0 1px white inset;
+      text-align: center;
+      text-shadow: 0 1px 1px white;
+      cursor: pointer;
+    }
+
+    .toggle-buttons[type="checkbox"]:checked + label,
+    .toggle-buttons[type="checkbox"]:active + label {
+      box-shadow: .04em .1em .2em rgba(0,0,0,.6) inset;
+      border-color: rgba(0,0,0,.3);
+      background: #bbb;
+    }
+  </style>
+</body>
+</html>
