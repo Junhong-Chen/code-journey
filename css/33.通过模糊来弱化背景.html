@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>通过模糊来弱化背景</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    main {
+      height: 100vh;
+      background: url('../assets/images/lady.jpg') no-repeat;
+      background-size: cover;
+    }
+
+    main.de-emphasized {
+      filter: blur(3px);
+    }
+
+    dialog {
+      position: fixed;
+      top: 50%; left: 50%;
+      z-index: 1;
+      width: 10em;
+      padding: 2em;
+      margin: -5em;
+      border: 1px solid silver;
+      border-radius: .5em;
+      box-shadow: 0 .2em .5em rgba(0, 0, 0, .5),
+                  0 0 0 100vmax rgba(0, 0, 0, .2);
+    }
+
+    dialog:not([open]) {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  在滤镜效果（http://w3.org/TR/filter-effects）出现之前，它完全是不可能完成的任务；即使是在blur() 滤镜出现之后，这个任务仍然是非常困难的。
+  如果想对除了某个特定元素之外的一切应用模糊效果，那到底应该把滤镜应用到哪个元素上呢？
+  如果把它应用到 <body> 元素上，页面中的所有元素都会被模糊处理，想要凸显出来的那个关键元素也不例外。
+  这跟“毛玻璃效果”一节中的问题非常类似，但无法在这里直接套用那里的解决方案，因为处在这个对话框下层的可能是任何元素，而不一定只有一张背景图片。
+  很遗憾，我还是得动用一个额外的 HTML 元素来实现这个效果：
+    需要把页面上除了关键元素之外的一切都包裹起来，这样就可以只对这个容器元素进行模糊处理了。
+  <main> 元素在这里是极为合适的，因为它可以发挥一箭双雕的作用：
+    1.把页面中的主要内容标记出来（对话框通常都不是主要内容），同时还给了我们添加样式的钩子；
+    2.当弹出一个对话框，需要给 <main> 元素增加一个类，以便对它应用模糊滤镜；
+    3.给滤镜设置动画；
+    4.把这两种弱化背景的手法（阴影和模糊）结合起来。可以使用 brightness() 和 contrast() 滤镜，但这意味
+      着一旦滤镜不被支持，将没有任何回退方，所以建议使用 上一节 提到的 box-shadow 方案。
+
+  reference-link: play.csssecrets.io/deemphasizing-blur
+  -->
+  <dialog 
+    id="modal"
+    onclick="this.close(); document.querySelector('#main').classList.remove('de-emphasized')"
+  >hello world!</dialog>
+
+  <main id="main">
+    <button
+      onclick="document.querySelector('#modal').showModal(); document.querySelector('#main').classList.add('de-emphasized')"
+    >Show dialog</button>
+  </main>
+</body>
+</html>
