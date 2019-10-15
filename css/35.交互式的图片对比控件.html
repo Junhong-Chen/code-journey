@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>交互式的图片对比控件</title>
+</head>
+<body>
+  <!--
+  有时，需要展示两张图片的外观差异，通常是“之前和之后”形式的对比。例如，照片在经过一系列操作前后的对比效果，美容网站上某种护肤疗法前后的对比效果，某个地区在灾难事件前后的现场对比结果。
+  最常见的解决方案就是把两张图片并排放置。不过在这种情况下，人眼只能观察到非常明显的差异，从而忽略掉相对细小的区别。
+  -->
+
+  <!--
+  CSS resize 方案：
+  图片对比滑动控件基本上可以理解为两层结构：下层是一张固定的图片；上层的图片则可以在水平方向上调整大小，从而或多或少地显露出下层图片。
+  在 CSS 基本UI 特性（第三版）（http://w3.org/TR/css3-ui/#resize）中，resize 属性可以不动用脚本就能控制元素的大小。
+  resize 默认都是设置为 none 的，即禁用调整大小的特性。除了 both 之外，这个属性接受的值还有 horizontal 和 vertical，它们可以限制元素调整大小的方向（ <textarea> 元素的 resize 属性默认为 both ）。
+  直接对一个 <img> 元素应用 resize 看起来会很怪异，因为直接调整图片大小会导致其变形失真。如果用一个 <div> 作为它的容器，再对这个容器应用 resize 属性，那就合理多了。
+  (MDN 上的描述： resize CSS 属性允许你控制一个元素的可调整大小性，我理解是对任何元素都有效，但在 chrome 上 resize 对 <img> 无效，原因未知。)
+  利用一个伪元素覆盖在调节手柄上，再自定义样式来增强调节手柄的辨识度。
+  cursor: ew-resize; 提供了额外的自释性，不过不应该只依赖鼠标光标提供唯一的自释性，因为这种自释性只有当用户与之交互时才是可见的。
+  最后对这两张图片应用 user-select:none，这样即使用户在没有点中调节手柄的情况下拖动鼠标，也不会误选图片。
+
+  缺点：
+    1.它对键盘来说是不可访问的；
+    2.调整上层图片的唯一方法就是拖动。对于较大的图片，或有运动障碍的用户来说，这就比较讨厌了。如果允许用户点击某一个点就可以把图片宽度调整到那个点所在的位置，它的体验就会大幅提高；
+    3.用户只能在上层图片的右下角进行调整大小的操作。即使已经对它的样式进行了强化，但它仍然可能被用户忽略。
+  
+  reference-link: play.csssecrets.io/image-slider
+  -->
+
+  <div class="image-slider">
+    <div>
+      <img src="../assets/images/IceAge_1986.jpg" alt="Before" />
+    </div>
+    <img src="../assets/images/IceAge_2019.jpg" alt="After" />
+  </div>
+  <style>
+    .image-slider {
+      position: relative;
+      display: inline-block;
+    }
+
+    .image-slider > div {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 50%; /* 初始宽度 */
+      max-width: 100%; /* 避免拖动时超出图片宽度 */
+      overflow: hidden; /* 让它可以裁切图片 */
+      resize: horizontal;
+    }
+
+    .image-slider > div::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      background: white;
+      cursor: ew-resize; /* 提供了额外的自释性，可以提示用户这个区域可以像调节手柄那样拖动。 */
+      padding: 5px; /* 跟图片的边缘保持 5px 的间隙 */
+      background: linear-gradient(-45deg, white 50%, transparent 0); /* 设置为白色三角形 */
+      background-clip: content-box;
+    }
+
+    .image-slider img {
+      display: block;
+      user-select: none;
+    }
+  </style>
+
+  <!--
+  范围输入控件方案：
+  如果用一点脚本，就可以将一个原生的滑块控件（HTML 范围输入控件）覆盖在图片上，用它来控制上层图片的伸缩，这样就可以解决 CSS resize 方案的三个缺点。
+  由于一定要用到JavaScript，不妨用脚本来添加所有的附加元素，这样就可以把结构代码写到最精简的程度。
+  前面一种解决方案所用到的CSS 基本上可以直接套用在这里。只需要删掉那些我们不再需要的部分即可：
+    1.resize属性；
+    2. .image-slider > div::before 规则，因为已经不存在调节手柄了；
+    3.max-width，因为现在由滑块和脚本来控制宽度。
+
+  优点：范围输入控件当前的浏览器支持度比 resize 属性要好一些。
+  缺点：需要使用脚本来辅助。
+  -->
+
+  <div class="image-slider-script">
+    <img src="../assets/images/IceAge_1986.jpg" alt="Before" />
+    <img src="../assets/images/IceAge_2019.jpg" alt="After" />
+  </div>
+  <script>
+    // 创建附加的div元素，并用它包住第一个图片元素
+    const slider = document.querySelector('.image-slider-script')
+    const div = document.createElement('div')
+    const img = slider.querySelector('img')
+    slider.insertBefore(div, img)
+    div.appendChild(img)
+
+    // 创建滑块
+    const range = document.createElement('input')
+    range.type = 'range'
+    range.oninput = function() {
+      div.style.width = this.value + '%'
+    }
+    slider.appendChild(range)
+  </script>
+  <style>
+    .image-slider-script {
+      position: relative;
+      display: inline-block;
+    }
+
+    .image-slider-script > div {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 50%; /* 初始宽度 */
+      overflow: hidden; /* 让它可以裁切图片 */
+    }
+
+    .image-slider-script img {
+      display: block;
+      user-select: none;
+    }
+
+    /* 将输入控件定位到图片下面，并做一些美化 */
+    .image-slider-script input {
+      position: absolute;
+      left: 0;
+      bottom: 10px;
+      width: 100%;
+      margin: 0;
+      filter: contrast(.5); /* filter: contrast(4) 会让这个滑块变得黑白分明，而低于 1 的对比度值会让它显示出更多的灰色调。 */
+      mix-blend-mode: luminosity; /* mix-blend-mode CSS 属性描述了元素的内容应该与元素的直系父元素的内容和元素的背景如何混合。 */
+    }
+  </style>
+</body>
+</html>
