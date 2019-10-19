@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>自适应内部元素</title>
+</head>
+<body>
+  <!--
+  如果不给元素指定一个具体的height，它就会自动适应其内容的高度。假如希望 width 也具有类似的行为，通常会使用下面几种带有副作用的方法：
+    1.让 <figure>元素浮动会让它得到正确的宽度，但同时也彻底改变了它的布局模式，这往往会导致我们不想要的结果。
+    2.对figure应用display: inline-block会让它根据内容来决定自身的尺寸，但跟想要的方式还是不一样。此外，即使它的宽度计算方式与期望一致，也很难继续完成水平居中的任务。需要对它的父元素应用text-align: center，然后对这个父元素的所有子元素（p, ul, ol, dl, ...）都设置一遍text-align: left。
+    3.当开发者走投无路时，就只能对 figure 应用一个固定的 width 或 max-width 了，然后对 figure > img 应用 max-width: 100%。可是这个方法无法充分利用有效空间；对于过小的图片来说，布局效果也很突兀。此外，响应式也无从谈起。
+  而在CSS 内部与外部尺寸模型（第三版）（http://w3.org/TR/css3-sizing）中引入了一个新的关键字 min-content，完美的解决了这个问题
+  
+  reference-link: play.csssecrets.io/intrinsic-sizing
+  -->
+
+  <p>Let’s assume we have some text here. Bacon ipsum dolor sit amet turkey veniam shankle, culpa short ribs kevin t-bone occaecat.</p>
+  <figure>
+    <img src="../assets/images/AlbertEinstein.jpg" />
+    <figcaption>
+      The great Sir Adam Catlace was named after Countess Ada Lovelace, the first programmer ever.
+    </figcaption>
+  </figure>
+  <p>We also have some more text here. Et laborum venison nostrud, ut veniam sint kielbasa ullamco pancetta.</p>
+</body>
+<style>
+  figure {
+    max-width: 300px; /* 回退样式 */
+    max-width: min-content;
+    margin: auto;
+  }
+
+  figure > img { max-width: inherit } /* 回退样式，如果父元素的 min-content 生效，则此元素继承后不会有影响。 */
+  /* Basic styling */
+  figure {
+    padding: 10px;
+    border: 1px solid silver;
+  }
+</style>
+</html>
