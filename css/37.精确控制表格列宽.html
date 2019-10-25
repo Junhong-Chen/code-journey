@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>精确控制表格列宽</title>
+  <style>
+    body { background: #ddd }
+
+    section {
+      width: 500px;
+      margin: 2em;
+    }
+
+    table {
+      border-collapse: collapse;
+      margin-bottom: 1em;
+      width: 100%;
+      background: white;
+      border: 2px solid #aaa;
+    }
+
+    section + section table { table-layout: fixed }
+
+    td {
+      border: 2px solid #aaa;
+    }
+
+    td.preformatted {
+      white-space: pre;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    code {
+      font-family: Consolas, "Courier New", Courier, FreeMono, monospace;
+      color: #f92672;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  尽管多年以前就不再使用表格来完成页面布局了，但表格在现代网站中仍然有其不可替代的位置，我们需要用它来实现统计数据、电子邮件、拥有大量元数据的列表等表格型数据。
+  对其他元素的 display 属性使用表格相关的关键字，也可以让它们具备表格类元素的行为。尽管有时候它们看起来很方便，但对于不固定的内容来说，它们的布局其实是很难预测的。
+  这是因为列宽根据其内容进行调整，即使显式地指定了width，也只能起到类似提示的作用。
+  因为这个问题，往往不得不使用其他元素来呈现表格型数据，或者干脆接受布局效果的不可预测性。
+
+  解决方案来自于 CSS 2.1 中一个鲜为人知的属性，叫作table-layout。它的默认值是auto，其行为模式被称作自动表格布局算法，也就是最常见的表格布局行为。
+  它还接受另外一个值 fixed，这个值的行为要明显可控一些。它把更多的控制权交给了网页开发者，只把较少的控制权留给渲染引擎。设置的（宽度）样式会直接起作用，而不仅仅被视为一种提示；同时，溢出行为（包括text-overflow）与其他元素行为也是一样的，因此表格的内容将只能影响表格行的高度了。
+
+  这种固定表格布局算法不仅更容易预测、便于使用，同时也明显更快。因为表格的内容并不会影响单元格的宽度，所以在页面的下载过程中，表格不需要频繁重绘。
+  页面加载过程中表格不断重新调整列宽的情景，对于固定表格布局来说，这种情况再也不会发生了。
+  在使用时，只需要对 <table> 元素或其他具有display: table 样式的元素应用这个属性即可。
+  注意，为了确保这个技巧奏效，需要为这些表格元素指定一个宽度（哪怕是100%）。同样，为了让 text-overflow:ellipsis 发挥作用，还需要为那一列指定宽度。
+
+  reference-link: play.csssecrets.io/table-column-widths
+  -->
+
+  <section>
+    <h1>With table-layout: auto</h1>
+    <div>
+      <table>
+        <tr>
+          <td>如果我们不……</td>
+          <td>指定单元格的宽度，则这些单元格就会根据它们内容的长短来分配宽度。也就是说，内容较长的单元格所能分配到的宽度也较多。</td>
+        </tr>
+      </table>
+      
+      <table>
+        <tr>
+          <td>如果我们不……</td>
+          <td>指定单元格的宽度，则这些单元格就会根据它们内容的长短来分配宽度。也就是说，内容较长的单元格所能分配到的宽度也较多。</td>
+        </tr>
+        <tr>
+          <td>表格的每一行都会参与到列宽的计算中，而不仅是第一行。</td>
+          <td>注意，这个表格的列宽分配结果跟上面那个表格不同。</td>
+        </tr>
+      </table>
+      
+      <table>
+        <tr>
+          <td style="width: 1000px">即使我们为单元格指定了宽度，也未必会得到对应的结果。比如这个单元格的宽度被指定为<code>1000px</code>…</td>
+          <td style="width: 2000px">而这个单元格的宽度被指定为<code>2000px</code>。由于外层容器所能提供的空间远远不足<code>3000px</code>，这两个单元格的宽度会按比例缩小，分别得到总宽度的 33.3% 和 66.6%。</td>
+        </tr>
+      </table>
+      
+      <table>
+        <tr>
+          <td>如果我们禁止文本折行行为，那么表格宽度可能会远远超出其容器的宽度。</td>
+          <td class="preformatted">而且<code>text-overflow: ellipsis</code>对此也无能为力，这一点很遗憾。</td>
+        </tr>
+      </table>
+      
+      <table>
+        <tr>
+          <td>大图片或代码块也可能会导致同样的问题。</td>
+          <td><img src="http://lea.verou.me/book/panoramic.jpg" /></td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h1>With table-layout: fixed</h1>
+    <div></div>
+  </section>
+
+  <script>
+    document.querySelector('section + section div').innerHTML = document.querySelector('section:first-of-type div').innerHTML;
+  </script>
+</body>
+</html>
