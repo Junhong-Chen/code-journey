@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>根据兄弟元素的数量来设置样式</title>
+</head>
+<style>
+  .palette li:first-child:nth-last-child(n+4) .color-options a:after,
+  .palette li:first-child:nth-last-child(n+4) ~ li .color-options a:after {
+    content: none;
+  }
+
+  /* Hide word when 6 items or more */
+  .palette li:first-child:nth-last-child(n+6) .color-options a,
+  .palette li:first-child:nth-last-child(n+6) ~ li .color-options a {
+    color: transparent;
+    font-size: 0;
+  }
+
+  .palette li:only-child .delete {
+    display:none;
+  }
+
+  /* From this point it’s just styling */
+  .palette {
+    display: flex;
+    height: 200px;
+    max-width:900px;
+    font: bold 90%/1 sans-serif;
+  }
+
+  .palette li {
+    flex: 1;
+    list-style: none;
+    background: #082323;
+  }
+    
+  .color-options {
+    background: rgba(0,0,0,.5);
+    padding: 10px;
+    margin: 0 10px;
+    overflow:hidden;
+    border-radius:0 0 10px 10px;
+  }
+      
+  .color-options .add { float:left; }
+  .color-options .delete { float:right; }
+  
+  .color-options a {
+    color: white;
+    text-decoration:none;
+  }
+      
+  .color-options a:before {
+    display:inline-block;
+    font-size: 1rem;
+    width:1.3rem;
+    margin-right:.3rem;
+    text-align: center;
+    line-height: 1.3;
+    background:white;
+    border-radius: 50%;
+    letter-spacing: normal;
+  }
+  
+  .color-options .add:before {
+    content:'✚';
+    color:#590;
+  }
+  
+  .color-options .delete:before {
+    content:'✖';
+    color:#b00;
+  }
+  
+  .color-options a:after {
+    content: ' card';
+    font-weight: normal;
+  }
+</style>
+<body>
+  <!--
+  根据兄弟元素的总数来匹配元素:
+  对 CSS 选择符来说，基于兄弟元素的总数来匹配元素并不简单。设想一个列表，假设仅当列表项的总数为 4 时才对这些列表项设置样式。
+  可以用 li:nth-child(4) 来选中列表的第四个列表项，但这并不是我想要的；我需要在列表项的总数为 4 时选中每一个列表项。
+  接下来的想法可能就是把 :nth-child() 和兄弟选择符（~）结合起来，比如 li:nth-child(4), li:nth-child(4) ~ li。
+  不过，这个选择符只能选中第四个列表项以及在它之后的所有列表项，这跟列表项的总数没有什么关系。
+  对于只有一个列表项的特殊场景来说，解决方案显然就是 :only-child，这个伪类选择符就是为这种情况而设计的，:only-child 等效于 :first-child:last-child。
+  :last-child 其实是一个快捷写法，相当于 :nth-last-child(1)。
+  其中 1 是一个参数，可以根据需要来修改这个值，那么 li:first-child:nth-last-child(4) 会选中哪些元素呢？
+  这个元素是父元素的第一个子元素，同时还是从后往前数的第四个子元素，也就是一个正好有四个列表项的列表中的第一个列表项。
+  现在已经找到一种选中特定数量列表项中第一项的方法，接下来就可以用兄弟选择符（~）来选中它之后的所有兄弟元素：相当于在这个列表正好包含四个列表项时，选中它的每一项。
+
+  li:first-child:nth-last-child(4),
+  li:first-child:nth-last-child(4) ~ li {
+    当列表正好包含四项时，选中所有列表项
+  }
+
+  使用预处理简化：
+
+  /* 定义mixin */
+  @mixin n-items($n) {
+    &:first-child:nth-last-child(#{$n}),
+    &:first-child:nth-last-child(#{$n}) ~ & {
+      @content;
+    }
+  }
+
+  /* 调用时 */
+  li {
+    @include n-items(4) {
+      /* 属性与值写在这里 */
+    }
+  }
+  -->
+
+  <!--
+  根据兄弟元素的数量范围来匹配元素：
+  :nth-child() 选择符，可以用来选中一个范围，比如选中第 4 项之后的所有项。
+  它的参数可以是像 an+b 这样的表达式，比如 :nth-child(2n+1)。n 表示一个变量，理论上的范围是 0 到 +∞（实际情况中，由于页面中元素的数量是有限的，超
+  过某个特定数量的值也没有元素可选了）。
+  如果使用 n+b 这种形式的表达式（此时相当于 a 的取值为1），那么不论 n 如何取值，这个表达式都无法产生一个小于 b 的值。因此，n+b 这种形式的表达式可以选中从第 b 个
+  开始的所有子元素。举例来说，:nth-child(n+4) 将会选中除了第一、二、三个子元素之外的所有子元素。
+  当把 n+4 传给 :nth-last-child() 时，选中从倒数第四个子元素开始往前的所有元素。
+  当把 -n+4 传给 :nth-last-child() 时，选中从倒数第四个子元素开始往后的所有元素。
+  当把两个结合在一起使用，会选中一个范围，比如 :nth-last-child(n+4):nth-last-child(-n+6) 会选中从 倒数第四个 至 倒数第六个 区间的所有元素。
+  当然，如果这里使用 :nth-child() 也可以实现同样的效果，区别就是把上面三句话中的倒数改成正数。
+  这里之所以用 :nth-last-child() 举例，是因为需要用它来和 :first-child() 结合使用。
+
+  li:first-child:nth-last-child(n+4),
+  li:first-child:nth-last-child(n+4) ~ li {
+    /* 当列表至少包含四项时，选中所有列表项 */
+  }
+
+  li:first-child:nth-last-child(-n+4),
+  li:first-child:nth-last-child(-n+4) ~ li {
+    /* 当列表最多包含四项时，选中所有列表项 */
+  }
+
+  li:first-child:nth-last-child(n+2):nth-last-child(-n+6),
+  li:first-child:nth-last-child(n+2):nth-last-child(-n+6) ~ li {
+    /* 当列表包含2～6项时，命中所有列表项 */
+  }
+
+  tips: 之所以不使用 :nth-child() 和 :last-child()来选中最后一个元素，是因为兄弟选择符（~）只能向后选择，所以也就无法选中其他所有的元素了。
+
+  reference-link: play.csssecrets.io/styling-sibling-count
+  -->
+  <ul class="palette">
+    <li>
+      <div class="color-options">
+        <a class="add" href="#">Add</a>
+        <a class="delete" href="#">Delete</a>
+      </div>
+    </li>
+  </ul>
+  <script>
+    let colors = [
+      '#082323', '#E6E2AF', '#A7A37E', '#EFECCA', '#046380', // Sandy stone beach
+      '#1C171D', '#FEE169', '#CDD452', '#F9722E', '#C9313D', // Sushi Maki
+      '#2E95A3', '#50B8B4', '#C6FFFA', '#E2FFA8', '#D6E055', // Agave
+    ]
+    const palette = document.querySelector('.palette')
+       
+    function addColor(template) {
+      const li = template.cloneNode(true)
+      const color = colors.pop()
+      colors.unshift(color)
+      li.style.background = color
+      palette.insertBefore(li, template.nextSibling)
+    }
+
+    palette.onclick = function(evt) {
+      const button = evt.target
+      
+      if (button.className === 'add') {
+        addColor(button.parentNode.parentNode)
+      }
+      else if (button.className === 'delete') {
+        const li = button.parentNode.parentNode
+        li.parentNode.removeChild(li)
+      }
+    }
+  </script>
+</body>
+</html>
