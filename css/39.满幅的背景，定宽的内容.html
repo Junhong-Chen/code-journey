@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>满幅的背景，定宽的内容</title>
+  <style>
+  /**
+   * Fluid background, fixed content
+   */
+  header, section, footer {
+    padding: 1em calc(50% - 500px);
+  }
+
+  footer {
+    background: #333;
+    color: white;
+  }
+
+  header {
+    background: orange;
+    color: white;
+  }
+
+  section + section {
+    background: #eee;
+  }
+
+  body {
+    margin: 0;
+    font: 100%/1.5 sans-serif;
+  }
+  </style>
+</head>
+<body>
+  <!--
+  有一种网页设计手法称作背景宽度满幅，内容宽度固定:
+    1.页面中包含多个大区块，每个区块都占据了整个视口的宽度，区块的背景也各不相同。
+    2.内容是定宽的，即使在不同分辨率下的宽度不一样，那也只是因为媒体查询改变了这个固定的宽度值而已。
+
+  实现这种设计风格最常见的方法就是为每个区块准备两层元素，外层用来实现满幅的背景，内层用来实现定宽的内容，并用 margin: auto 实现水平居中。
+  margin: auto 在这个场景下的作用是让左右外边距等于视口宽度的一半减去内容宽度的一半。
+  所以 auto 属性完全可以用 calc() 函数来代替。
+  假设我希望内层元素的宽度是 1000px，那么就可以写成 margin: 1em calc(50% - 500px)。
+  而且把这个长度值写到父元素的 padding 上得到的效果也是一样的（padding: 1em calc(50% - 500px)）。
+  经过一系列调整后，内层元素已经没有css代码了，也就是说，它已经不参与布局了，可以放心的把它删掉。
+
+  reference-link: play.csssecrets.io/fluid-fixed
+  -->
+
+  <header>
+    <h1>Fluid background, <br />fixed content</h1>
+  </header>
+  <section>
+    <h1>Heading</h1>
+    <p>Bacon ipsum dolor amet voluptate et shoulder, ipsum flank tongue exercitation commodo sed beef ribs drumstick in venison laborum. Laboris ut enim id drumstick, et aute esse. Consequat ad kielbasa anim pork loin turkey qui cupidatat drumstick doner labore. Nulla sirloin jerky do sed magna meatloaf. Ribeye ea ut elit leberkas laboris sausage corned beef drumstick cillum non.</p>
+  </section>
+  <section>
+    <h1>Another heading</h1>
+    <p>Nostrud landjaeger cillum beef cow tail cupidatat non mollit voluptate jowl. Enim sunt in, flank hamburger proident qui. Id aute excepteur chuck magna tempor ipsum pork chop t-bone. Frankfurter meatball pork loin beef et leberkas pork. Pig ball tip pancetta in.</p>
+    <p>Ribeye in veniam ipsum flank. Elit incididunt t-bone proident meatball. Porchetta exercitation prosciutto sausage chuck ut eu brisket shank pastrami turkey sunt laboris tenderloin anim. Landjaeger do venison laboris kevin.</p>
+  </section>
+  <footer>
+    <p>&copy; 2015 Lea Verou (j/k, feel free to use wherever)</p>
+    <p>Consectetur et t-bone pork loin. Tri-tip cupim in, spare ribs velit exercitation in. Tempor cillum fugiat, nisi leberkas reprehenderit anim laboris proident cow. Eu fatback kevin sint, ad shoulder in venison picanha. Sausage drumstick capicola, culpa boudin pork belly minim aute ipsum biltong picanha venison nulla adipisicing.</p>
+  </footer>
+</body>
+</html>
