@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>垂直居中</title>
+</head>
+<body>
+  <!--
+  在 CSS 中对元素进行水平居中非常简单：
+  (1)如果它是一个行内元素，就对它的父元素应用text-align: center；
+  (2)如果它是一个块级元素，就对它自身应用margin: auto。
+  而对一个元素进行垂直居中，可能光是想想就令人头皮发麻了。
+  -->
+
+  <!--
+  基于绝对定位的解决方案：
+  绝对定位会以元素的左上角为基准进行定位，所以 top 和 left 的值都设为 50% 时，元素仍没有居中，所以还需要根据自身的宽高再向上、向左移动半个身位。
+  借助 calc() 函数，可以轻松的算出位移距离，但前提是需要知道元素的宽高，且元素的宽高改变后也需要修改对应的 css 样式。
+  如果能找到一个属性的百分比值，是以元素自身的宽高作为解析基准，那么问题就迎刃而解了（大多数的 css 属性，百分比都是以父元素的宽高为解析基准）。
+  translate() 变形函数使用百分比值时，就是以元素自身的宽高为基准进行换算和移动的。
+
+  /**
+   * Vertical centering - absolute positioning method
+   */
+  main {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); // 以元素自身宽高为基准进行换算和移动
+  }
+
+  缺点：
+  (1)有时不能选用绝对定位，因为它对整个布局的影响太过强烈；
+  (2)如果需要居中的元素已经在高度上超过了视口，那它的顶部会被视口裁切掉。有一些办法可以绕过这个问题，但 hack 味道过浓。
+  (3)在某些浏览器中，这个方法可能会导致元素的显示有一些模糊，因为元素可能被放置在半个像素上。这个问题可以用 transformstyle: preserve-3d 来修复，不过这个修复手段也可以认为是一个 hack，而且很难保证它在未来不会出问题。
+
+  reference-link: play.csssecrets.io/vertical-centering-abs
+  -->
+
+  <!--
+  基于视口单位的解决方案：
+  不使用绝对定位，也可以采用 translate() 技巧来把这个元素以其自身宽高的一半为距离进行移动，问题是如何把元素的左上角放置在容器的正中心。
+  首先肯定会想到用 margin 属性的百分比来实现（margin: 50% auto 0;），不过很遗憾，因为 margin 的百分比是以父元素的宽度作为解析基准的，
+  你没看错，即使作用在垂直方向上的 margin-top 和 margin-bottom 也是如此。
+  不过 CSS 值与单位（ 第三版）（http://w3.org/TR/css-values-3/#viewportrelative-lengths）定义了一套新的单位，称为视口相关的长度单位：
+  (1)vw 是与视口宽度相关的，1vw 表示视口宽度的1%，而不是100%。
+  (2)与 vw类似，1vh表示视口高度的 1%。
+  (3)当视口宽度小于高度时，1vmin等于 1vw，否则等于 1vh。
+  (4)当视口宽度大于高度时，1vmax等于 1vw，否则等于 1vh。
+
+  /**
+   * Vertical centering - Viewport unit method
+   */
+  main {
+    width: 18em;
+    padding: 1em 1.5em;
+    margin: 50vh auto 0;
+    transform: translateY(-50%);
+  }
+
+  缺点：只适用于在视口中居中的场景。
+
+  reference-link: play.csssecrets.io/vertical-centering-vh
+  -->
+
+  <!--
+  基于 Flexbox 的解决方案：
+  这是毋庸置疑的最佳解决方案，因为Flexbox（伸缩盒）（http://w3.org/TR/css-flexbox）是专门针对这类需求所设计的。
+  之所以要讨论其他方案，仅仅是因为那些方案在浏览器的支持程度上稍微好一些而已。
+  当使用Flexbox 时，margin: auto 不仅在水平方向上将元素居中，垂直方向上也是如此。而且也不需要指定任何宽度，这个居中元素分配到的宽度等于 max-content。
+  只需两步就可以完成垂直居中：
+  (1)给待居中元素的父元素设置 display: flex ;
+  (2)给待居中元素设置 margin: auto 。
+
+  reference-link: play.csssecrets.io/vertical-centering
+  -->
+
+  <main>
+    <h1>Am I centered yet?</h1>
+    <p>Center me, please!</p>
+  </main>
+
+  <style>
+    /**
+     * Vertical centering - Flexbox solution
+     */
+
+    * { margin: 0 }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    main {
+      padding: 1em 2em;
+      /* 更常见的写法是 align-self: center; 它更语义化，而 margin: auto; 则有回退作用，这个回退是指 justify-content: center; 不生效时。 */
+      margin: auto; 
+      box-sizing: border-box;
+      background: #655;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: .2em;
+      font-size: 150%;
+    }
+
+    body {
+      background: #fb3;
+      font: 100%/1.5 sans-serif;
+    }
+  </style>
+</body>
+</html>

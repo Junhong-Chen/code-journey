@@ -26,9 +26,9 @@
   数学公式： T = a + blog2(1 + D / W)，T 表示所需时间，D 是从起点到目标中心的距离，W 是目标区域的宽度，而 a 和 b 都是常数。
   根据这个公式，可以很容易地推导出：目标越大，越容易到达。
   因此，对于那些较小的、难以瞄准的控件来说，如果不能把它的视觉尺寸直接放大，将其可点击区域（热区）向外扩张往往也可以带来可用性的提升。
-    1.border: 10px solid transparent; —> 扩张热区最简单的办法是为它设置一圈透明边框，因为鼠标对元素边框的交互也会触发鼠标事件，这一点是描边和投影所不及的。
-    2.background-clip: padding-box; —> 把背景限制在原本的区域之内。
-    3.box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset; —> 用内嵌投影来模拟出一道（实色）边框。
+  (1)border: 10px solid transparent; —> 扩张热区最简单的办法是为它设置一圈透明边框，因为鼠标对元素边框的交互也会触发鼠标事件，这一点是描边和投影所不及的。
+  (2)background-clip: padding-box; —> 把背景限制在原本的区域之内。
+  (3)box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset; —> 用内嵌投影来模拟出一道（实色）边框。
 
   reference-link: play.csssecrets.io/hit-area-border
   -->
