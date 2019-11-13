@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>闪烁效果</title>
+</head>
+<body>
+  <!--
+  CSS 动画可以实现各种类型的闪烁效果，比如对整个元素进行闪烁（opacity属性），对文字的颜色进行闪烁（color属性），对边框进行闪烁（border-color属性）等等。
+  就以其中的文字的闪烁为例来说，要实现一个平滑的闪烁效果很简单，第一步需要这样的代码：
+  /*
+  @keyframes blink-smooth { to { color: transparent } }
+  .highlight { animation: 1s blink-smooth 3; }
+  */
+  这基本上已经实现了，它可以平滑地从它原来的颜色淡化为透明色，但随后会生硬地跳回原来的颜色。
+  如果希望文字颜色的变化不仅是平滑隐去的，同时还是平滑显现的，那么可能会先想到去修改它的关键帧：
+  /*
+  @keyframes blink-smooth { 50% { color: transparent } }
+  .highlight { animation: 1s blink-smooth 3; }
+  */
+  它的表现似乎和我们所预期的一致，但要时刻的明白一点：这个动画是一直处在加速过程中的，不论是在文字显现还是隐去时，除非把调速函数设置为linear。
+  不过还有另一种更优雅的解决办法，就是反转它的循环周期。
+  animation-direction 的唯一作用就是反转每一个循环周期（reverse），或第偶数个循环周期（alternate），或第奇数个循环周期（alternate-reverse）。
+  它还会【 同时反转调速函数 】，从而产生更加逼真的动画效果。
+  因为现在一次淡入淡出的过程是由两个循环周期组成的，所以需要把动画循环的次数翻倍，把 animation-duration 减半。
+  /*
+  @keyframes blink-smooth { to { color: transparent } }
+  .highlight { animation: .5s blink-smooth 6 alternate; }
+  */
+
+  如果并不希望闪烁是平滑的，而是生硬的切换，那么可能会先想到使用 steps()：
+  /*
+  @keyframes blink { to { color: transparent } }
+  .highlight { animation: 1s blink 3 steps(1); }
+  */
+  如果写成上面这样，会发现什么变化都没有，因为 steps(1) 等同于 steps(1, end)，它表示切换动作发生在步进的end时间点，而当前颜色与 transparent 之间的过渡会在一次步进中完成，于是颜色值的切换只会发生在动画周期的末尾。因此，我们会看到起始值贯穿于整个动画周期，而终止值只在动画结尾的无限短的时间点处出现。
+  以这个逻辑来看，我们可以尝试换用 steps(2) 来碰碰运气，两种步进方式（start 或end）都可以试一下。
+  现在终于可以看到闪烁效果了，但这个闪烁效果要么是由半透明切到纯透明，要么是由半透明切到实色，原因同上。
+  由于无法通过配置 steps() 来让这个切换动作发生在动画周期的中间点（只能发生在起点或终点），唯一的解决方案是调整动画的关键帧，让切换动作发生在 50% 处，就像上面实现平滑的闪烁所做的那样：
+  /*
+  @keyframes blink { 50% { color: transparent } }
+  .highlight {animation: 1s blink 3 steps(1); /* 或用step-end */}
+  */
+
+  reference-link: play.csssecrets.io/blink
+  -->
+
+  <div class="blink-smooth">
+    blink-smooth
+  </div>
+  <style>
+    @keyframes blink-smooth {
+      to {
+        color: transparent;
+      }
+    }
+    .blink-smooth {
+      animation: .5s blink-smooth infinite alternate;
+    }
+  </style>
+
+  <div class="blink">
+    blink
+  </div>
+  <style>
+    @keyframes blink {
+      50% {
+        color: transparent;
+      }
+    }
+    .blink {
+      animation: 5s blink infinite steps(1);
+    }
+  </style>
+</body>
+</html>
