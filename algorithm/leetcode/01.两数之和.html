@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>两数之和</title>
+  <style>
+    pre {
+      padding: 10px 15px;
+      border-radius: 3px;
+      background: #f7f9fa;
+      color: #263238;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+	<div>
+    <p>给定一个整数数组 <code>nums</code>&nbsp;和一个目标值 <code>target</code>，请你在该数组中找出和为目标值的那&nbsp;<strong>两个</strong>&nbsp;整数，并返回他们的数组下标。</p>
+
+    <p>你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。</p>
+
+    <p><strong>示例:</strong></p>
+
+    <pre>给定 nums = [2, 7, 11, 15], target = 9<br>因为 nums[<strong>0</strong>] + nums[<strong>1</strong>] = 2 + 7 = 9<br>所以返回 [<strong>0, 1</strong>]</pre>
+  </div>
+  <script>
+    /**
+     * @param {number[]} nums
+     * @param {number} target
+     * @return {number[]}
+     */
+    const twoSum = function(nums, target) {
+      let record = new Map(); // 记录元素的值与索引
+      for (let i = 0; i < nums.length; i++) {
+        let complete = target - nums[i]; // 目标值与当前值的差值
+        if (record.get(complete) !== undefined) { // 如果map中存在这个差值，则说明已经有两个数相加等于target
+          return [record.get(complete), i]
+        }
+        record.set(nums[i], i) // 如果map中没有这个值，则把当前值与索引记录到map中
+      }
+    };
+
+    console.log(twoSum([2, 7, 11, 15], 9))
+  </script>
+</body>
+</html>
