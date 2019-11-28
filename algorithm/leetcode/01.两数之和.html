@@ -30,15 +30,15 @@
      * @return {number[]}
      */
     const twoSum = function(nums, target) {
-      let record = new Map(); // 记录元素的值与索引
+      let record = new Map() // 记录元素的值与索引
       for (let i = 0; i < nums.length; i++) {
-        let complete = target - nums[i]; // 目标值与当前值的差值
+        let complete = target - nums[i] // 目标值与当前值的差值
         if (record.get(complete) !== undefined) { // 如果map中存在这个差值，则说明已经有两个数相加等于target
           return [record.get(complete), i]
         }
         record.set(nums[i], i) // 如果map中没有这个值，则把当前值与索引记录到map中
       }
-    };
+    }
 
     console.log(twoSum([2, 7, 11, 15], 9))
   </script>
