@@ -26,17 +26,17 @@
     <pre><strong>输入：</strong>(2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)<br><strong>输出：</strong>7 -&gt; 0 -&gt; 8<br><strong>原因：</strong>342 + 465 = 807</pre>
   </div>
   <script>
-     // Definition for singly-linked list.
-     function ListNode(val) {
+    // Definition for singly-linked list.
+    function ListNode(val) {
       this.val = val
       this.next = null
-     }
+    }
     /**
      * @param {ListNode} l1
      * @param {ListNode} l2
      * @return {ListNode}
      */
-    const addTwoNumbers = function(l1, l2) {
+    function addTwoNumbers(l1, l2) {
       let result
       let cache
       let carried = 0

@@ -29,7 +29,7 @@
      * @param {number} target
      * @return {number[]}
      */
-    const twoSum = function(nums, target) {
+    function twoSum(nums, target) {
       let record = new Map() // 记录元素的值与索引
       for (let i = 0; i < nums.length; i++) {
         let complete = target - nums[i] // 目标值与当前值的差值
