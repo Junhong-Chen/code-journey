@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>双向绑定</title>
+  <script src="./obsever.js"></script>
+  <script src="./watcher.js"></script>
+  <script src="./compile.js"></script>
+  <script src="./vue.js"></script>
+</head>
+<body>
+  <div id="app">  
+    <h2>{{title}}</h2>
+    <button v-on:click="clickMe">click me!</button>
+    <h2>{{name}}</h2>
+    <input v-model="name">
+  </div>
+  <script>
+    const el = document.getElementById('test')
+    const vue = new Vue({
+      el: '#app', // document.querySelector(el)
+      data: {
+        title: 'hello world!',
+        name: 'junhong',
+      },
+      methods: {
+        clickMe: function () {
+          this.title = this.title === '世界你好！' ? 'hello world!' : '世界你好！'
+        }
+      },
+      mounted: function () {
+        window.setTimeout(() => {
+          this.name = 'jay'
+        }, 1000)
+      }
+    })
+  </script>
+</body>
+</html>
