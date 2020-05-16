@@ -1,0 +1,16 @@
+{
+  "name": "cpack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "bin": {
+    "cpack": "./bin/cpack.js"
+  },
+  "dependencies": {
+    "@babel/generator": "^7.9.5",
+    "@babel/traverse": "^7.9.5",
+    "@babel/types": "^7.9.5",
+    "babylon": "^6.18.0",
+    "ejs": "^3.0.2"
+  }
+}
