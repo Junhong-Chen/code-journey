@@ -23,9 +23,9 @@ const Promise = require('./promise.js')
 //   console.log('error2:' + error)
 // })
 
-const promise = new Promise((resolve, reject) => {
-  reject('ojbk')
-})
+// const promise = new Promise((resolve, reject) => {
+//   reject('ojbk')
+// })
 
 // const promiseAgain = promise.then(value => {
 //   console.log(value)
@@ -33,7 +33,22 @@ const promise = new Promise((resolve, reject) => {
 // })
 
 
-Promise.resolve(promise).then(value => {
+// Promise.resolve(promise).then(value => {
+//   console.log(value)
+// }, reason => {
+//   console.log(reason)
+// })
+
+const p1 = new Promise(resolve => {
+  resolve('success')
+})
+
+const p2 = new Promise((resolve, reject) => {
+  // resolve('success again')
+  reject('fail')
+})
+
+Promise.all([p1, p2]).then(value => {
   console.log(value)
 }, reason => {
   console.log(reason)
