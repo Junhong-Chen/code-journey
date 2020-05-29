@@ -20,7 +20,8 @@ class Promise {
 
   onFulfilled(value) {
     if (this.status !== 'pending') { // 由于状态是不可逆的，所以必须先判断当前状态是否合法
-      throw new Error('onRejected was called multiple times')
+      return
+      // throw new Error('onRejected was called multiple times')
     } else {
       this.value = value
     }
@@ -34,7 +35,8 @@ class Promise {
 
   onRejected(error) {
     if (this.status !== 'pending') { // 由于状态是不可逆的，所以必须先判断当前状态是否合法
-      throw new Error('onRejected was called multiple times')
+      return
+      // throw new Error('onRejected was called multiple times')
     } else {
       this.error = error
     }
@@ -128,6 +130,18 @@ class Promise {
           if (values.length === promises.length) {
             resolve(values)
           }
+        }, reason => {
+          reject(reason)
+        })
+      })
+    })
+  }
+
+  static race(promises) {
+    return new Promise((resolve, reject) => {
+      promises.forEach(promise => {
+        promise.then(value => {
+          resolve(value)
         }, reason => {
           reject(reason)
         })

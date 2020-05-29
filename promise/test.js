@@ -40,15 +40,25 @@ const Promise = require('./promise.js')
 // })
 
 const p1 = new Promise(resolve => {
-  resolve('success')
+  setTimeout(() => {
+    resolve('success')
+  }, 1000)
 })
 
 const p2 = new Promise((resolve, reject) => {
   // resolve('success again')
-  reject('fail')
+  setTimeout(() => {
+    reject('fail')
+  }, 2000)
 })
 
-Promise.all([p1, p2]).then(value => {
+// Promise.all([p1, p2]).then(value => {
+//   console.log(value)
+// }, reason => {
+//   console.log(reason)
+// })
+
+Promise.race([p1, p2]).then(value => {
   console.log(value)
 }, reason => {
   console.log(reason)
