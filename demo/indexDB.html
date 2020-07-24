@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>indexedDB</title>
+</head>
+<body>
+  <script>
+    // 打开 admin 数据库
+    let request, database;
+    request = indexedDB.open('admin', 1) // 指定数据库版本号，必须是无符号整数
+    // 创建一个新的数据库或者增加已存在的数据库的版本号时 onupgradeneeded 事件会被触发
+    request.onupgradeneeded = function(event) {
+      // 创建一个名为 users 的对象仓库, user 为这个仓库的键
+      const userStore = event.target.result.createObjectStore('users', { keyPath: 'uesr' })
+    };
+    // 处理函数
+    request.onerror = function(event) {
+      alert(`Something bad happened while trying to open: ${event.target.errorCode}`)
+    }
+    request.onsuccess = function(event) {
+      database = event.target.result
+    }
+
+  </script>
+</body>
+</html>
