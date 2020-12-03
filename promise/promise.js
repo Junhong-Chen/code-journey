@@ -29,8 +29,8 @@ class Promise {
     setTimeout(() => { // 在 promise 中的主体代码异步执行后（意味着 fulfilledFns 列表不为空），在执行 resolve 或 reject 时也需要异步执行
       this.fulfilledFns.forEach(fn => {
         fn(this.value)
-      });
-    }, null);
+      })
+    }, null)
   }
 
   onRejected(error) {
@@ -44,8 +44,8 @@ class Promise {
     setTimeout(() => {
       this.rejectedFns.forEach(fn => {
         fn(this.error)
-      });
-    }, null);
+      })
+    }, null)
   }
 
   then(onFulfilled, onRejected) {
