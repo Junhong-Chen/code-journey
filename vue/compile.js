@@ -8,9 +8,9 @@ class Compile {
 
   init() {
     if (this.el) {
-      this.fragment = this.nodeToFragment(this.el)
+      this.fragment = this.nodeToFragment(this.el) // 把元素都放进 DocumentFragment 里操作
       this.compileElement(this.fragment)
-      this.el.appendChild(this.fragment)
+      this.el.appendChild(this.fragment) // 操作完了再放回来
     } else {
       alert('#app元素不存在!')
     }

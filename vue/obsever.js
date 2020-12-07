@@ -21,7 +21,7 @@ function observer(data) {
 
 function defineReactive(data, key, value) {
   observer(value)
-  const dep = new Dep() // 注意每个属性都有自己单独的 dep 实例
+  const dep = new Dep() // 每个属性都有自己单独的 dep 实例，通过闭包访问
   Object.defineProperty(data, key, {
     enumerable: true,
     configurable: true,
