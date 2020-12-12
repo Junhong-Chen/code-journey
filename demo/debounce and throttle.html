@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>debounce and throttle</title>
+  <style type="text/css">
+    html, body {
+      font-family: Consolas;
+    }
+    input {
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  debounce:<input id="debounce" type="text"><br />
+  throttle:<input id="throttle" type="text">
+  <script>
+    const $ = document.querySelector.bind(document)
+    const debounceInput = $('#debounce')
+    const throttleInput = $('#throttle')
+
+    function debounce(fn, delay) {
+      let id
+      return function() {
+        if (id) clearTimeout(id)
+        id = setTimeout(() => {
+          fn.apply(this, Array.prototype.slice.call(arguments))
+        }, delay)
+      }
+    }
+
+    function throttle(fn, delay) {
+      let id
+      return function() {
+        if (id) return
+        id = setTimeout(() => {
+          fn.apply(this, Array.prototype.slice.call(arguments))
+          id = null
+        }, delay)
+      }
+    }
+
+    const debouncePrint = debounce(function (value) {
+      console.log(value)
+    }, 500)
+
+    const throttlePrint = throttle(function (value) {
+      console.log(value)
+    }, 500)
+
+    debounceInput.addEventListener('input', (event) => {
+      debouncePrint(event.target.value)
+    }, false)
+
+    throttleInput.addEventListener('input', (event) => {
+      throttlePrint(event.target.value)
+    }, false)
+  </script>
+</body>
+</html>
