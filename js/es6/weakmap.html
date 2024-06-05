@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WeakMap</title>
+</head>
+<body>
+  <script>
+    /*
+    它和 Map 对象的区别有两点:
+    1.WeakMap 对象中的元素的 key 只能存放对象引用，不能存放值， 而 Map 对象都可以。
+    2.WeakMap 对象中存储的对象值都是被弱引用的，如果没有其他的变量或属性引用这个对象值，则这个对象值会被当成垃圾回收掉。正因为这样， WeakMap 对象是无法被枚举的，没有办法拿到它包含的所有元素。
+    3.clear()被废弃。
+    参考：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap
+    */
+
+    // es6并没有为 WeakMap 配置内建的迭代器，所以不能使用 for of 和 forEach进行遍历。
+    let steam = [{name: 'steam', representative: 'G胖'}, 'much']
+    let uplay = [{name: 'uplay', representative: 'ubisoft'}, 'few']
+
+    let gamePlatforms = new WeakMap([steam, uplay])
+    console.log(gamePlatforms)
+    console.log(`WeakMap没有size：${gamePlatforms.size}`)
+    // console.log(`给WeakMap的元素的 key 设置为值，否在报错：${gamePlatforms.set('origin', 'rotten')}`)
+    // for (let game of gamePlatforms) {
+    //   console.log(game) // 报错，因为WeakMap不能用 for of 遍历
+    // }
+
+
+    /*
+    WeakMap 的垃圾回收机制
+    */
+    uplay = null
+    console.log(`在gamePlatforms中, 是否还存在steam：${gamePlatforms.has(steam)}, 是否还存在uplay： ${gamePlatforms.has(uplay)}`)
+    // 疑问：在控制台中查看 gamePlatforms 时，多次刷新会看到不同的结果，有时还能看到 uplay 存在。
+    // 原因(*暂未确定)：垃圾回收机制何时运行是不可预测的。
+  </script>
+</body>
+</html>

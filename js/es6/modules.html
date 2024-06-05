@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Modules</title>
+</head>
+<body>
+  <!-- export -->
+  <script>
+    // 默认导出（只能有一个）
+    const jay = {
+      name: 'Junhong',
+      age: 25,
+      sex: 'male'
+    }
+    export default jay
+
+    // 命名导出
+    export const height = '176'
+
+    // 重命名导出
+    const weight = '65'
+    export { weight as bodySize }
+  </script>
+
+  <!-- import -->
+  <script>
+    // 默认导出可以用任意名字进行导入，上面导出是Jay，下面导入用的是Junhong
+    import junhong from './config'
+    console.log(junhong)
+
+    // 命名导出只能用对应的名字进行导入
+    import { height } from './config'
+    console.log(height)
+
+    // 重命名导入
+    import { bodySize as weight } from './config'
+    console.log(weight)
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bind</title>
+</head>
+<body>
+  <script>
+    var slice = Array.prototype.slice
+    function _bind() {
+      var thisArg = arguments[0]
+      var thatArg = slice(arguments, 1)
+      var that = this
+      if (typeof thisArg !== 'function') {
+        throw TypeError('Function.prototype.bind what is trying to be bound is not callable')
+      }
+      return function() {
+        var funcArgs = thatArg.concat(slice.call(arguments))
+        return that.apply(thisArg, funcArgs)
+      }
+    }
+
+    Function.prototype._bind = _bind
+
+    apple = {
+      name: 'apple'
+    }
+    function test(type) {
+      console.log(type)
+      console.log(this.name)
+    }
+    appleTest = test.bind(apple)
+    appleTest('appleTest')
+  </script>
+</body>
+</html>

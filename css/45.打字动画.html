@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>打字动画</title>
+</head>
+<body>
+  <!--
+  核心思路就是让容器的宽度成为动画的主体：把所有文本包裹在这个容器中，然后让它的宽度从 0 开始以步进动画的方式、一个字一个字地扩张到它应有的宽度。
+  这个方法是有局限的：它并不适用于多行文本。
+  注意的事情是，动画的持续时间越长，动画效果越差：持续时间较短的动画会让界面显得更加精致，在某些场景下还是有益于可用性的。反之，动画的持续时间越长，越容易让用户感到厌烦。因此，即使这个技巧可以用在大段文本身上，也不一定是个好主意。
+
+  ch 单位是由 CSS 值与单位（第三版）（http://w3.org/TR/css3-values）规范引入的一个新单位，表示“0”字形的宽度。它应该是最不为人知的一个新单位，因为在绝大多数场景下，我们并不关心 0 这个字符显示出来到底有多宽。但对等宽字体来说，这是个例外。在等宽字体中，“0”字形的宽度和其他所有字形的宽度是一样的。
+
+  reference-link: play.csssecrets.io/typing
+  -->
+
+  <h1>CSS is awesome!</h1>
+  <style>
+    @keyframes typing {
+      from {
+        width: 0;
+      }
+    }
+    @keyframes caret {
+      50% {
+        border-color: currentColor;
+      }
+    }
+
+    h1 {
+      font: bold 200% Consolas, Monaco, monospace; /*注意一定要使用等宽字体*/
+      width: 15ch;
+      border-right: 1px solid transparent; /*光标，这里指定为transparent是因为当浏览器不支持动画时，至少不会把光标（border）显示出来。*/
+      overflow: hidden;
+      white-space: nowrap; /*宽度不够时会自动换行，这里阻止文本换行*/
+      animation: typing 2s steps(15), /*15个字符（包括空格），所以steps()分15次递进*/
+                 caret 1s steps(1) infinite; /*光标的动画，具体原理参照上一节【44.闪烁效果】*/
+    }
+  </style>
+  <script>
+    // 如果不知道内容的长度，可以使用JavaScript来控制CSS样式。
+    const h1 = document.getElementsByTagName('h1')[0]
+    const length = h1.textContent.length // 文本内容的长度
+    h1.style.width = `${length}ch`
+    h1.style.animationTimingFunction = `steps(${length}), steps(1)` // 后面这个 steps(1) 是光标的调速函数
+  </script>
+</body>
+</html>

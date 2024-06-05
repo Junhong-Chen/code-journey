@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Map</title>
+</head>
+<body>
+  <article>
+    <button>Fire 🔥</button>
+    <button>Dancer 💃</button>
+    <button>Ice Cream 🍦</button>
+    <button>Hamburger 🍔</button>
+    <button>Earth 🌏</button>
+  </article>
+  <script>
+    /*
+    Map 对象保存键值对。任何值(对象或者原始值) 都可以作为一个键或一个值。
+    如果把 Set 看作是一个 Array 话，那么 Map 就可以看成是一个 Object(这里只是方便理解，实际上并不能这么认为)。
+    Object 会把 key 强制转换成 string 类型。
+    */
+    const fruits = new Map([['apple', 'sour'], ['banana', 'yummy'], ['cherry', 'juicy']])
+    console.log('Map.prototype.size方法查看元素个数:', fruits.size)
+    console.log('Map.prototype.set()方法添加元素:', fruits.set('durian', 'creamy'))
+    console.log('Map.prototype.get()方法返回键对应的值:', fruits.get('durian'))
+    console.log('Map.prototype.delete()方法删除元素:', fruits.delete('durian'), '删除后:', fruits)
+    console.log('Map.prototype.has()方法查看元素是否存在:', fruits.has('durian'))
+    // console.log('Map.prototype.clear()方法清空:', fruits.clear())
+    // 更多方法参考：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map
+
+    // es6 为 Map 提供了内建的迭代器，所以可以使用for of(for of 本质上就是调用了迭代器进行遍历)进行遍历。
+    for (let fruit of fruits) {
+      console.log(fruit)
+    }
+
+    // 也可以使用forEach进行遍历。
+    fruits.forEach((value, key, ownMap) => {
+      console.log(value, key, ownMap)
+    })
+
+
+    /*
+    Example：计算每个button的点击次数(Map的主要应用场景是为了存储某个对象的信息,而Object是把信息存储到对象)。
+    */
+    const buttons = document.querySelectorAll('button')
+    const clickCounts = new Map()
+
+    buttons.forEach(button => {
+      clickCounts.set(button, 0)
+      button.addEventListener('click', function() {
+        let clickCount = clickCounts.get(this)
+        clickCounts.set(this, ++clickCount)
+        console.log(`${this.innerText}被点击了${clickCount}次。`)
+      })
+    })
+  </script>
+</body>
+</html>

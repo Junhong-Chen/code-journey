@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Generator</title>
+</head>
+<body>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    /*
+    生成器:
+    function* 声明一个函数就是生成器。
+    可以把生成器理解为一个自定义的迭代器，它的行为和迭代器一样。
+    */
+    function* listColors() {
+      yield 'red'
+      yield 'yellow'
+      yield 'blue'
+      yield 'green'
+    }
+    const colors = listColors()
+    console.log(colors.next())
+
+    /*
+    Example-0：使用生成器迭代一个对象。
+    */
+    const fruits = ['apple', 'banana', 'cherry']
+    function* loop(target) {
+      for (let item of target) {
+        yield item
+      }
+    }
+    const fruit = loop(fruits)
+    console.log(fruit.next())
+
+
+    /*
+    Example-1：使用生成器来控制ajax请求，作用类似async await。
+    */
+    function ajax(url) {
+      // next()方法也可以通过接受一个参数用以向生成器传值。
+      axios.get(url).then(response => userGenerator.next(response.data))
+    }
+
+    function* steps() {
+      console.log('fetching users')
+      const users = yield ajax('https://api.github.com/users')
+      console.log(users)
+
+      console.log('fetching firstUser')
+      const firstUser = yield ajax(`https://api.github.com/users/${users[0].login}`)
+      console.log(firstUser)
+
+      console.log('fetching followers')
+      const followers = yield ajax(firstUser.followers_url)
+      console.log(followers)
+    }
+
+    const userGenerator = steps()
+    userGenerator.next()
+  </script>
+</body>
+</html> 

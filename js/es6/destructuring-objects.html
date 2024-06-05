@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Destructuring Objects</title>
+</head>
+<body>
+  <div class="container"></div>
+  <script>
+    /*
+    对象解构会找到名称相同的属性，并赋值给新定义的参数。
+    */
+    const person = {
+      name: 'Junhong',
+      sex: 'male',
+      parameter: {
+        height: 177,
+        weight: 65,
+        age: 24,
+      }
+    }
+
+    // const name = 'Junhong' 不能提前声明和对象解构里名称一样的变量，不然会报错。
+    const { name, sex } = person
+    console.log(name, sex)
+
+    const { height: h, weight: w, age: a} = person.parameter // 如果和现有变量名冲突，可以重命名对象解构的参数。
+    console.log(h, w, a)
+
+    const { girlfriend = 'hava no girlfriend' } = person // 当某个属性不存在（值必须为undefined，null/false/0 均不会使用默认值）时，可以使用默认参数输出。
+    console.log(girlfriend)
+
+
+    /*
+    Example：使用默认值来实现回退。
+    */
+    function appendChildDiv(options = {}) {
+      const { parent = 'body', width = '100px', height = '100px', backgroundColor = 'black' } = options
+      const div = document.createElement('div')
+      div.style.width = width
+      div.style.height = height
+      div.style.backgroundColor = backgroundColor
+      document.querySelector(parent).appendChild(div)
+    }
+
+    appendChildDiv({ parent: '.container', height: '50px', backgroundColor: 'grey'}) // 因为没有设置宽度，所以回退到了默认值100px。
+
+
+  </script>
+</body>
+</html>

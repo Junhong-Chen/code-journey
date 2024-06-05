@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>环形文字</title>
+  <style>
+    .circular {
+      width: 30em;
+      height: 30em;
+      margin: 4em auto 0;
+      font: bold 57% Helvetica, sans-serif;
+    }
+
+    .circular svg {
+      display: block;
+      overflow: visible;
+      transition: 10s linear transform;
+    }
+
+    .circular svg:hover { transform: rotate(-2turn); }
+
+    .circular text { fill: currentColor }
+    .circular path { fill: none; }
+  </style>
+</head>
+<body>
+  <!--
+  目前还没有比较好的纯 CSS 实现方法，但可以借助一点内联 SVG 来轻松解决这个难题。
+  SVG 原生支持以任意路径排队的文字，而圆形只不过是一种特定的路径而已。
+  在 SVG 中，让文本按照路径排列的基本方法就是用一个 <textPath> 元素来包裹住这段文本，再把它们装进一个 <text> 元素中。
+  这个 <textPath> 元素还需要在它的 ID 属性中引用一个<path> 元素，然后就可以用这个 <path> 元素来定义想要的路径。
+  在内联 SVG 内部的文本同样可以继承绝大多数字体样式（不包括line-height，因为它会由SVG 另行指定），因此不需要担心字体问题，就像处理外部的 SVG 图像时一样。
+  请注意 viewBox 是用来定义它的单位的， 而不是用 width 和 height 属性。
+  这样就不需要指定一个固定的尺寸就可以设置坐标系统和图形的宽高比。这个写法不仅更加紧凑，还可以节省几行 CSS 代码，
+  因为我们已经不需要对这个 <svg> 元素应用值为 100% 的宽度和高度了：它自己就可以自动地适应外层容器的尺寸。
+  到目前为止，显示出的路径还只是一个黑色的圆。使用 <text> 和 <textPath> 元素来添加文本，并通过 xlink:href 属性来把它链接到这个圆上。
+  接下来，把黑色的填充效果从路径中去掉:
+  (1)比如把它嵌套进一个 <defs> 元素中，该元素就是专门为这个目的而设计的;
+  (2)用 CSS 给它应用一个 fill: none 样式（推荐）。
+
+  现在最大的问题是，几乎所有的文本都跑到 SVG 元素的外面去了，而且被裁剪了。
+  让这个容器元素变小，然后再给 SVG 元素应用 overflow: visible 样式，这样它就不会把内容的溢出部分裁剪掉了。
+  但现在仍然有一部分文本是被裁剪掉的。因为 SVG 元素只会基于它自己的尺寸（而不是它溢出的内容）来影响布局流。
+  因此，即使有一些文本溢出到了这个 <svg> 元素创建的方框之外，这些溢出部分也不会把 SVG 元素自身往下推。
+  所以这里用外边距来处理： margin: 4em auto 0;。
+
+  reference-link: play.csssecrets.io/circular-text
+  -->
+  <div class="circular">
+    <svg viewBox="0 0 100 100">
+      <path d="M 0,50 a 50,50 0 1,1 0,1 z" id="circle"/>
+      <text>
+        <textPath xlink:href="#circle">目前还没有什么比较好的css办法来实现环形文字，所以这里考虑用SVG实现。</textPath>
+      </text>
+    </svg>
+  </div>
+</body>
+</html>

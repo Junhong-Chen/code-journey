@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>折角效果</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    div {
+      width: 200px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  45°折角方案：
+  切角效果参照 12.切角效果 实现。
+  完成切角后增加一个暗色的三角形来实现翻折效果。实现方法是增加另一层渐变来生成这个三角形并将其定位在右上角，通过 background-size 来控制折角的大小。
+  1.414em 是沿着渐变轴进行度量的，根据勾股定理可算出斜边为 2em，与上层背景的 background-size 一致。
+  之所以选择调整切角渐变的角标位置值，是因为调整 background-size 需要把这个长度重复两次。
+
+  reference-link: play.csssecrets.io/folded-corner
+  -->
+
+  <div class="folded-corner">
+    <style>
+      .folded-corner {
+        background: linear-gradient(to left bottom, transparent 50%, cadetblue 0) 100% 0 / 2em 2em no-repeat,
+                    linear-gradient(to left bottom, transparent 1.414em, lightblue 0);
+      }
+    </style>
+  </div>
+
+  <!--
+  其他角度方案：
+  现实生活中的折角往往不是精确的 45°。如果希望它看起来更真实一些，可以稍稍改变一下角度，比如 -150deg 可以产生 30° 的切角。
+  只是改变斜面切角的角度很简单，但是想改变翻折部分的三角形的尺寸并不容易。它的尺寸并不是由角度来定义的，而是由宽度和高度来定义的。
+  这里需要用到一些三角函数的知识（正弦函数、余弦函数以及勾股定理）。已知 sin30° = 1 / 2，cos30° = √3 / 2。
+  根据计算可知三角形的宽高分别为 3 1.732 才能和斜面切角保持一致（计算过程略）。
+  现在这个三角形确实已经跟切角对上号了，但这个结果看起来更不真实了。
+  我们尝试拿出一张真实的纸并折出类似的角度，或许就能理解它为什么看起来很假了，因为我们完全不可能把一张纸折成现在的样子。
+  这个折页三角形是需要微微旋转的，它的尺寸跟元素角上“切”下来的那个三角形应该是一致的。由于无法旋转背景，所以这里需要用上伪元素。
+  把折页三角形的 width 和 height 对调，以此改变它的方向，这样就可以得到跟折页缺口对称的三角形，而不是一个可以补足折页缺口的三角形。
+  逆时针 30° 来旋转这个折页三角形，这样可以让它的斜边与折线平行。
+  为了让这两个三角形（深色的三角形折页和折角的三角形缺口）的斜边重合，它在水平和垂直方向上都需进行移动，要算出这两个偏移量似乎很难。
+  可以让事情变得更简单一些，把 transform-origin 设置为 bottom right，让三角形的右下角成为旋转的中心，这样就可以让它的右下角保持固定。
+  现在只需在垂直方向上，向上移动这个折页三角形就可以了。
+  为了算出实际要移动的距离，又要用到几何学了。
+  把旋转暂时去掉，可以轻易的看出所需的垂直偏移量是三角形的两条边相减：x − y = 3 − √3 = 1.268
+  最后，为了让它更加真实一些，可以增加圆角、渐变以及投影等。
+
+  缺点：不够DRY。
+
+  referenc-link: play.csssecrets.io/folded-corner-realistic
+
+  如果希望代码更加 DRY，可以使用预处理器的 mixin。
+  link：play.csssecrets.io/folded-corner-mixin
+  -->
+
+  <div class="folded-corner-realistic">
+    <style>
+      .folded-corner-realistic {
+        position: relative;
+        background: linear-gradient(-150deg, transparent 1.5em, lightblue 0); /*1.414em 取整后更贴合，具体原因不知，可能与浏览器计算 em 方式有关*/
+        border-radius: .5em;
+      }
+      .folded-corner-realistic::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: linear-gradient(to left bottom, transparent 50%, hsla(0, 0%, 0%, .2) 0, hsla(0, 0%, 0%, .4)) 100% 0 no-repeat;
+        width: 1.732em;
+        height: 3em;
+        transform: translateY(-1.268em) rotate(-30deg);
+        transform-origin: bottom right;
+        border-bottom-left-radius: inherit;
+        box-shadow: -.2em .2em .3em -.1em hsla(0, 0%, 0%, .15);
+      }
+    </style>
+  </div>
+</body>
+</html>

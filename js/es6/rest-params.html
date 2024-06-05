@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rest Params</title>
+</head>
+<body>
+  <script>
+    /*
+    Example-0: 对函数参数的处理：给一个汇率，计算剩余参数的汇率值。
+    */
+    function converCurrency(rate, ...amounts) {
+      return amounts.map(amount => amount * rate)
+    }
+    console.log(converCurrency(0.88, 100, 121, 90, 111))
+
+    
+    /*
+    Example-1: 变量的解构：获取某人的名字和剩下的属性。
+    */
+    const player = ['Jay', 1994, 178, 65]
+    const [name, ...attribute] = player
+    console.log(name, attribute)
+  </script>
+</body>
+</html>

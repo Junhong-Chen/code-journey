@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Object Literal Upgrade</title>
+</head>
+<body>
+  <script>
+    const name = 'Junhong'
+    const age = 25
+    const sex = 'male'
+
+    /*
+    // es5：
+    const jay = {
+      name: name,
+      age: age,
+      sex: sex,
+      greet: function() {
+        alert('hello world!')
+      }
+    }*/
+
+    const jay = {
+      name,
+      age,
+      sex,
+      greet() {
+        alert('hello world!')
+      }
+    }
+    console.log(jay)
+
+
+    /*
+    计算属性
+    */
+    const keys = ['name', 'age', 'sex']
+    const values = ['Junhong', 25, 'male']
+
+    // 对象里的 [keys.shift()] 相当于在外面写 jayAttribute[keys.shift()]
+    const jayAttribute = {
+      [keys.shift()]: values.shift(),
+      [keys.shift()]: values.shift(),
+      [keys.shift()]: values.shift()
+    }
+    console.log(jayAttribute)
+  </script>
+</body>
+</html>

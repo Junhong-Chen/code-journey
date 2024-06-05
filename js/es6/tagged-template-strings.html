@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Tagged Template Strings</title>
+  <style>
+    body {
+      margin: 30px;
+    }
+
+    .highlight {
+      color: white;
+      background-color: black;
+    }
+
+    textarea {
+      margin-top: 10px;
+      border-radius: 3px;
+    }
+
+    button {
+      display: block;
+      border: 0;
+      border-radius: 3px;
+      background-color: black;
+      color: white;
+      box-shadow: 1px 1px 3px black;
+      padding: 10px;
+    }
+
+    .comment-header {
+      border-bottom: 1px solid rgba(0, 0, 0, .1);
+      padding: 10px 0;
+      color: tomato;
+
+    }
+
+    .comment-body {
+      display: inline-block;
+      font-size: 14px;
+      margin: 10px;
+      border-radius: 3px;
+      padding: 0 5px;
+      background-color: gainsboro;
+    }
+
+  </style>
+</head>
+<body>
+  <article>
+    <form class="add-comment">
+      <textarea class="comment-text" cols="60" rows="10"></textarea>
+      <button >Post Comment</button>
+    </form>
+    <div class="comment"></div>
+  </article>
+  <!-- 引入DOMPurify，来源：cdnjs资源库 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/1.0.10/purify.js"></script>
+	<script>
+    /*
+    转义标签就是在模板字符串前面写一个函数，这个函数包含了两个参数：
+    strings 以数组的形式保存被变量分隔的字符串，如果字符串模板的开头或结尾是变量，那么strings的第一个或最后一个值就是空字符串。
+    ...value 表示所有的变量
+    */
+    function highlight(strings, ...values) {
+      // 获取一个含有高亮样式的标签的数组
+      const highlighted = values.map(value => `
+        <span class="highlight">${value}</span>
+      `)
+
+      // 把strings和有高亮样式的标签组合在一起。
+      return strings.reduce((prev, curr, i) => `
+        ${prev}${curr}${highlighted[i] || ''}
+      `, '')
+    }
+
+    const user = 'Jay'
+    let topic = 'Learn to use markdown.'
+    // sentence 返回highlight标签(函数)的值。
+    let sentence = highlight`${user} has commented on your topic ${topic}`
+
+    document.body.insertAdjacentHTML('afterbegin', sentence)  // 插入到第一个子节点之前
+
+
+
+    /*
+    Example：使用转义标签和DOMPurify过滤用户输入的信息，避免被黑客攻击。
+    带有攻击的输入信息: <img src="https://s9.51cto.com/wyfs01/M00/15/7B/wKioJlIK5QzTEZzvAABqXKplFxs442.jpg-wh_651x-s_1711129743.jpg" onload="alert('Hah!You got hacked!😈')"/>
+    */
+    const addCommentFrom = document.querySelector('.add-comment')
+    const textarea = document.querySelector('.comment-text')
+    const comment = document.querySelector('.comment')
+
+    function sanitize(strings, ...values) {
+      const dirty = strings.reduce((previous, current, i) => `
+        ${previous}${current}${values[i] || ''}
+      `, '')
+      return DOMPurify.sanitize(dirty)
+    }
+
+    addCommentFrom.addEventListener('submit', event => {
+      if(!textarea.value) {
+        return
+      }
+      event.preventDefault()
+      const newComment = textarea.value.trim()
+      if(newComment) {
+      // 可以删除sanitize函数查看被攻击时的场景。
+        comment.insertAdjacentHTML('beforeend', sanitize`
+          <div class="comment-header">${user}</div>
+          <div class="comment-body">${textarea.value}</div>
+        `) // 插入到最后一个子节点之后
+      }
+      textarea.value = null
+    })
+	</script>
+
+</body>
+</html>

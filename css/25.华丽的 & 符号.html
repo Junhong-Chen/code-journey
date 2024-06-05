@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>华丽的 & 符号</title>
+  <style>
+    @font-face {
+      font-family: Ampersand;
+      src: local('Baskerville-Italic'), local('GoudyOldStyleT-Italic'), local('Garamond-Italic'), local('Palatino-Italic'); /*只在 OS 系统中有效*/
+      unicode-range: U+26;
+    }
+
+    h1 {
+      font-family: Ampersand, Helvetica, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  在文学作品的字体排印中，简写的 & 符号倍受推崇。没有其他字符可以像精心设计的 & 那样迅速传递出优雅的气质。
+  所有网站都殚精竭虑，试图找出一种能够体现 & 字符之美的最佳字体。不过，可以显示出优美 & 字符的字体往往并不适用于页面中的其他文本。
+  毕竟对于标题来说，真正美丽而优雅的效果正是来源于清爽的无衬线字体与华丽的衬线 & 符号之间的对比。
+  最简单的做法是用一个 <span> 标签将 & 符号包裹起来，然后给这个标签设定想要的样式。
+  有一个方案可以不修改 html 的结构来实现这个想法，就是用另一种字体来单独美化某个特定字符（或是某个区间内的多个字符）。
+  在 font-family 声明中同时指定多个字体（即字体队列）时，即使我们指定的最优先字体不可用，浏览器还可以回退到其他符合整体设计风格的字体。
+  这个机制对单个字符来说也是有效的。
+  在这个规则之下，如果有一款字体只包含一个字符，那这款字体将只用于显示这个字符，其他字符会由字体队列中排在第二位、第三位或更后面的字体来显示。
+  如果只想用系统内建字体中的某一款来美化 & 符号，src 描述符还可以接受local()函数，用于指定本地字体的名称。
+  最后还需要用 unicode-range 来声明我们想用这几款本地字体来显示哪些字符，否则它会把整段文本都应用为我们指定的某款字体。
+  unicode-range 接受 Unicode 码位，比如 "&".charCodeAt(0).toString(16); 返回26，再在码位前面加上 U+ 作为前缀（unicode-range: U+26;）。
+  如果希望字体中只有 & 呈现出斜体风格，可以直接指定字体中想要的单个 风格/字重 所对应的“PostScript 名称”。
+
+  提示： & 符号在中文网站中很少使用，但可以借此技巧来美化网站中某些常用的文字。
+  reference-link: play.csssecrets.io/ampersands
+  -->
+  <h1>HTML & CSS</h1>
+</body>
+</html>

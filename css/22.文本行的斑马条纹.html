@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>文本行的斑马条纹</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .zebra-lines {
+      padding: .5em;
+      line-height: 1.5;
+      background: beige;
+      background-image: linear-gradient(hsla(0, 0%, 0%, .2) 50%, transparent 0);
+      background-size: auto 3em;
+      background-origin: content-box;
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    code {
+      font: inherit;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  对于 :nth-child()/:nth-of-type() 伪类，最常用来解决的一个需求就是表格的“斑马条纹”。
+  但想把表格行的这种效果应用到文本行时，仍然有些难度。
+  很多开发者使用 JavaScript 把每行代码包裹进一个个 <div> 元素中，然后运用上述 :nth-child()/:nth-of-type() 技巧来实现斑马条纹。
+  这种方法在理论上违背了纯粹原则（ JavaScript 不应该参与到样式层面来），而且过多的 DOM 元素也会降低整个页面的性能。
+  抛开上面所说的做法，换一种思路来重新考虑这个问题，为什么不对整个元素设置统一的背景图像呢？
+  首先，需要运用“条纹背景”中所描述的方法，创建出水平条纹背景。
+  它的 background-size 需要设置为 line-height 的两倍，因为每个背景贴片需要覆盖两行代码。
+  因为设置了 padding: .5em; 导致代码错位了，可以使用 background-position 向错位的反方向移动 .5em 解决，但这样不够 DRY。
+  为了让代码更灵活，这里使用 background-position: content-box; 让 background-position 以内容区的边缘作为基准进行对齐（“灵活的背景定位”中也曾使用过）。
+
+  reference-link: play.csssecrets.io/zebra-lines
+  -->
+
+  <pre class="zebra-lines"><code>#include &lt;stdio.h&gt;
+  int main()
+  {
+    printf("Hello, World!");
+    return 0;
+  }</code></pre>
+</body>
+</html>

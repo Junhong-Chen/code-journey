@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>连字</title>
+  <style>
+    body {
+      font: 200% / 1.6 "Adobe Caslon Pro", Baskerville, serif;
+      font-variant-ligatures: common-ligatures discretionary-ligatures historical-ligatures;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  在 CSS3 字体中，原有的 fontvariant 被升级成了一个简写属性，由很多新的展开式属性组合而成。
+  其中之一叫作 font-variant-ligatures，专门用来控制连字效果的开启和关闭。如果要启用所有可能的连字，需要同时指定这三个标识符：
+  font-variant-ligatures: common-ligatures discretionary-ligatures historical-ligatures;
+  也可以单独只启用某一种，甚至可以设置为 none 来关闭连字效果。
+
+  提示：本章的连词只适用于英文，中文无连词一说，此小节只作了解。
+  reference-link: play.csssecrets.io/ligatures
+  -->
+  Common ligatures: fi ff fl ffi ffl <br/>
+  Discretionary ligatures: st ct
+</body>
+</html>

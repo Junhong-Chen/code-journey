@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Classes</title>
+</head>
+<body>
+  <script>
+    /*
+    es5:
+    */
+    // function User(name, age) {
+    //   this.name = name
+    //   this.age = age
+    // }
+    // User.prototype.greeting = function() {
+    //   console.log(`Hi, I'm ${this.name}, ${this.age} years old.`)
+    // }
+    // User.prototype.description = function() {
+    //   console.log('this is a user.')
+    // }
+
+    // const jay = new User('Jay', 24)
+    // jay.greeting()
+    // jay.description()
+
+
+    /*
+    es6: 类声明不存在提升。
+    */
+    // 类的属性也可以使用计算属性。
+    const methodName = 'show'
+    class User {
+      constructor(name, age) {
+        this.name = name
+        this.age = age
+      }
+      // 使用计算属性：
+      [methodName]() {
+        console.log('this is calculation attribute.')
+      }
+
+      greeting() {
+        console.log(`Hi, I'm ${this.name}, ${this.age} years old.`)
+      }
+
+      // 静态方法：只能通过类(User)进行调用。
+      static description() {
+        console.log('this is a user.')
+      }
+
+      set github(value) {
+        this.githubName = value
+      }
+
+      get github() {
+        return `https://github.com/${this.githubName}`
+      }
+    }
+    // 只能通过new来调用。
+    const junhong = new User('Junhong', 24)
+    junhong.show()
+    junhong.greeting()
+    User.description()
+
+
+
+  </script>
+</body>
+</html>

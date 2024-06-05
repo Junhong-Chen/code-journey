@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>最长回文子串</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div>
+    <p>给定一个字符串 <code>s</code>，找到 <code>s</code> 中最长的回文子串。你可以假设&nbsp;<code>s</code> 的最大长度为 1000。</p>
+
+    <p><strong>示例 1：</strong></p>
+
+    <pre><strong>输入:</strong> "babad"<br><strong>输出:</strong> "bab"<br><strong>注意:</strong> "aba" 也是一个有效答案。</pre>
+
+    <p><strong>示例 2：</strong></p>
+
+    <pre><strong>输入:</strong> "cbbd"<br><strong>输出:</strong> "bb"</pre>
+  </div>
+  <script>
+    /**
+     * @param {string} s
+     * @return {string}
+     */
+    function longestPalindrome(s) { // manacher 算法
+      const str = String(s)
+
+      // 把字符串转成数组，并在它们之间插入null，这样就可以把所有回文字符串化简为奇数长度来处理
+      const arr = [NaN, null]
+      for (let i = 0; i < str.length; i++) {
+        arr.push(str[i])
+        arr.push(null)
+      }
+      arr.push(NaN) // 前后各加上 NaN 做开始符和结束符，利用NaN不等于任何类型(包括自身)的特性
+
+      const lens = [] // 存放以 arr[i] 为中点的回文子串的半径(长度 / 2 - 1)
+      let iCenterMax = 1 // 已知最长的回文子串的中点
+      let iCenter = 0 // 最右回文子串的中点
+      let iRight = 0 // 最右回文子串的右点
+      for (let i = 0; i < arr.length; i++) {
+        if (arr.length - i - 1 < lens[iCenterMax]) {
+          break // 如果最后剩下的字符串长度都小于已知的最大半径，那么它们中就不会产生比 iCenterMax 更大的值
+        }
+
+        lens[i] = 0
+
+        if (i < iRight) { // i 在已知最长回文的范围中
+          let iMirror = 2 * iCenter - i // 找到 i 相对于 iCenter 的对称点
+          lens[i] = Math.min(lens[iMirror], iCenter - i) // 考虑 p[iMirror] 左越界和不越界两种情况，其中最小值则为已知的对称半径
+        }
+
+        while (arr[i + lens[i] + 1] === arr[i - lens[i] - 1]) { // 朴素计算，判断字符串向外延伸是否对称
+          lens[i]++
+        }
+
+        if (i + lens[i] > iRight) { // 如果当前的 i 加上它的半径大于当前最右回文子串的右点坐标，那么 i 就是最新的最右回文子串的中点
+          iCenter = i
+          iRight = i + lens[i]
+        }
+
+        if (lens[i] > lens[iCenterMax]) {
+          iCenterMax = i
+        }
+      }
+      return arr.slice(iCenterMax - lens[iCenterMax], iCenterMax + lens[iCenterMax] + 1)
+        .filter(item => item !== null)
+        .join('')
+    }
+
+    console.log(longestPalindrome('baabd'))
+
+    // reference-link: https://blog.crimx.com/2017/07/06/manachers-algorithm/
+  </script>
+</body>
+</html>

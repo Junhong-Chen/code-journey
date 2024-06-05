@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>插入换行</title>
+  <style>
+    body {
+      font: 150% / 1.6 Baskerville, Palatino, serif;
+    }
+
+    dt,
+    dd {
+      display: inline;
+      margin: 0;
+    }
+
+    dd {
+      font-weight: 600;
+    }
+
+    dd + dt::before {
+      content: "\A";
+      white-space: pre;
+    }
+
+    dd + dd::before {
+      content: ", ";
+      font-weight: normal;
+      margin-left: -.25em;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  <dt> 和<dd> 都是块级元素，所以给它们应用 display:inline; 样式。
+  有一个 Unicode 字符是专门代表换行符的：0x000A。在 CSS 中，这个字符可以写作"\000A"，或简化为"\A"。这里把它添加到需要换行的元素的后面一个兄弟元素的伪元素上。
+  但现在换行依然不生效，是因为HTML默认会把所有相邻的空白符和换行符进行合并。
+  如果希望空白符和换行符保留，需要用到 white-space: pre;(pre、pre-line、prewrap都可以，但 pre 的兼容性最好)。
+  此时换行已经完成了，但是还有一些不足，比如有两个相邻<dd>时，它们会“零距离接触”，这里使用伪元素添加逗号来分隔。
+  但现在又出现了新的问题，当多个连续的 <dd> 之间包含了（未加注释的）空白符时，那么逗号前面会有一个空格。
+  有很多方法可以修复这个问题，但都不够完美。其中一种方法是利用负外边距：margin-left: -.25em;。
+  这个方法可行，但不够可靠。如果内容是以不一样的字体和尺寸来显示的，这个空隙的宽度就不一定刚好是0.25em，但大多数情况来看，这个误差不会很大。
+
+  reference-link: play.csssecrets.io/line-breaks
+  -->
+  <dl>
+    <dt>Name:</dt>
+    <dd>Lea Verou</dd>
+
+    <dt>Email:</dt>
+    <dd>lea@verou.me</dd>
+    <dd>leaverou@mit.edu</dd>
+
+    <dt>Location:</dt>
+    <dd>Earth</dd>
+  </dl>
+</body>
+</html>

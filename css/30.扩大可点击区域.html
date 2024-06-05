@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>扩大可点击区域</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+
+    button {
+      padding: .5em;
+      border-radius: 50%;
+      color: white;
+      background: #58a;
+      font: bold 120%/1 sans-serif;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  Fitts 法则：人类移动到某个目标区域所需的最短时间是由目标距离与目标宽度之比所构成的对数函数。
+  数学公式： T = a + blog2(1 + D / W)，T 表示所需时间，D 是从起点到目标中心的距离，W 是目标区域的宽度，而 a 和 b 都是常数。
+  根据这个公式，可以很容易地推导出：目标越大，越容易到达。
+  因此，对于那些较小的、难以瞄准的控件来说，如果不能把它的视觉尺寸直接放大，将其可点击区域（热区）向外扩张往往也可以带来可用性的提升。
+  (1)border: 10px solid transparent; —> 扩张热区最简单的办法是为它设置一圈透明边框，因为鼠标对元素边框的交互也会触发鼠标事件，这一点是描边和投影所不及的。
+  (2)background-clip: padding-box; —> 把背景限制在原本的区域之内。
+  (3)box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset; —> 用内嵌投影来模拟出一道（实色）边框。
+
+  reference-link: play.csssecrets.io/hit-area-border
+  -->
+
+  <button class="hit-area-border">+</button>
+  <style>
+    .hit-area-border {
+      width: 3em;
+      height: 3em;
+      border: 10px solid transparent;
+      background-clip: padding-box;
+      box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset;
+    }
+  </style>
+
+  <!--
+  与边框不同的是，box-shadow 可以同时指定多层投影。因此，如果你真的需要多层投影，只要指定多个由逗号分隔的投影即可。
+  但如果把内嵌投影和（常规的）外部投影组合起来，将会得到一个怪异的效果，因为外部投影是绘制在 border box 外部的。
+  比如 box-shadow: 0 0 0 1px rgba(0,0,0,.3) inset, 0 .1em .2em -.05em rgba(0,0,0,.5);
+  旦真这样去做，会发现结果与我的期望大相径庭。这个解决方案在其他方面也不够完美：边框会影响布局，而且在某些场景下可能根本无法利用边框。
+  现在可以用另外一个特性来实现：伪元素同样可以代表其宿主元素来响应鼠标交互。
+  在按钮的上层覆盖一层透明的伪元素，并让伪元素在四个方向上都比宿主元素大出10px。
+  只要有任何一个伪元素可供利用，这个方法就可以发挥作用，也不会干扰其他任何效果。
+  这个基于伪元素的解决方案极为灵活，基本上可以把热区设置为任何想要的尺寸、位置或形状，甚至可以脱离元素原有的位置。
+
+  reference-link: play.csssecrets.io/hit-area
+  -->
+
+  <button class="hit-area">+</button>
+  <style>
+    .hit-area {
+      width: calc(3em - 20px);
+      height: calc(3em - 20px);
+      position: relative;
+      border: 1px solid rgba(0,0,0,.3);
+      box-shadow:  0 .1em .2em -.05em rgba(0,0,0,.5);
+    }
+
+    .hit-area:before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      bottom: -10px;
+      left: -10px;
+    }
+  </style>
+
+</body>
+</html>

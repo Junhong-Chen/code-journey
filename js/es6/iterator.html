@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Iterator</title>
+</head>
+<body>
+  <script>
+    /*
+    es6为 Array、Map、Set 提供了内建的迭代器。
+    四种生成迭代器的方法：
+    colors[Symbol.iterator]() 返回对象的value；
+    colors.entries() 返回对象的key和value；
+    colors.keys() 返回对象的key；
+    colors.values() 返回对象的value。
+    */
+    const colors = ['red', 'yellow', 'blue', 'green']
+    const iterator = colors[Symbol.iterator]()
+    console.log(iterator.next())
+
+
+    /*
+    Example：尝试写一个自定义迭代器：当传入true或者不传参数时，是一个keys迭代器；当传入false时，是一个values迭代器。
+    */
+    Array.prototype.customIterator = function(isKey = true) {
+      let index = 0
+      let name = isKey ? 'key' : 'value'
+
+      // 保存当前的上下文。
+      const _this = this
+
+      // 首先返回一个遍历器对象。
+      return {
+        // 遍历器里有 next() 方法。
+        next() {
+          const done = index >= _this.length
+
+          // console.log(this)
+          // 这里不能直接使用this来访问，因为如果在函数中返回了一个新对象，那么this会指向这个新对象。
+          const value = isKey ? (done ? undefined : index++) : (done ? undefined : _this[index++])
+          
+          // 返回相应的属性。
+          return {
+            [name]: value,
+            done
+          }
+        }
+      }
+    }
+
+
+  </script>
+</body>
+</html>

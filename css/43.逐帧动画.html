@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>逐帧动画</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  在很多时候，我们需要一个很难（或不可能）只通过某些 CSS 属性的过渡来实现的动画。比如一段卡通影片，或是一个复杂的进度指示框。
+  在这种场景下，基于图片的逐帧动画才是完美的选择。不过想在网页中以一种灵活的方式来实现这种动画，并不简单。
+  GIF可以完美实现动画，但它也有一些缺点让我们无法在某些场景下使用：
+  (1)颜色数量被限制在256色；
+  (2)不具备 Alpha 透明的特性；
+  (3)无法在 CSS 层面修改动画的某些参数。
+
+  steps() 调速函数：
+  在 [42.缓动效果] 中使用的都是基于三次贝塞尔曲线的调速函数，它们会在关键帧之间进行插值运算，从而产生平滑的过渡效果，这种平滑特性却恰恰无法实现逐帧动画效果。
+  与贝塞尔曲线调速函数不同的是，steps() 会根据指定的步进数量，把整个动画切分为多帧，而且整个动画会在帧与帧之间硬切，不会做任何插值处理。
+  steps() 还接受可选的第二个参数，其值可以是 start 或 end。这个参数用于指定动画在每个循环周期中的哪个时间点发生帧的切换动作。
+  简写属性 step-start 和 step-end，分别等同于 steps(1, start) 和 steps(1, end)。
+
+  下面使用 steps() 调速函数来制作一个加载动画：
+  (1)把加载动画中的所有帧全部拼合到一张 PNG 图片中；
+  (2)用一个元素来容纳这个图片（在里面写一些文字，来确保可访问性），并把它的宽高设置为图片单帧的尺寸；
+  (3)改变 background-position 的值来显示图片的其他帧；
+  (4)使用 steps() ，其值设置为图片帧数总和。
+
+  reference-link: play.csssecrets.io/frame-by-frame
+  -->
+
+  <div class="loader">Loading...</div>
+  <style>
+    .loader {
+      width: 100px; height: 100px;
+      background: url(../assets/images/loader.png) 0 0;
+      /* 将文本隐藏起来 */
+      text-indent: 200%;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: loader 1s infinite steps(8);
+    }
+
+    @keyframes loader {
+      to {
+        background-position: -800px 0;
+      }
+    }
+  </style>
+
+  <button class="dot">
+    表单提交中<span class="dotting"></span>
+  </button>
+  <style>
+    .dotting {
+      display: inline-block;
+      min-width: 2px;
+      min-height: 2px;
+      margin-right: 8px;
+      box-shadow: none;
+      animation: dot 4s infinite step-end; /* 让动画在end时间点进行帧的切换 */
+    }
+
+    @keyframes dot {
+      25% { box-shadow: 2px 0; }                /* 1个点 */
+      50% { box-shadow: 2px 0, 6px 0; }         /* 2个点 */ 
+      75% { box-shadow: 2px 0, 6px 0, 10px 0; } /* 3个点 */
+    }
+  </style>
+</body>
+</html>

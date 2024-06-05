@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>New Array Methods</title>
+</head>
+<body>
+  <ul>
+    <li>Go Shopping</li>
+    <li>Watch Moive</li>
+    <li>Learn English</li>
+  </ul>
+  <script>
+    /*
+    不是原型上的方法
+    Array.from()
+    将类数组对象或者可遍历的对象转换为数组。
+    */
+    const todos = document.querySelectorAll('li')
+    const names = Array.from(todos, todo => todo.textContent) // 第二个参数相对于数组的map方法。
+    console.log(names)
+
+    // 转换arguments为数组后使用reduce计算参数之和。
+    function sum(...numbers) {
+      // 这里可以用剩余参数numbers来计算，但因为numbers本身是一个数组，而这里需要演示如何使用Array.from()，故使用arguments。
+      return Array.from(arguments).reduce((previous, current) => previous + current, 0)
+    }
+    console.log(sum(1, 2, 3, 4))
+
+    console.log('字符串（可遍历对象）也可以转换为数组，Array.from("Junhong")：', Array.from('Junhong'))
+
+
+    /*
+    Array.of()
+    解决 new Array() 的不一致性。
+    */
+
+    console.log('当new Array()只有一个参数（number类型）时，会返回一个以当前参数的值为长度的空数组，new Array(3)：', new Array(3))
+    console.log('当new Array()有多个参数时，返回由这些参数组成的数组，new Array(1, 2, 3) ：', new Array(1, 2, 3))
+    console.log('Array.of()可以保持一致性，Array.of(3)：', Array.of(3))
+    console.log('Array.of(1, 2, 3)：', Array.of(1, 2, 3))
+
+
+    const favorites = [
+      { fruit: 'watermelon' },
+      { sport: 'cycling'},
+      { color: 'black'}
+    ]
+
+    /*
+    find(element, index, currentArray)
+    查找数组中符合条件的元素，找到第一个符合条件的元素后返回并结束遍历。
+    不需要再使用 array.indexOf(value) < 0 去做查找。
+    */
+    console.log('查找我喜欢的颜色：', 
+      favorites.find(favorite => {
+        for (let temp in favorite) {
+          if (temp === 'color') {
+            return true
+          }
+        }
+      })
+    )
+
+
+    /*
+    findIndex(element, index, currentArray)
+    查找数组中符合条件的元素，找到第一个符合条件的元素后返回元素的索引值并结束遍历。
+    */
+    console.log('查找我喜欢的颜色所在对象中的索引值：', 
+      favorites.findIndex(favorite => {
+        for (let temp in favorite) {
+          if (temp === 'color') {
+            return true
+          }
+        }
+      })
+    )
+
+
+    const inventory = [
+      { name: 'apple', quantity: 3},
+      { name: 'bananas', quantity: 0},
+      { name: 'cherries', quantity: 12},
+    ]
+
+    /*
+    some()
+    当数组中某个元素满足条件，返回true并结束遍历。
+    */
+    console.log('三种水果里至少有一种是有库存的：', inventory.some(fruit => fruit.quantity > 0))
+
+    /*
+    every()
+    当数组中某个元素不满足条件，返回false并结束遍历。
+    */
+    console.log('三种水果都有库存：', inventory.every(fruit => fruit.quantity > 0))
+
+  </script>
+</body>
+</html>

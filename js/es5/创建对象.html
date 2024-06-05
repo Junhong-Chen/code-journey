@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>创建对象的三种方式</title>
+</head>
+<body>
+  <script>
+
+    function Person () {
+      this.name = 'Jay'
+      this.sex = 'male'
+    }
+    // 构造函数
+    let child0 = new Person()
+
+    // 字面量
+    let child1 = { name: 'junhong', sex: 'male'}
+
+    // Object.create
+    let child2 = Object.create(child1)
+    child2.name = 'J'
+    child2.sex = 'male'
+
+    console.log(child0, child1, child2)
+  </script>
+</body>
+</html>

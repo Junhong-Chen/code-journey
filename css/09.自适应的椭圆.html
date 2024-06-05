@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>自适应的椭圆</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    div {
+      width: 200px;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  可能有人会奇怪，border-radius 到底由何得名。
+  这个属性并不需要边框来参与工作，似乎把它叫作 corner-radius 更贴切一些。
+  这个名字乍听起来确实让人摸不着头脑，其实原因在于 border-radius 是对元素的 border box 进行切圆角处理的。
+  当元素没有边框时，可能还看不出差异；当它有边框时，则以边框外侧的拐角作为切圆角的基准。
+  边框内侧的圆角会稍小一些（严格来说内角半径将是max(0, border-radius-border-width)）。
+  -->
+
+  <!--
+  椭圆：
+  border-radius 它可以单独指定水平和垂直半径，只要用一个斜杠（/）分隔这两个值即可。这个特性允许我们在拐角处创建椭圆圆角。
+  它不仅可以接受长度值，还可以接受百分比值。这个百分比值会基于元素的尺寸进行解析，即宽度用于水平半径的解析，而高度用于垂直半径的解析。
+
+  reference-link: play.csssecrets.io/ellipse
+  -->
+  <div class="ellipse">full
+    <style>
+      .ellipse {
+        background: orangered;
+        /*border-radius: 50% / 50%; 由于斜杠前后的值一致，可简写成如下代码：*/
+        border-radius: 50%;
+      }
+    </style>
+  </div>
+
+  <!--
+  半椭圆：
+  border-radius 可以为元素的每个角指定不同的值。
+  如果我们传给它四个值，这四个值就会被分别从左上角开始以顺时针顺序应用到元素的各个拐角。
+
+  reference-link: play.csssecrets.io/half-ellipse
+  -->
+  <div class="half-ellipse">half
+    <style>
+      .half-ellipse {
+        background: chocolate;
+        /*border-radius: 50% 50% 0 0 / 100% 100% 0 0; 简写：*/
+        border-radius: 50% / 100% 100% 0 0;
+        height: 100px;
+      }
+    </style>
+  </div>
+
+  <!--
+  四分之一椭圆：
+  设置其中一个角的水平和垂直半径值都需要是 100%，而其他三个角都不能设为圆角。
+
+  reference-link: play.csssecrets.io/quarter-ellipse
+  -->
+  <div class="quarter-ellipse">quarter
+    <style>
+      .quarter-ellipse {
+        background: royalblue;
+        /*border-radius: 100% 0 0 0 / 100% 0 0 0; 简写：*/
+        border-radius: 100% 0 0 0;
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+  </div>
+
+  <!--
+  叶子：
+  原理类似四分之一椭圆。
+  -->
+  <div class="leaf">leaf
+    <style>
+      .leaf {
+        background: green;
+        /*border-radius: 100% 0 100% 0 / 100% 0 100% 0; 简写：*/
+        border-radius: 100% 0 100% 0;
+      }
+    </style>
+  </div>
+</body>
+</html>

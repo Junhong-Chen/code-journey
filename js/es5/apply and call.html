@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>apply and call</title>
+</head>
+<body>
+  <script>
+    function getGlobalThis() {
+      return this
+    }
+    function GenerateUUID () {
+      var uuid = ''
+      for (var i = 0; i < 32; i++) {
+        var random = (~~(Math.random() * 16)).toString(16)
+        if (i > 0 && i % 8 === 0) {
+          uuid += '-'
+        }
+        uuid += random
+      }
+      console.log(uuid)
+      return uuid
+    }
+    function generateFunctionCode(length) {
+      var code = 'return arguments[0][arguments[1]]('
+      for (var i = 0; i < length; i++) {
+        if (i > 0) {
+          code += ','
+        }
+        code += 'arguments[2][' + i + ']'
+      }
+      code += ')'
+      return code
+    }
+
+    function _apply(thisArg, arrayArg) {
+      if (typeof this !== 'function') {
+        throw TypeError(this + ' is not a function')
+      }
+      // 因为在 es5 中局部作用域下的 undefined 可以修改，所以用 void 0 来代替 undefined 进行判断
+      if (thisArg === null || thisArg === void 0) {
+        thisArg = getGlobalThis()
+      }
+      if (arrayArg === null || arrayArg === void 0) {
+        arrayArg = []
+      }
+      if (arrayArg !== new Object(arrayArg)) {
+        throw TypeError('CreateListFromArrayLike called on non-object')
+      }
+
+      thisArg = new Object(thisArg)
+      var fn = GenerateUUID() // 生产随机名
+      var temp
+      if (thisArg.hasOwnProperty(fn)) {
+        temp = thisArg[fn] // 如果属性已经存在则缓存起来，使用完后再赋值回去
+      }
+      thisArg[fn] = this
+      // var result = thisArg[fn](...arrayArg)
+      var result = new Function(generateFunctionCode(arrayArg.length))(thisArg, fn, arrayArg) // 可以理解为更安全的 eval
+      if (temp === void 0) {
+        delete thisArg[fn]
+      } else {
+        thisArg[fn] = temp
+      }
+      return result
+    }
+
+    function _call(thisArg) {
+      var arrayArg = []
+      for (var i = arguments.length; i > 0; i--) { // 第一个参数不需要
+        arrayArg[i - 1] = arguments[i]
+      }
+      return this._apply(thisArg, arrayArg)
+    }
+
+    Function.prototype._apply = _apply
+    Function.prototype._call = _call
+
+    var name = 'global'
+    var apple = {
+      name: 'apple'
+    }
+
+    function test(type) {
+      console.log(type)
+      console.log(this.name)
+    }
+
+    test('test')
+    test._apply(apple, ['apply'])
+    test._call(apple, 'call')
+  </script>
+</body>
+</html>

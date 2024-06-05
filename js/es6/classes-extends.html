@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Classes Extends</title>
+</head>
+<body>
+  <script>
+    class Animal {
+      constructor(name) {
+        this.name = name
+        this.belly = []
+      }
+
+      eat(food) {
+        this.belly.push(food)
+      }
+
+      bark() {
+        console.log('roar~')
+      }
+    }
+
+    class Dog extends Animal {
+      constructor(name, age) {
+        /*
+        super(name) 相当于es5中的:
+        Animal.call(this, name)
+        Dog.prototype = Object.create(Animal.prototype) // ps:如果这里使用 Dog.prototype = new Animal() 就会调用两次父类的构造函数，在es5中不建议这么使用。
+        Dog.prototype.constructor = Dog
+        */
+        super(name)
+        this.age = age
+      }
+
+      // 子类可以重写父类的方法
+      bark() {
+        console.log('Barl bark!')
+      }
+    }
+
+    const black = new Dog('black', 3)
+    black.bark()
+  </script>
+</body>
+</html>

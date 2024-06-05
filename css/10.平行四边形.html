@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>平行四边形</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+    }
+    div {
+      width: 150px;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      color: rgba(255, 255, 255, .9);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  嵌套元素方案：
+  通过 skew() 的变形属性来对矩形进行斜向拉伸。
+  为了让内容保持不变，需要对内容再应用一次反向的 skew() 变形，从而抵消容器的变形效果。
+  缺点：添加额外的 HTML 元素。
+
+  reference-link: play.csssecrets.io/parallelograms
+  -->
+  <div class="parallelograms">
+    <div>CLICK ME</div>
+    <style>
+      .parallelograms {
+        background: pink;
+        transform: skew(-45deg);
+      }
+
+      .parallelograms > div {
+        transform: skew(45deg);
+      }
+    </style>
+  </div>
+
+  <!--
+  伪元素方案：
+  把所有样式（背景、边框等）应用到伪元素上，然后再对伪元素进行变形。
+  因为内容并不是包含在伪元素里的，所以内容不会受到变形的影响。
+  为了让伪元素保持良好的灵活性，可以自动继承其宿主元素的尺寸，甚至当宿主元素的尺寸是由其内容来决定时仍然如此。
+  一个简单的办法是给宿主元素应用 position: relative 样式，并为伪元素设置 position: absolute，然后再把所有偏移量都设置为零，以便让它在水平和垂直方向上都 被拉伸至宿主元素的尺寸。
+  伪元素生成的方块是重叠在内容之上的，一旦给它设置背景，就会遮住内容，可以给伪元素设置 z-index: -1 来修复这个问题。
+
+  reference-link: play.csssecrets.io/parallelograms-pseudo
+  -->
+  <div class="parallelograms-pseudo">CLICK ME
+    <style>
+      .parallelograms-pseudo {
+        position: relative;
+      }
+
+      .parallelograms-pseudo::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+        transform: skew(-45deg);
+        background: seagreen;
+      }
+    </style>
+  </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>半透明边框</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      background: steelblue;
+    }
+
+    div {
+      width: 150px;
+      height: 150px;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  background-clip方案：
+  设置属性 background-clip: padding-box; 让当前元素的background用内边距(padding)来裁剪，背景颜色就不会延伸到border上。
+
+  reference-link: play.csssecrets.io/translucent-borders
+  -->
+  <div class="translucent-borders">
+    <style>
+      .translucent-borders {
+        border: 10px solid hsla(0, 0%, 100%, .5);
+        background: seagreen;
+        background-clip: padding-box;
+      }
+    </style>
+  </div>
+</body>
+</html>

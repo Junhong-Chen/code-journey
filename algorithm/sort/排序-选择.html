@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>选择排序</title>
+</head>
+<body>
+  <script>
+    const selectionSort = (array) => {
+      let length = array.length
+      for (let i = 0; i < length; i++) {
+        let minIndex = i
+        for (let j = i + 1; j < length; j++) {
+          if (array[j] < array[minIndex]) {
+            minIndex = j
+          }
+        }
+        let temp = array[i]
+        array[i] = array[minIndex]
+        array[minIndex] = temp
+      }
+      return array
+    }
+    const array = [2, 7, 22, 21, 9, 0, -21, 32, 12, 3, 1, 2] 
+    console.log(selectionSort(array))
+  </script>
+</body>
+</html>

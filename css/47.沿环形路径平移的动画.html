@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>沿环形路径平移的动画</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-evenly;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  两个元素的解决方案:
+  主要的思路与【10.平行四边形】或者【11.菱形图片】中提到的“嵌套的两层变形会相互抵消”如出一辙：用内层的变形来抵消外层的变形效果。
+  不过，这一次可不是静态的抵消了，这次的抵消作用是贯穿于整个动画中的每一帧。
+  注意这里之所以使用两个元素，是因为两个元素的变形原点不一样。
+  外层元素要绕着环形路径平移，所以它的变形原点是父元素(.circular-2elements)的中心。
+  内层元素要抵消自身的旋转，所以它的变形原点是自身（这里也可以父元素为中心，因为它始终撑满父元素）的中心。
+
+  reference-link: play.csssecrets.io/circular-2elements
+  -->
+  <div class="circular-2elements">
+    <div class="avatar">
+      <img src="../assets/images/eagle.jpg">
+    </div>
+  </div>
+  <style>
+    .circular-2elements {
+      width: 300px;
+      height: 300px;
+      padding: 20px;
+      border-radius: 50%;
+      background: #085;
+    }
+
+    .circular-2elements .avatar {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto; /*水平居中*/
+      border-radius: 50%;
+      overflow: hidden;
+      animation: two-elements-spin 6s infinite linear;
+      transform-origin: 50% 150px; /*设定旋转中心*/
+    }
+
+    .circular-2elements .avatar > img {
+      display: block;
+      width: inherit;
+      animation: inherit; /*继承父元素的动画*/
+      animation-direction: reverse; /*动画反转*/
+      /*transform-origin: 50% 50% 0; 注意这里的变形原点为默认值*/
+    }
+
+    @keyframes two-elements-spin {
+      to {
+        transform: rotate(1turn);
+      }
+    }
+
+    /*动画反转后等于：
+    @keyframes spin-reverse {
+      from {
+        transform: rotate(1turn);
+      }
+    }*/
+  </style>
+
+  <!--
+  单个元素的解决方案:
+  transform-origin 只是一个语法糖。实际上它总是可以用两个 translate() 来代替。比如，下面两段代码实际上是等效的：
+
+  /*
+  transform: rotate(30deg);
+  transform-origin: 200px 300px;
+  */
+  等于
+  /*
+  transform: translate(200px, 300px)
+             rotate(30deg)
+             translate(-200px, -300px);
+  transform-origin: 0 0; 注意这里的变形原点是 0 0，也就是左上角，不写也没有影响，仅仅是想说明translate是以左上角为原点出发。
+  */
+
+  变形函数并不是彼此独立的（重点）。
+  每个变形函数并不是只对这个元素进行变形，而且会把整个元素的坐标系统进行变形，从而影响所有后续的变形操作。这也说明了为什么变形函数的顺序是很重要的，变形属性中不同函数的顺序如果被打乱，可能会产生完全不同的结果。
+
+  基于这个思路，可以尝试用translate代替transform-origin：
+  /*
+  @keyframes spin {
+    from {
+      transform: translate(50%, 150px)
+      rotate(0turn)
+      translate(-50%, -150px);
+    }
+    to {
+      transform: translate(50%, 150px)
+      rotate(1turn)
+      translate(-50%, -150px);
+    }
+  }
+  @keyframes spin-reverse {
+    from {
+      transform: translate(50%,50%)
+      rotate(1turn)
+      translate(-50%,-50%);
+    }
+    to {
+      transform: translate(50%,50%)
+      rotate(0turn)
+      translate(-50%, -50%);
+    }
+  }
+  */
+
+  由于现在所有变形函数所使用的都是相同的原点，所以可以把这两套动画合并为一套：
+  /*
+  @keyframes spin {
+    from {
+      transform: translate(50%, 150px)
+      rotate(0turn)
+      translate(-50%, -150px)
+      translate(50%,50%)
+      rotate(1turn)
+      translate(-50%,-50%);
+    }
+    to {
+      transform: translate(50%, 150px)
+      rotate(1turn)
+      translate(-50%, -150px)
+      translate(50%,50%)
+      rotate(0turn)
+      translate(-50%, -50%);
+    }
+  }
+  */
+
+  通过观察上面的代码可以发现，水平方向上的位移是相互抵消的，这基本相当于只在 Y 轴上做了两次位移操作（translateY(-150px) translateY(50%)）。
+  由于（水平方向上的位移）是在同一关键帧中相互抵消的，所以可以把旋转之前和之后的水平位移动作去掉，再把垂直位移合并起来：
+  /*
+  @keyframes spin {
+    from {
+      如果对这个位移有疑问，可以在纸上（以左上角为原点）画出这个圆的位移轨迹，就理解了。
+      这里也可以按上面（没有去掉水平方向上的位移）那样的顺序写，这里之所以要这么做，是为了后面进一步简化代码。
+      transform: translateY(150px) translateY(-50%)
+      rotate(0turn)
+      translateY(-150px) translateY(50%)
+      rotate(1turn);
+    }
+    to {
+      transform: translateY(150px) translateY(-50%)
+      rotate(1turn)
+      translateY(-150px) translateY(50%)
+      rotate(0turn);
+    }
+  }
+  */
+
+  不难发现，上面代码中的最开始的那两个位移操作，实际上就是把它放在圆心，所以如果把头像放在圆心并以此作为起点，就可以删除这两行代码了：
+  /*
+  @keyframes spin {
+    from {
+      transform: rotate(0turn)
+      translateY(-150px) translateY(50%)
+      rotate(1turn);
+    }
+    to {
+      transform: rotate(1turn)
+      translateY(-150px) translateY(50%)
+      rotate(0turn);
+    }
+  }
+  */
+
+  reference-link: play.csssecrets.io/circular
+  -->
+  <div class="circular">
+    <img class="avatar" src="../assets/images/eagle.jpg">
+  </div>
+  <style>
+    .circular {
+      width: 300px; height: 300px;
+      padding: 20px;
+      border-radius: 50%;
+      background: #fb3;
+    }
+
+    .avatar {
+      display: block;
+      width: 50px;
+      margin: calc(50% - 25px) auto 0; /*放在圆心位置*/
+      border-radius: 50%;
+      overflow: hidden;
+      animation: spin 6s infinite linear;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0turn)
+                   translateY(-150px) translateY(50%)
+                   rotate(1turn);
+      }
+      to {
+        transform: rotate(1turn)
+                   translateY(-150px) translateY(50%)
+                   rotate(0turn);
+      }
+    }
+  </style>
+</body>
+</html>

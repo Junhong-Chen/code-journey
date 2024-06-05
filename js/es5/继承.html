@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>es5继承的6种方法</title>
+</head>
+<body>
+  <script>
+    function Animal (name) {
+      this.name = name || 'Animal'
+      this.array = [1, 2, 3]
+      this.say = function () {
+        alert('喵~')
+      }
+    }
+    Animal.prototype.sex = 'male'
+    Animal.prototype.eat = function (food) {
+      alert(this.name + '正在吃' + food)
+    }
+
+    // 拷贝继承
+    // function Cat (name) {
+    //   let animal = new Animal(name)
+    //   for (let i in animal) {
+    //     Cat.prototype[i] = animal[i]
+    //   }
+    // }
+
+    // 实例继承
+    // function Cat (name) {
+    //   let instance = new Animal(name)
+    //   return instance
+    // }
+
+    // 构造继承
+    // function Cat (name) {
+    //   Animal.apply(this, [name])
+    // }
+
+    // 原型链继承
+    // function Cat (name) {
+    //   this.name = name
+    // }
+    // Cat.prototype = new Animal()
+    // Cat.prototype.sayhi = 'hi'
+    
+    // 组合继承
+    // function Cat (name) {
+    //   Animal.apply(this, [name])
+    // }
+    // Cat.prototype = new Animal()
+    // Cat.prototype.constructor = Cat
+
+    // 组合继承优化
+    function Cat (name) {
+      Animal.apply(this, [name])
+    }
+    // Cat.prototype = Animal.prototype
+    Cat.prototype = Object.create(Animal.prototype) // 创建一个新的prototype
+    Cat.prototype.constructor = Cat // 将 prototype 的 constructor 指向当前的构造函数
+    var cat = new Cat('tom')
+    var cat2 = new Cat('jack')
+    console.log(cat, cat2)
+  </script>
+</body>
+</html>

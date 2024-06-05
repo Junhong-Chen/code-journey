@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>不规则投影</title>
+  <style>
+    div {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      vertical-align: bottom;
+      box-sizing: border-box;
+      width: 5.9em;
+      height: 5.2em;
+      margin: .6em;
+      background: #fb3;
+      /*box-shadow: .1em .1em .3em rgba(0,0,0,.5);*/
+      -webkit-filter: drop-shadow(.1em .1em .1em rgba(0,0,0,.5));
+      filter: drop-shadow(.1em .1em .1em rgba(0,0,0,.5));
+      font: 200%/1.6 Baskerville, Palatino, serif;
+      text-align: center;
+    }
+
+    .speech {
+      border-radius: .3em;
+    }
+
+    .speech::before {
+      content: '';
+      position: absolute;
+      top: 1em;
+      right: -.7em;
+      width: 0;
+      height: 0;
+      border: 1em solid transparent;
+      border-left-color: #fb3;
+      border-right-width: 0;
+    }
+
+    .dotted {
+      background: transparent;
+      border: .3em dotted #fb3;
+    }
+
+    .cutout {
+      border: .5em solid #58a;
+      border-image: 1 fill url('data:image/svg+xml,\
+        <svg xmlns="http://www.w3.org/2000/svg" width="3" height="3" fill="%23fb3">\
+        <polygon points="0,1 1,0 2,0 3,1 3,2 2,3 1,3 0,2"/>\
+        </svg>');
+      background-clip: padding-box;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  filter方案：
+  滤镜效果规范（http://w3.org/TR/filter-effects）引入了一个叫作 filter 的新属性，这个属性是从 SVG 那里借鉴过来的。
+  使用它并不需要掌握任何 SVG 知识。只需要一些函数就可以很方便地指定滤镜效果了，比如 blur()、grayscale() 以及即将使用的 drop-shadow()。
+  drop-shadow() 滤镜可接受的参数基本上和 box-shadow 属性是一样的，但不包括扩张半径，不包括 inset 关键字，也不支持逗号分割的多层投影语法。
+
+  优点：平稳退化，当浏览器不支持时，不会出现问题，只不过没有任何效果而已。
+  缺点：任何非透明的部分都会被一视同仁地打上投影，包括文本（如果背景是透明的），而且不能通过 text-shadow: none; 来取消掉文本上的投影。
+  其实 text-shadow 和它是完全不相干的两码事，因此这样做并不能取消文本上的 drop-shadow() 效果。
+  相反，如果已经用 textshadow 在文本上加了投影效果，文本投影还会被 drop-shadow() 滤镜再加上投影，这本质上是给投影加了投影。
+
+  reference-link: play.csssecrets.io/drop-shadow
+  -->
+  <div class="speech">Speech bubble</div>
+  <div class="dotted">Dotted border</div>
+  <div class="cutout">Cutout corners</div>
+</body>
+</html>

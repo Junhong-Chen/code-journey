@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>缓动效果</title>
+</head>
+<body>
+  <!--
+  假设要用一个元素来模拟一个下落的小球，可以把 transform 属性从 none 过渡到 translateY(300px) 来模拟下落，然后再把值往回倒一点来模拟弹起，然后再次回到最终值(300px)，如此往复一次或多次，逐渐收敛，最后稳定在最终值，到此整个下落过程模拟完成。
+  这种方式不仅适用于位移，也适用于其他一些场景，比如尺寸的变化、角度的变化等。
+  如果只是简单的应用动画，会发现动画表现出来的效果很不真实。那是因为小球改变运动方向时，它的移动过程都是持续加速的。
+  这时候就轮到调速函数出场了，这个函数决定了动画的缓动曲线该如何描绘。
+  在 animation/transition 简写属性中， 或则在 animationtiming-function/transition-timing-function 展开式属性中，都可以指定调速函数。
+  调速函数的默认值是 ease，除此之外还有四个内置的缓动曲线，分别是 ease-in、ease-out、ease-in-out、liner。
+  回想一下现实当中的场景，当一个小球下落时，它是加速的，而接触地面再弹起时，它是减速的。所以只要找一对曲线是相反的缓动曲线，分别设置在下落和弹起的方向上，就可以让动画看起来更真实了。
+
+  有些时候内置的缓动曲线无法满足复杂的需求，所以 css 还提供了一个自定义调速函数 cubic-bezier()。
+  使用方法很简单，先绘制一个片段的三次贝塞尔曲线，三次贝塞尔曲线是用两个控制锚点来绘制的。绘制完成后，只需要把这两个锚点的坐标填入 cubic-bezier() 中即可。
+  这个绘制出来的三次贝塞尔曲线，其实就是我们所想得到的缓动曲线。
+
+  小技巧：想得到当前调速函数的反向版本，只需要把控制锚点的水平坐标和垂直坐标互换即可。
+  在线绘制缓动曲线：cubic-bezier.com
+
+  reference-link: play.csssecrets.io/bounce
+  -->
+  <div class="ball"></div>
+  <style>
+    @keyframes bounce {
+      60%, 80%, to {
+        transform: translateY(300px);
+        animation-timing-function: cubic-bezier(.215, .61, .355, 1); /*相对于不假思索就用一对相反的缓动曲线而言，用符合现实的缓动曲线其实更好*/
+      }
+      70% {
+        transform: translateY(260px);
+      }
+      90% {
+        transform: translateY(290px);
+      }
+    }
+
+    .ball {
+      width: 0;
+      height: 0;
+      padding: 25px;
+      border-radius: 50%;
+      margin: auto;
+      background: darksalmon radial-gradient(at 30% 30%, #FFEBEE, darksalmon);
+      animation: bounce 3s cubic-bezier(.5, .1, 1, .37) forwards; /*forwards: 目标将保留由执行期间遇到的最后一个关键帧计算值*/
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(skyblue, white 350px, yellowgreen 0, green);
+    }
+  </style>
+
+  <!--
+  弹性过渡：
+  假设有一个文本输入框，每当它被聚焦时，都需要展示一个提示框，并且在展示时有一个过渡动画让它从无到有的显示出来。
+  现在我希望这个动画更生动一些，而不仅仅是线性的动画，比如先扩大到 110% 的尺寸，然后再缩回 100%。
+  显然，模仿上面的例子中的方法（@keyframes）也可以轻易的完成，但是，有没有更好的方法呢？答案依旧是自定义调速函数 cubic-bezier()。
+  之前说过 cubic-bezier() 中的参数是绘制的三次贝塞尔曲线的两个控制锚点的坐标。
+  这个曲线的横轴代表时间，而纵轴代表动画进度，它们的取值都在 0 ~ 1 之间。
+  显然，横轴是没有办法突破它的取值区间的，至少在时光机发明之前是不可能的，但却可以在纵轴上突破 0 ~ 1 区间。
+  所以，如果希望调速函数中的动画可以先达到 110% 的程度（相当于scale(1.1)），然后再过渡回100%。缓动曲线可以设置为 cubic-bezier(.25, .1, .3, 1.5)。
+  但这里有一个小小的问题，动画在从有到无时，因为动画会到达 110% 的程度，它会被解析成 scale(-0.1)，所以就出现了一个怪异的动画。
+  解决它也很简单，只要给提示框的关闭过程指定普通的 ease 调速函数，把当前的调速函数覆盖掉就可以了。
+  现在又出现了另一个问题，提示框的关闭动作明显比打开时要迟钝一些。
+  出现这个现象的原因在于在提示框的展开过程中，时间进行到 50% 时，它就已经达到 100% 的完整尺寸了。而关闭动作在时间进行到 100% 时，才达到 100% 的完整尺寸。
+  要修复这个问题，只需把关闭过程的动画的持续时间设置为之前的一半即可，可以用 transition 这个简写属性来覆盖，因为它的默认调速函数是 ease，这样就不需要再显式的去指定调速函数为 ease 了。
+
+  tip：虽然弹性过渡在很多种类的过渡中都可以获得不错的效果（比如上述的例子），但在某些时候它产生的结果可能会相当糟糕。典型的反面案例出现在对颜色属性的弹性过渡中。尽管两种颜色发生弹性过渡的结果可能会相当有趣，但这种效果在 UI 场景下通常是不合适的。
+  为避免不小心对颜色设置了弹性过渡，可以尝试把过渡的作用范围限制在某几种特定的属性上，而不是像以前那样什么都不指定。当在 transition 简写属性中不指定任何属性时，transition-property 就会得到它的初始值：all。这意味着只要是可以过渡的属性，都会参与过渡。如果在提示框打开状态的样式规则中增加一行 background 声明，那么弹性过渡也会作用在这个属性上。
+
+  reference-link: play.csssecrets.io/elastic
+  -->
+  <div class="elastic">
+    <label>
+      Your username:
+      <input value="junhong"></input>
+      <span class="callout">
+        Only letters, numbers, underscores (_) and hyphens (-) allowed!
+      </span>
+    </label>
+  </div>
+  <style>
+    /**
+     * Elastic transitions
+     */
+
+    input:not(:focus) + .callout:not(:hover) {
+      transform: scale(0);
+      transition: .25s transform;
+    }
+
+    .callout {
+      transition: .5s cubic-bezier(.25,.1,.3,1.5) transform; /*在属性中指定只作用在transform，避免它应用在其他可以过渡的属性中，而产生意想不到的结果*/
+      transform-origin: 1.4em -.4em;
+    }
+
+    /* Styling */
+    .elastic {
+      padding: 1.5em;
+      font: 200% / 1.6 Baskerville;
+    }
+
+    input {
+      display: block;
+      padding: 0 .4em;
+      font: inherit;
+    }
+
+    .callout {  
+      position: absolute;
+      max-width: 14em;
+      padding: 0.6em 0.9em;
+      border-radius: .3em;
+      margin: .5em 0 0 -1px;
+      background: #fed;
+      border: 1px solid rgba(0,0,0,.3);
+      box-shadow: .05em .2em .6em rgba(0,0,0,.2);
+      font-size: 75%;
+    }
+
+    .callout:before {
+      content: "";
+      position: absolute;
+      top: -.4em;
+      left: 1em;
+      padding: .35em;
+      background: inherit;
+      border: inherit;
+      border-right: 0;
+      border-bottom: 0;
+      transform: rotate(45deg);
+    }
+  </style>
+</body>
+</html>
