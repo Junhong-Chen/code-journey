@@ -9,6 +9,7 @@ import {
   ShaderMaterial,
   DoubleSide,
   Uniform,
+  Vector2
 } from 'three'
 import { OrbitControls } from "three/addons/controls/OrbitControls.js"
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'

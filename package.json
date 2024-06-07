@@ -1,19 +1,32 @@
 {
-  "name": "learingrecords",
+  "name": "code-journey",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Junhong-Chen/-LearningRecords.git"
+    "url": "git+https://github.com/Junhong-Chen/code-journey.git"
   },
-  "author": "Jay",
+  "author": "Junhong",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Junhong-Chen/-LearningRecords/issues"
+    "url": "https://github.com/Junhong-Chen/code-journey/issues"
   },
-  "homepage": "https://github.com/Junhong-Chen/-LearningRecords#readme"
+  "homepage": "https://github.com/Junhong-Chen/code-journey#readme",
+  "devDependencies": {
+    "vite": "^5.2.12"
+  },
+  "dependencies": {
+    "gsap": "^3.12.5",
+    "lil-gui": "^0.19.2",
+    "three": "^0.165.0",
+    "three-custom-shader-material": "^5.4.0",
+    "vite-plugin-glsl": "^1.3.0"
+  }
 }

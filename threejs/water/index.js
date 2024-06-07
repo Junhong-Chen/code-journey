@@ -67,10 +67,10 @@ orbitControls.enablePan = false
 const waterParameters = {
   depthColor: 0x00d5ff,
   surfaceColor: 0x002d38,
-  waterElevation: .05,
+  waterElevation: .06,
   waterFrequency: new Vector2(2, 4),
   speed: .8,
-  wavesElevation: .05,
+  wavesElevation: .04,
   wavesFrequency: 3,
   wavesSpped: .2,
   wavesIterations: 3,

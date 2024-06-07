@@ -85,7 +85,7 @@ displacement.context.fillRect(0, 0, displacement.canvas.width, displacement.canv
 document.body.appendChild(displacement.canvas)
 
 displacement.glowImage = new Image()
-displacement.glowImage.src = 'textures/glow.png'
+displacement.glowImage.src = '/textures/glow.png'
 displacement.glowSize = displacement.canvas.width / 4
 
 // 因为 raycaster 无法作用于 Point，故新增一个 Plane 与 Point 重合来实现 raycaster

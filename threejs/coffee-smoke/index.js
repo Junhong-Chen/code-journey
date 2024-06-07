@@ -9,18 +9,13 @@ import {
   ShaderMaterial,
   DoubleSide,
   Uniform,
-  RepeatWrapping
+  RepeatWrapping,
+  Vector2
 } from 'three'
 import { OrbitControls } from "three/addons/controls/OrbitControls.js"
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
-import GUI from 'lil-gui'
 import vertexShader from './vertex.glsl'
 import fragmentShader from './fragment.glsl'
-
-const gui = new GUI()
-gui.domElement.addEventListener('mousedown', function (e) {
-  e.stopPropagation()
-}, false)
 
 const scene = new Scene()
 

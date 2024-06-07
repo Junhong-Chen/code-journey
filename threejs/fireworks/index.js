@@ -17,8 +17,8 @@ import {
 } from 'three'
 import { OrbitControls } from "three/addons/controls/OrbitControls.js"
 import gsap from 'gsap'
-import vertexShader from '/vertex.glsl'
-import fragmentShader from '/fragment.glsl'
+import vertexShader from './vertex.glsl'
+import fragmentShader from './fragment.glsl'
 
 function random (min, max) {
   return min + Math.random() * (max - min)
@@ -60,7 +60,7 @@ window.addEventListener('resize', function () {
   sizes.pixelRatio = Math.min(window.devicePixelRatio, 2)
   sizes.resolution.set(window.innerWidth, window.innerHeight)
 
-  const { width, height, pixelRatio} = sizes
+  const { width, height, pixelRatio } = sizes
 
   renderer.setSize(width, height)
   renderer.setPixelRatio(pixelRatio)
@@ -133,7 +133,7 @@ function crateFireworks({
     blending: AdditiveBlending,
     uniforms: {
       uSize: new Uniform(size),
-      upixelRatio: new Uniform(sizes.pixelRatio),
+      uPixelRatio: new Uniform(sizes.pixelRatio),
       uResolution: new Uniform(sizes.resolution),
       uTexture: new Uniform(texture),
       uColors: new Uniform(colors),
@@ -175,7 +175,7 @@ window.addEventListener('click', function(e) {
   mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
   const position = calcPosition(mouse, camera)
   const count = ~~random(250, 500)
-  const size = random(0.04, 0.08)
+  const size = random(.04, .08)
   const texture = textures[~~random(0, 6)]
   const colors = []
   colors.push(new Color('#f7f7c7'))

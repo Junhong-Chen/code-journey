@@ -9,9 +9,10 @@ import {
   AdditiveBlending,
   BufferGeometry,
   BufferAttribute,
+  Vector2
 } from 'three'
 import { OrbitControls } from "three/addons/controls/OrbitControls.js"
-import vertexShader from './vertax.vs.glsl'
+import vertexShader from './vertex.vs.glsl'
 import fragmentShader from './fragment.fs.glsl'
 
 const scene = new Scene()

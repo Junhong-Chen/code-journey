@@ -11,7 +11,8 @@ import {
   MeshStandardMaterial,
   Mesh,
   MeshDepthMaterial,
-  RGBADepthPacking
+  RGBADepthPacking,
+  Vector2
 } from 'three'
 import { OrbitControls } from "three/addons/controls/OrbitControls.js"
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -72,9 +73,9 @@ scene.add( dirLight )
 const loader = new GLTFLoader()
 const textureLoader = new TextureLoader()
 
-const map = textureLoader.load('/textures/MapColor.jpg')
+const map = textureLoader.load('/textures/LeePerrySmithMapColor.jpg')
 map.colorSpace = SRGBColorSpace
-const normalMap = textureLoader.load('/textures/MapNormal.jpg')
+const normalMap = textureLoader.load('/textures/LeePerrySmithMapNormal.jpg')
 let mesh
 const material = new MeshPhongMaterial({
   specular: 0x111111,
