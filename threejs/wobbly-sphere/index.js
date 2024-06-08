@@ -4,7 +4,6 @@ import {
   WebGLRenderer,
   Clock,
   Color,
-  TextureLoader,
   DirectionalLight,
   PlaneGeometry,
   MeshStandardMaterial,
@@ -23,7 +22,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js'
 import GUI from 'lil-gui'
-import threeCustomShaderMaterial from 'three-custom-shader-material/vanilla'
+import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 import vertexShader from './vertex.glsl'
 import fragmentShader from './fragment.glsl'
 
@@ -72,18 +71,15 @@ const clock = new Clock()
 const orbitControls = new OrbitControls(camera, renderer.domElement)
 
 // Loaders
-const textureLoader = new TextureLoader()
-
-/**
- * Wobbly Sphere
- */
-// Loader 
 const rgbeLoader = new RGBELoader()
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('/draco/')
 const gltfLoader = new GLTFLoader()
 gltfLoader.setDRACOLoader(dracoLoader)
 
+/**
+ * Wobbly Sphere
+ */
 // Environment map
 rgbeLoader.load('/hdr/urban_alley_01_1k.hdr', function(map) {
   map.mapping = EquirectangularReflectionMapping
@@ -109,7 +105,7 @@ const uniforms = {
 }
 
 // Material
-const material = new threeCustomShaderMaterial({
+const material = new CustomShaderMaterial({
   baseMaterial: MeshPhysicalMaterial,
   vertexShader,
   fragmentShader,
@@ -124,7 +120,7 @@ const material = new threeCustomShaderMaterial({
   wireframe: false,
 })
 
-const depthMaterial = new threeCustomShaderMaterial({
+const depthMaterial = new CustomShaderMaterial({
   baseMaterial: MeshDepthMaterial,
   vertexShader,
   uniforms,

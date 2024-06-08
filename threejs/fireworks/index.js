@@ -42,18 +42,18 @@ const scene = new Scene()
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
 camera.position.set(0, 0, 2)
 
-const renderer = new WebGLRenderer({ alpha: false, antialias: true })
-renderer.setSize(window.innerWidth, window.innerHeight)
-renderer.setPixelRatio(Math.min(2, window.devicePixelRatio))
-document.body.appendChild(renderer.domElement)
-
-// 窗口自适应
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
   pixelRatio: Math.min(window.devicePixelRatio, 2),
   resolution: new Vector2(window.innerWidth, window.innerHeight)
 }
+const renderer = new WebGLRenderer({ alpha: false, antialias: true })
+renderer.setSize(sizes.width, sizes.height)
+renderer.setPixelRatio(sizes.pixelRatio)
+document.body.appendChild(renderer.domElement)
+
+// 窗口自适应
 window.addEventListener('resize', function () {
   sizes.width = window.innerWidth
   sizes.height = window.innerHeight
