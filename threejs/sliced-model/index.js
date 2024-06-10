@@ -8,7 +8,6 @@ import {
   Vector2,
   ACESFilmicToneMapping,
   PCFSoftShadowMap,
-  IcosahedronGeometry,
   MeshStandardMaterial,
   Vector3,
   DirectionalLight,
@@ -163,7 +162,7 @@ const customDepthMaterial = new CustomShaderMaterial({
   patchMap,
   silent: true,
 
-  // MeshStandardMaterial
+  // MeshDepthMaterial
   depthPacking: RGBADepthPacking
 })
 
