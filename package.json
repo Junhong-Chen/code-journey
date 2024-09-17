@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Junhong-Chen/code-journey#readme",
   "devDependencies": {
-    "vite": "^5.2.12"
+    "vite": "^5.4.6"
   },
   "dependencies": {
     "gsap": "^3.12.5",
