@@ -134,8 +134,7 @@ gpgpu.particlesVariable.material.uniforms.uFlowFieldStrength = new Uniform(10)
 gpgpu.particlesVariable.material.uniforms.uFlowFieldFrequency = new Uniform(.2)
 gpgpu.particlesVariable.material.uniforms.uCursor = new Uniform(new Vector3(9999, 9999, 9999))
 
-
-// 将变量自己作为依赖项，将现在的状态发送到下一次计算中，达到数据可持续化的效果
+// 为变量设置依赖项，将当前状态发送到下一帧中计算，达到数据可持续化的效果
 gpgpu.computation.setVariableDependencies(gpgpu.particlesVariable, [gpgpu.particlesVariable])
 gpgpu.computation.init()
 

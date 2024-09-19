@@ -25,7 +25,7 @@ function random (min, max) {
 }
 
 function remap(value, low1, high1, low2, high2) {
-  return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+  return low2 + (high2 - low2) * (value - low1) / (high1 - low1)
 }
 
 // 计算鼠标对应场景的位置
@@ -86,9 +86,6 @@ const textures = [
   textureLoader.load('/textures/particles/5.png'),
   textureLoader.load('/textures/particles/6.png'),
 ]
-const parameters = {
-  time: 0
-}
 
 function crateFireworks({
   count,
@@ -124,7 +121,7 @@ function crateFireworks({
     colorRandomness[i] = ~~random(0, 3)
   }
 
-  const gemoetry = new BufferGeometry()
+  const geometry = new BufferGeometry()
   const material = new ShaderMaterial({
     vertexShader,
     fragmentShader,
@@ -138,17 +135,16 @@ function crateFireworks({
       uTexture: new Uniform(texture),
       uColors: new Uniform(colors),
       uProgress: new Uniform(0),
-      uTime: new Uniform(parameters.time)
     }
   })
 
-  gemoetry.setAttribute('position', new BufferAttribute(positionsArray, 3))
-  gemoetry.setAttribute('aSize', new BufferAttribute(sizesArray, 1))
-  gemoetry.setAttribute('aTimeMultiplier', new BufferAttribute(timeMultiplierArray, 1))
-  gemoetry.setAttribute('aColorRandomness', new BufferAttribute(colorRandomness, 1))
+  geometry.setAttribute('position', new BufferAttribute(positionsArray, 3))
+  geometry.setAttribute('aSize', new BufferAttribute(sizesArray, 1))
+  geometry.setAttribute('aTimeMultiplier', new BufferAttribute(timeMultiplierArray, 1))
+  geometry.setAttribute('aColorRandomness', new BufferAttribute(colorRandomness, 1))
 
   const fireworks = new Points(
-    gemoetry,
+    geometry,
     material
   )
   fireworks.position.copy(position)
@@ -162,7 +158,7 @@ function crateFireworks({
       ease: 'linear',
       onComplete: function() {
         scene.remove(fireworks)
-        gemoetry.dispose()
+        geometry.dispose()
         material.dispose()
       }
     }
@@ -196,7 +192,5 @@ function animate() {
   window.requestAnimationFrame(animate)
   renderer.render(scene, camera)
   orbitControls.update()
-
-  parameters.time = clock.getElapsedTime()
 }
 animate()
